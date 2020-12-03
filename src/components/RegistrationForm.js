@@ -99,11 +99,11 @@ function RegistrationForm () {
   ]
 
   const initialValues = {
+    name: '',
     email: '',
     password: '',
     confirmPassword: '',
-    modeOfContact: '',
-    phone: ''
+    phone: '',
   }
 
   const validationSchema = Yup.object({

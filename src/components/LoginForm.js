@@ -1,5 +1,5 @@
 import React from 'react'
-import {Redirect} from 'react-router-dom'
+import {Redirect, Link} from 'react-router-dom'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import FormikControl from './FormikControl';
@@ -86,6 +86,8 @@ export default class LoginForm extends React.Component{
                 value={this.state.onChange}
                 onChange={this.onChange}
               />
+              <Link to="/resetpassword">Forgot Password?</Link>
+              <br />
               <Button type='submit' style={{ margin: '10px',
                 backgroundColor:'#6200EE', color: '#fff'}}>Submit</Button>
             </Form>
