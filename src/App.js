@@ -4,8 +4,9 @@ import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import LoginForm from './components/LoginForm';
 import Logout from './components/Logout';
 import Admin from './components/Admin';
+import CalendarPage from './components/Calendar/Calendar'
 import ResetPassword from './components/ResetPassword';
-import RegistrationForm from './components/RegistrationForm'
+import RegistrationForm from './components/RegistrationForm';
 
 function App () {
   return (
@@ -17,6 +18,7 @@ function App () {
             <Route exact path='/resetpassword' component={ResetPassword}/>
             <Route exact path='/logout' component={Logout}/>
             <Route exact path='/admin' component={Admin}/>
+            <Route exact path='/calendar' component={CalendarPage}/>
           </Switch>
         </Router>
       </div>
