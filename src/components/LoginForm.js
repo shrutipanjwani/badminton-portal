@@ -1,14 +1,9 @@
-import React from 'react'
-import {Redirect, Link} from 'react-router-dom'
-import { Formik, Form } from 'formik'
-import * as Yup from 'yup'
-import FormikControl from './FormikControl';
-import Button from '@material-ui/core/Button';
-import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography';
-import LockOpenIcon from '@material-ui/icons/LockOpen';
+import React, { Fragment } from 'react';
+import { Link, Redirect } from 'react-router-dom'
+import axios from 'axios';
 
-export default class LoginForm extends React.Component{
+
+export default class Login extends React.Component{
 
   constructor(props) {
     super(props);
@@ -50,50 +45,46 @@ export default class LoginForm extends React.Component{
 
   render() {
 
+
     if(this.state.loggedIn){
       return <Redirect to="/admin" />
     }
 
     return (
-      <Formik>
-        {formik => {
-          return (
-            <Form style={{ width: '100%', marginTop: '20px', margin: 'auto' }} onSubmit={this.submitForm}>
-              <div style={{ marginTop: '80px',display: 'flex',flexDirection: 'column',
-              alignItems: 'center' }}>
-                <Avatar style={{ margin: '10px',backgroundColor: '#6200EE'}}>
-                  <LockOpenIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                  Login
-                </Typography>
-              </div>
-              <FormikControl
-                control='input'
-                type='email'
-                placeholder='Email'
-                name='email'
-                style={{ margin: '20px',padding: '8px'}}
+      <Fragment>
+        <section className='container'>
+          <h1 className="large text-primary">Sign In</h1>
+          <p className="lead"><i className="fas fa-user"></i> Sign Into Your Account</p>
+          <form className="form" onSubmit={this.submitForm}>
+            <div className="form-group">
+              <input 
+                type="email" 
+                placeholder="Email Address" 
+                name="email" 
                 value={this.state.email}
                 onChange={this.onChange}
-              />
-              <FormikControl
-                control='input'
-                type='password'
-                placeholder='Password'
-                name='password'
-                style={{ margin: '20px',padding: '8px'}}
+                required />
+            </div>
+            <div className="form-group">
+              <input
+                type="password"
+                placeholder="Password"
+                name="password"
+                minLength="6"
                 value={this.state.onChange}
-                onChange={this.onChange}
+                onChange={this.onChange} 
+                required
               />
-              <Link to="/resetpassword">Forgot Password?</Link>
-              <br />
-              <Button type='submit' style={{ margin: '10px',
-                backgroundColor:'#6200EE', color: '#fff'}}>Submit</Button>
-            </Form>
-          )
-        }}
-      </Formik>
-    )
+            </div>
+            <Link to="/resetpassword">Forgot Password?</Link>
+            <br />
+            <input type="submit" className="btn btn-primary" value="Login" />
+          </form>
+          <p className="my-1">
+            Don't have an account? <Link to="/signup">Sign Up</Link>
+          </p>
+        </section>
+    </Fragment>
+    );
   }
 }

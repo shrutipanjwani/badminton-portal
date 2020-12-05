@@ -1,53 +1,21 @@
-import React, { useState } from 'react';
-import { Formik, Form } from 'formik'
-import * as Yup from 'yup'
-import './Style.css'
-import FormikControl from './FormikControl';
+import React, { Fragment, useState } from 'react';
+import { Link } from 'react-router-dom';
+import * as Yup from 'yup';
 import TextField from '@material-ui/core/TextField';
-import Avatar from '@material-ui/core/Avatar';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import Typography from '@material-ui/core/Typography';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
-const contactFormEndpoint = process.env.REACT_APP_CONTACT_ENDPOINT;
+import { connect } from 'react-redux';
+import { setAlert } from '../actions/alert';
+import PropTypes from 'prop-types';
+import Alert from './Alert';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
-    paper: {
-      marginTop: theme.spacing(8),
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-    avatar: {
-      margin: theme.spacing(1),
-      backgroundColor: theme.palette.primary.main,
-    },
-    form: {
-      width: '100%', // Fix IE 11 issue.
-      marginTop: theme.spacing(1),
-      margin: 'auto',
-    },
-    submit: {
-      margin: theme.spacing(3, 0, 2),
-      backgroundColor: theme.palette.primary.main,
-      color: '#fff',
-    },
-    field: {
-      margin: '20px',
-      padding: '8px',
-    },
-    field5: {
-      margin: '0px',
-      padding: '9px',
-      width: '150px',
-    },
     dflex: {
       display: 'inline-flex',
       padding: '20px',
@@ -59,10 +27,6 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 18,
       },
     },
-    center: {
-      margin: 'auto',
-      marginRight: '10px',
-    },
 }));
 
 function countryToFlag(isoCode) {
@@ -73,19 +37,42 @@ function countryToFlag(isoCode) {
     : isoCode;
 }
 
-function RegistrationForm () {
+const Register = ({ setAlert }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const [isSubmitionCompleted, setSubmitionCompleted] = useState(false);
-
+ 
   function handleClose() {
     setOpen(false);
   }
 
   function handleClickOpen() {
-    setSubmitionCompleted(false);
     setOpen(true);
   }
+
+  // const options = [
+  //   { key: 'Email', value: 'emailmoc' },
+  //   { key: 'Telephone', value: 'telephonemoc' }
+  // ]
+
+  // const initialValues = {
+  //   name: '',
+  //   email: '',
+  //   password: '',
+  //   confirmPassword: '',
+  //   phone: '',
+  // }
+
+  // const validationSchema = Yup.object({
+  //   name: Yup.string().required('Required!'),
+  //   email: Yup.string()
+  //     .email('Invalid email format')
+  //     .required('Required'),
+  //   password: Yup.string().required('Required!'),
+  //   confirmPassword: Yup.string()
+  //     .oneOf([Yup.ref('password'), ''], 'Passwords must match!')
+  //     .required('Required!'),
+  //   phone: Yup.string().required('Required!')
+  // })
 
   const styles = {
     center: {
@@ -93,84 +80,105 @@ function RegistrationForm () {
     },
   }
 
-  const options = [
-    { key: 'Email', value: 'emailmoc' },
-    { key: 'Telephone', value: 'telephonemoc' }
-  ]
-
-  const initialValues = {
+  const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    confirmPassword: '',
-    phone: '',
-  }
+    confirmPassword: ''
 
-  const validationSchema = Yup.object({
-    name: Yup.string().required('Required!'),
-    email: Yup.string()
-      .email('Invalid email format')
-      .required('Required'),
-    password: Yup.string().required('Required!'),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), ''], 'Passwords must match!')
-      .required('Required!'),
-    phone: Yup.string().when('modeOfContact', {
-      is: 'telephonemoc',
-      then: Yup.string().required('Required!')
-    })
-  })
+  });
 
-  const onSubmit = values => {
-    console.log('Form data', values)
-  }
+  const { name, email, password, confirmPassword, digits} = formData;
+
+  const onChange = e => 
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const onSubmit = async e => {
+    console.log('Form data', e)
+    e.preventDefault();
+    const country = document.getElementById("country-select-demo");
+    if (password != confirmPassword) {
+      setAlert('Password do not match', 'danger');
+    } else {
+      const newUser = {
+        "name": name,
+        "email": email,
+        "password": password,
+        "phone":{
+          "country": country.value,
+          "digits": digits
+        }
+      }
+
+      console.log(newUser);
+      try {
+        const config = {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+
+        const body = JSON.stringify(newUser);
+
+        const res = await axios.post('/users/register', body, config);
+        console.log(res);
+        handleClickOpen(true);
+
+      } catch(err) {
+        console.error(err);
+      }
+
+    }
+  };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={onSubmit}
-    >
-      {formik => {
-        return (
-          <Form className={classes.form}>
-            <div className={classes.paper}>
-              <Avatar className={classes.avatar}>
-                <LockOutlinedIcon />
-              </Avatar>
-              <Typography component="h1" variant="h5">
-                Register
-              </Typography>
-            </div>
-            <FormikControl
-              control='input'
-              type='text'
-              placeholder='Name'
-              name='name'
-              className={classes.field}
+    <Fragment>
+      <section className='container'>
+        <h1 className="large text-primary">Sign Up</h1>
+        <p className="lead"><i className="fas fa-user"></i> Create Your Account</p>
+        <form className="form" onSubmit={e => onSubmit(e)}>
+          <div className="form-group">
+            <input 
+            type="text" 
+            placeholder="Name" 
+            name="name"
+            value={name}
+            onChange={e => onChange(e)} 
+            required />
+          </div>
+          <div className="form-group">
+            <input 
+              type="email" 
+              placeholder="Email Address" 
+              name="email" 
+              value={email}
+              onChange={e => onChange(e)} 
+              required />
+          </div>
+          <div className="form-group">
+            <input
+              type="password"
+              placeholder="Password"
+              name="password"
+              minLength="6"
+              value={password}
+              onChange={e => onChange(e)} 
+              required
             />
-            <FormikControl
-              control='input'
-              type='email'
-              placeholder='Email'
-              name='email'
-              className={classes.field}
+          </div>
+          <div className="form-group">
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              name="confirmPassword"
+              minLength="6"
+              value={confirmPassword}
+              onChange={e => onChange(e)} 
+              required
             />
-            <FormikControl
-              control='input'
-              type='password'
-              placeholder='Password'
-              name='password'
-              className={classes.field}
-            />
-            <FormikControl
-              control='input'
-              type='password'
-              placeholder='Confirm Password'
-              name='confirmPassword'
-              className={classes.field}
-            />
-            <div className={classes.dflex}> 
+          </div>
+          <Alert />
+          <div className={classes.dflex}> 
               <Autocomplete
                 id="country-select-demo"
                 style={{ width: 120, margin: 'auto'}}
@@ -199,20 +207,20 @@ function RegistrationForm () {
                   />
                 )}
               />
-              <FormikControl
+              <input
                 control='input'
-                type='number'
-                name='phone'
+                type='tel'
+                name='digits'
+                pattern="[0-9]{10}"
+                value={digits}
+                onChange={e => onChange(e)} 
+                required
                 placeholder='Contact No.'
-                className={classes.field5}
               />
             </div>
-            <br />
-            <Button className={classes.submit} type='submit' disabled={!formik.isValid} 
-            variant="outlined" onClick={handleClickOpen}>
-              Submit
-            </Button>
-            <Dialog
+          <br />
+          <input type="submit" id="submit-btn" className="btn btn-primary" value="Register" />
+          <Dialog
             open={open}
             onClose={handleClose}
             aria-labelledby="form-dialog-title"
@@ -229,11 +237,13 @@ function RegistrationForm () {
                 </Button>
               </DialogContentText>
             </DialogContent>
-            </Dialog>
-          </Form>
-        )
-      }}
-    </Formik>
+          </Dialog>
+        </form>
+        <p className="my-1">
+          Already have an account? <Link to="/signin">Sign In</Link>
+        </p>
+      </section>
+    </Fragment>
   );
 };
 
@@ -488,4 +498,9 @@ const countries = [
   { code: 'ZW', label: 'Zimbabwe', phone: '263' },
 ];
 
-export default RegistrationForm;
+Register.propTypes = {
+  setAlert: PropTypes.func.isRequired
+};
+
+
+export default connect(null, { setAlert })(Register);
