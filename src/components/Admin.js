@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link, Redirect} from 'react-router-dom'
+import CalendarPage from './Calendar/Calendar'
 
 export default class Admin extends Component {
 	constructor(props) {
@@ -21,8 +22,7 @@ export default class Admin extends Component {
 		}
 		return(
 			<div className="admin">
-				<h1>This is Admin Page only Auth people can see</h1>
-				<Link to="/logout"> Logout </Link>
+				<CalendarPage />
 			</div>
 		);
 	}

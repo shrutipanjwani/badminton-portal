@@ -4,7 +4,9 @@ import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import LoginForm from './components/LoginForm';
 import Logout from './components/Logout';
 import Admin from './components/Admin';
-import CalendarPage from './components/Calendar/Calendar'
+import CalendarPage from './components/Calendar/Calendar';
+import Profile from './components/Profile/Profile';
+import Wallet from './components/Wallet/Wallet';
 import ResetPassword from './components/ResetPassword';
 import RegistrationForm from './components/RegistrationForm';
 
@@ -19,6 +21,8 @@ function App () {
             <Route exact path='/logout' component={Logout}/>
             <Route exact path='/admin' component={Admin}/>
             <Route exact path='/calendar' component={CalendarPage}/>
+            <Route exact path='/wallet' component={Wallet}/>
+            <Route exact path='/profile' component={Profile}/>
           </Switch>
         </Router>
       </div>
