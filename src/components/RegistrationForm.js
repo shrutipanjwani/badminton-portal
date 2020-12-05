@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import { setAlert } from '../actions/alert';
 import PropTypes from 'prop-types';
 import Alert from './Alert';
-import axios from 'axios';
+import axios from 'axios';   
 
 const useStyles = makeStyles((theme) => ({
     dflex: {
@@ -84,8 +84,8 @@ const Register = ({ setAlert }) => {
     name: '',
     email: '',
     password: '',
-    confirmPassword: ''
-
+    confirmPassword: '',
+    digits: ''
   });
 
   const { name, email, password, confirmPassword, digits} = formData;
@@ -209,7 +209,7 @@ const Register = ({ setAlert }) => {
               />
               <input
                 control='input'
-                type='tel'
+                type='text'
                 name='digits'
                 pattern="[0-9]{10}"
                 value={digits}
