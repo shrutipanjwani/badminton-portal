@@ -104,8 +104,7 @@ const Register = ({ setAlert }) => {
       setAlert("Password do not match", "danger");
     } else {
       const newUser = {
-        name: name,
-        email: email,
+        name: name,     
         password: password,
         phone: {
           country: country.value,
