@@ -57,7 +57,12 @@ export default class Login extends React.Component {
         alert("Hi, Seems you are not verified");
       } else if (err.response.data.errors[0].msg == "Invalid credentials") {
         alert("Please enter valid credentials.");
-      } else {
+      } 
+      else if (err.response.data.errors[0].msg == "Pending approval from ADMIN") {
+        alert("Please get it approved from approver.");
+      }
+      
+      else {
         alert("Somethings went Wrong, Please retry");
       }
     }
