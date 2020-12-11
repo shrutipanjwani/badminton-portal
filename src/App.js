@@ -13,15 +13,32 @@ import EditTime from './adminportal/EditTime';
 import EditCourt from './adminportal/EditCourt';
 import Booking from './adminportal/Booking';
 import RegistererPermission from './adminportal/RegistererPermission';
+import Home from "./components/Home";
+
+
 //Redux
-import { Provider } from 'react-redux';
-import store from './store';
+import { Provider } from "react-redux";
+import store from "./store";
 
 const App = () => {
   return (
     <Provider store={store}>
-      <div className='App'>
+      <div className="App">
         <Router>
+          <Link to="/signup">signup </Link>
+
+          <Link to="/signin">signin </Link>
+
+          <Link to="/resetpassword">resetpass </Link>
+
+          <Link to="/logout">logout </Link>
+
+          <Link to="/admin">admin </Link>
+
+          <Link to="/calendar">calender </Link>
+          <Link to="/wallet">Wallet </Link>
+
+          <Link to="/profile">Profile </Link>
           <section className="container1">
             <Switch>
               <Route exact path='/signup' component={Register}/>
@@ -42,7 +59,7 @@ const App = () => {
         </Router>
       </div>
     </Provider>
-  )
-}
+  );
+};
 
-export default App
+export default App;
