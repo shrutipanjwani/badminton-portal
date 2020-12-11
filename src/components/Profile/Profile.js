@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Profile() {
+const Profile = () => {
 	const classes = useStyles();
 	let history = useHistory()
 	return (

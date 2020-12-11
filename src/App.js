@@ -9,6 +9,10 @@ import Profile from './components/Profile/Profile';
 import Wallet from './components/Wallet/Wallet';
 import ResetPassword from './components/ResetPassword';
 import Register from './components/RegistrationForm';
+import EditTime from './adminportal/EditTime';
+import EditCourt from './adminportal/EditCourt';
+import Booking from './adminportal/Booking';
+import RegistererPermission from './adminportal/RegistererPermission';
 //Redux
 import { Provider } from 'react-redux';
 import store from './store';
@@ -28,6 +32,11 @@ const App = () => {
               <Route exact path='/calendar' component={CalendarPage}/>
               <Route exact path='/wallet' component={Wallet}/>
               <Route exact path='/profile' component={Profile}/>
+              {/* Admin Portal */}
+              <Route exact path='/edittime' component={EditTime}/>
+              <Route exact path='/editcourt' component={EditCourt}/>
+              <Route exact path='/permission' component={RegistererPermission}/>
+              <Route exact path='/booking' component={Booking}/>
             </Switch>
           </section>
         </Router>

@@ -16,6 +16,45 @@
     color: #fff;
 }
 
+.MuiCardActions-root {
+  display: block !important;
+}
+
+.MuiPaper-elevation1 {
+  box-shadow: none !important;
+}
+
+@media (max-width: 450px){
+  #table{
+    width: 410px;
+  }
+}
+
+button[type="submit"]{
+  background: #6200EE;
+  color: #ffffff;
+}
+
+button[type="submit"]:hover{
+  background: #ffffff !important;
+  color: #6200EE !important;
+}
+
+.blackButton{
+  background-color: black;
+  color: white;
+}
+
+.whiteButton{
+  background-color: white;
+  color: black;
+}
+
+
+#table-no-highlight.toggled {
+    background-color: rgb(244,113,33);
+}
+
 /* Global Styles */
 :root {
   --primary-color: #6200EE;
