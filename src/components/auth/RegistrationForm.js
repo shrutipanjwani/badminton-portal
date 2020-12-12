@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
-import * as Yup from "yup";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { makeStyles } from "@material-ui/core/styles";
@@ -10,9 +9,9 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { connect } from "react-redux";
-import { setAlert } from "../actions/alert";
+import { setAlert } from '../../actions/alert';
 import PropTypes from "prop-types";
-import Alert from "./Alert";
+import Alert from "../layout/Alert";
 import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
@@ -100,11 +99,12 @@ const Register = ({ setAlert }) => {
     console.log("Form data", e);
     e.preventDefault();
     const country = document.getElementById("country-select-demo");
-    if (password != confirmPassword) {
+    if (password !== confirmPassword) {
       setAlert("Password do not match", "danger");
     } else {
       const newUser = {
-        name: name,     
+        name: name,
+        email: email,     
         password: password,
         phone: {
           country: country.value,
@@ -121,17 +121,18 @@ const Register = ({ setAlert }) => {
         };
 
         const body = JSON.stringify(newUser);
-
-         res = await axios.post("/users/register", body, config);
-        console.log(res);
+        //console.log(res);
+        res = await axios.post("/users/register", body, config);
+        //console.log(res);
         handleClickOpen(true);
       } catch (err) {
-        console.error("error" ,err.response.data);
-       if (err.response.data.errors[0]=="User already exists") {
-         alert ("Hi, Seems you are registred");
+        //console.error("error" ,err.response.data);
+        if (err.response.data.errors[0]==="User already exists") {
+          setAlert("User is already registered, please try to SignIn", "danger");
         }
         else{
-          alert("Somethings went Wrong, Please retry");
+          //console.log(err.response.data.errors[0].msg)
+          setAlert(err.response.data.errors[0].msg, "danger");
         }
       }
     }
@@ -141,9 +142,6 @@ const Register = ({ setAlert }) => {
     <Fragment>
       <section className="container">
         <h1 className="large text-primary">Sign Up</h1>
-        <p className="lead">
-          <i className="fas fa-user"></i> Create Your Account
-        </p>
         <form className="form" onSubmit={(e) => onSubmit(e)}>
           <div className="form-group">
             <input
@@ -245,16 +243,15 @@ const Register = ({ setAlert }) => {
             </DialogTitle>
             <DialogContent>
               <DialogContentText style={styles.center}>
-                Your Information has been sent for approval
+                <p>A Invitation Mail has already been sent to {email}.</p>
+                <p>Please Check in 2-3 Minutes.</p>
                 <br />
                 <br />
                 <Button
-                  type="submit"
                   variant="outlined"
-                  color="primary"
                   onClick={handleClose}
                 >
-                  OK
+                  <p className="text-primary">OK</p>
                 </Button>
               </DialogContentText>
             </DialogContent>

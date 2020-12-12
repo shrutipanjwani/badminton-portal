@@ -4,11 +4,9 @@ import './Calendar.css';
 import * as mobiscroll from '@mobiscroll/react';
 import '@mobiscroll/react/dist/css/mobiscroll.min.css';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
@@ -211,56 +209,55 @@ function CalendarPage() {
     });
 
     return (
-      <>
-        <div className={classes.grow}>
-          <AppBar position="static">
-            <Toolbar>
-              {/*<IconButton
-                edge="start"
-                className={classes.menuButton}
-                color="inherit"
-                aria-label="open drawer"
-              >
-              </IconButton>*/}
-              <Typography className={classes.title} variant="h6" noWrap>
-                Badminton Court
-              </Typography>
+        // <div className={classes.grow}>
+          // <AppBar position="static">
+          //   <Toolbar>
+          //     {/*<IconButton
+          //       edge="start"
+          //       className={classes.menuButton}
+          //       color="inherit"
+          //       aria-label="open drawer"
+          //     >
+          //     </IconButton>*/}
+          //     <Typography className={classes.title} variant="h6" noWrap>
+          //       Badminton Court
+          //     </Typography>
               
-              <div className={classes.grow} />
-              <div className={classes.sectionDesktop}>
-                <IconButton aria-label="show 17 new notifications" color="inherit" component={Link} to="/wallet">
-                  <Badge color="secondary">
-                    <AccountBalanceWalletIcon/>
-                  </Badge>
-                </IconButton>
-                <IconButton
-                  edge="end"
-                  aria-label="account of current user"
-                  aria-controls={menuId}
-                  aria-haspopup="true"
-                  onClick={handleProfileMenuOpen}
-                  color="inherit"
-                >
-                  <AccountCircle />
-                </IconButton>
-              </div>
-              <div className={classes.sectionMobile}>
-                <IconButton
-                  aria-label="show more"
-                  aria-controls={mobileMenuId}
-                  aria-haspopup="true"
-                  onClick={handleMobileMenuOpen}
-                  color="inherit"
-                >
-                  <MoreIcon />
-                </IconButton>
-              </div>
-            </Toolbar>
-          </AppBar>
-          {renderMobileMenu}
-          {renderMenu}
-        </div>
-        <div>
+          //     <div className={classes.grow} />
+          //     <div className={classes.sectionDesktop}>
+          //       <IconButton aria-label="show 17 new notifications" color="inherit" component={Link} to="/wallet">
+          //         <Badge color="secondary">
+          //           <AccountBalanceWalletIcon/>
+          //         </Badge>
+          //       </IconButton>
+          //       <IconButton
+          //         edge="end"
+          //         aria-label="account of current user"
+          //         aria-controls={menuId}
+          //         aria-haspopup="true"
+          //         onClick={handleProfileMenuOpen}
+          //         color="inherit"
+          //       >
+          //         <AccountCircle />
+          //       </IconButton>
+          //     </div>
+          //     <div className={classes.sectionMobile}>
+          //       <IconButton
+          //         aria-label="show more"
+          //         aria-controls={mobileMenuId}
+          //         aria-haspopup="true"
+          //         onClick={handleMobileMenuOpen}
+          //         color="inherit"
+          //       >
+          //         <MoreIcon />
+          //       </IconButton>
+          //     </div>
+          //   </Toolbar>
+          // </AppBar>
+          // {renderMobileMenu}
+          // {renderMenu}
+        // </div>
+        <div style={{ marginTop: "100px"}}>
             <mobiscroll.Eventcalendar
               theme="ios" 
               themeVariant="light" 
@@ -272,7 +269,6 @@ function CalendarPage() {
               view={view}
            />
        </div>
-      </>
     ); 
 }
 

@@ -40,25 +40,15 @@ button[type="submit"]:hover{
   color: #6200EE !important;
 }
 
-.blackButton{
-  background-color: black;
-  color: white;
-}
-
-.whiteButton{
-  background-color: white;
-  color: black;
-}
-
-
-#table-no-highlight.toggled {
-    background-color: rgb(244,113,33);
+.logo-img{
+  width: 140px;
+  height: 80px;
 }
 
 /* Global Styles */
 :root {
-  --primary-color: #6200EE;
-  --dark-color: #343a40;
+  --primary-color: #841e2d;
+  --dark-color: #841e2d;
   --light-color: #f4f4f4;
   --danger-color: #dc3545;
   --success-color: #28a745;
@@ -97,7 +87,7 @@ img {
   margin: auto;
   overflow: hidden;
   padding: 0 2rem;
-  margin-top: 6rem;
+  margin-top: 8rem;
   margin-bottom: 3rem;
 }
 
@@ -360,12 +350,12 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.7rem 2rem;
+  padding: 0.2rem 2rem;
   position: fixed;
   z-index: 1;
   width: 100%;
   top: 0;
-  border-bottom: solid 1px var(--primary-color);
+  border-bottom: solid 1px var(--dark-color);
   opacity: 0.9;
 }
 
@@ -379,10 +369,6 @@ button {
   margin: 0 0.25rem;
 }
 
-.navbar a:hover {
-  color: var(--primary-color);
-}
-
 .navbar .welcome span {
   margin-right: 0.6rem;
 }
@@ -390,6 +376,7 @@ button {
 /* Landing Page */
 .landing {
   position: relative;
+  background: url('./img/landing.jpg') no-repeat center center/cover;
   height: 100vh;
 }
 

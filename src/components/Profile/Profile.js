@@ -1,47 +1,80 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import React, { Fragment, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import Spinner from '../layout/Spinner';
+import ProfileTop from './ProfileTop';
+import { getProfileById } from '../../actions/profile';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-}));
+ 
+const Profile = ({ getProfileById, profile: { profile, loading}, auth, match }) => {
+	useEffect(() => {
+		getProfileById(match.params.id);
+	}, [getProfileById, match.params.id]);
 
-const Profile = () => {
-	const classes = useStyles();
-	let history = useHistory()
 	return (
-		<>
-			<div className={classes.root}>
-		      <AppBar position="static">
-		        <Toolbar>
-		          <IconButton edge="start" className={classes.menuButton}
-		          color="inherit" onClick={() => history.goBack()}>
-		            <ArrowBackIcon />
-		          </IconButton>
-		          <Typography variant="h6" className={classes.title}>
-		            My Profile
-		          </Typography>
-		        </Toolbar>
-		      </AppBar>
-		    </div>
-		</>
+		<Fragment>
+			{ profile === null || loading ? (<Spinner />
+			) : (
+			<Fragment>
+				<Link to="/profiles" className="btn btn-light" >
+					Back to Profiles
+				</Link>
+				{auth.isAuthenticated &&
+				 auth.loading === false && 
+				 auth.user._id === profile.user._id && (
+				 	<Link to='/edit-profile' className="btn btn-dark">
+						Edit Profile
+					</Link>
+				)}
+			<div className="profile-grid my-1">
+				<ProfileTop profile={profile} />
+				<ProfileAbout profile={profile} />
+				<div className="profile-exp bg-white p-2">
+					<h2 className="text-primary">Experience</h2>
+					{profile.experience.length > 0 ? (
+						<Fragment>
+						{profile.experience.map(experience => (
+							<ProfileExperience key={experience._id} experience={experience} />
+						))}
+					</Fragment>
+					) : (
+					<h4>No Experience Credentials</h4>
+					)}
+				</div>
+
+				<div className="profile-edu bg-white p-2">
+					<h2 className="text-primary">Education</h2>
+					{profile.education.length > 0 ? (
+						<Fragment>
+							{profile.education.map(education => (
+								<ProfileEducation key={education._id} education={education} />
+							))}
+						</Fragment>
+					) : (
+					<h4>No Education Credentials</h4>
+				)}
+				</div>
+
+				{profile.githubusername && (
+					<ProfileGithub username={profile.githubusername} />
+				)}
+			</div>
+		</Fragment>
+		)}
+     </Fragment>
 	);
+};
+
+Profile.propTypes = {
+	getProfileById: PropTypes.func.isRequired,
+	profile: PropTypes.object.isRequired,
+	auth: PropTypes.object.isRequired
 }
 
-export default Profile;
+const mapStateToProps = state => ({
+	profile: state.profile,
+	auth: state.auth
+});
 
-
+export default connect(mapStateToProps, { getProfileById })(Profile);
