@@ -9,9 +9,8 @@ import { setAlert } from '../../actions/alert';
 import PropTypes from "prop-types";
 import Alert from "../layout/Alert";
 import axios from "axios";
-import { login } from '../../actions/auth';
 
-const Login = ({ setAlert, isAuthenticated, isAdmin }) => {
+const Login = ({ setAlert }) => {
   const [open, setOpen] = useState(false);
 
   const [start, setStart] = useState(false);
@@ -62,8 +61,35 @@ const Login = ({ setAlert, isAuthenticated, isAdmin }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = async (e) => {
-      e.preventDefault();
-      login(email, password);
+    e.preventDefault();  
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const body = JSON.stringify({ email, password });
+    console.log(body);
+    try {
+      const res = await axios.post('/auth', body, config);
+      localStorage.setItem('token', res.data.key);
+      if (res.data.role === "Member") {
+         
+      };
+
+      if (res.data.role === "admin") {
+          
+      }
+
+    } catch(err) {
+      const errors = err.response.data.errors;
+      console.log(err)
+      if (errors) {
+        setAlert(errors[0].msg, 'danger');
+      }
+
+      
+    }
   };
 
     const styles = {
@@ -96,13 +122,7 @@ const Login = ({ setAlert, isAuthenticated, isAdmin }) => {
       }
     }
 
-    // Redirect if logged in
-    if (isAuthenticated) {
-      return <Redirect to='/calendar' />;
-    }
-    if (isAdmin) {
-      return <Redirect to='/permission' />;
-    }
+   
 
     return (
       <Fragment>
@@ -199,14 +219,8 @@ const Login = ({ setAlert, isAuthenticated, isAdmin }) => {
 
 Login.propTypes = {
   setAlert: PropTypes.func.isRequired,
-  login: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool,
-  isAdmin: PropTypes.bool
 }
 
-const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated,
-  isAdmin: state.auth.isAdmin
-});
 
-export default connect(mapStateToProps, {login, setAlert})(Login);
+
+export default connect(null, {setAlert})(Login);

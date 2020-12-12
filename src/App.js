@@ -1,13 +1,13 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Login from './components/auth/LoginForm';
 import Register from './components/auth/RegistrationForm';
 import ResetPassword from './components/auth/ResetPassword';
-import CalendarPage from './components/calendar/Calendar';
+import CalendarPage from './components/Calendar/Calendar';
 // import Profile from './components/profile/Profile';
-import Wallet from './components/wallet/Wallet';
+import Wallet from './components/Wallet/Wallet';
 import EditTime from './adminportal/EditTime';
 import EditCourt from './adminportal/EditCourt';
 import Booking from './adminportal/Booking';
@@ -19,7 +19,6 @@ import NotFound from './components/layout/NotFound';
 //Redux
 import { Provider } from "react-redux";
 import store from "./store";
-import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
 
 if (localStorage.token) {
@@ -28,9 +27,7 @@ if (localStorage.token) {
 
 
 const App = () => {
-  useEffect(() => {
-    store.dispatch(loadUser());
-  }, []);
+
   return (
     <Provider store={store}>
       <div className="App">
