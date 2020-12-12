@@ -9,8 +9,9 @@ import { setAlert } from '../../actions/alert';
 import PropTypes from "prop-types";
 import Alert from "../layout/Alert";
 import axios from "axios";
+import { login } from '../../actions/auth';
 
-const Login = ({ setAlert }) => {
+const Login = ({ setAlert, isAuthenticated, isAdmin }) => {
   const [open, setOpen] = useState(false);
 
   const [start, setStart] = useState(false);
@@ -61,40 +62,8 @@ const Login = ({ setAlert }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = async (e) => {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    var res;
-    console.log("Form data", e);
-    e.preventDefault();
-
-    const idpass = {
-      email: email,     
-      password: password,
-    };
-
-    const body = JSON.stringify(idpass);
-    console.log(body);
-    try {
-      res = await axios.post("/auth", body, config);
-      console.log(res);
-      if (res.data.role === "Member") {
-        <Redirect to="/calendar" />
-      } 
-      if (res.data.role === "admin") {
-        <Redirect to="/permission" />
-      } 
-    } catch (err) {
-      //console.log(err.response.data.errors[0].msg)
-      if (err.response.data.errors[0].msg) {
-        setAlert(err.response.data.errors[0].msg, "danger");
-      }
-      else {
-        setAlert("Something went Wrong, Please retry");
-      }
-    }
+      e.preventDefault();
+      login(email, password);
   };
 
     const styles = {
@@ -125,6 +94,14 @@ const Login = ({ setAlert }) => {
         }
         console.log(err.response.data.errors[0].msg)
       }
+    }
+
+    // Redirect if logged in
+    if (isAuthenticated) {
+      return <Redirect to='/calendar' />;
+    }
+    if (isAdmin) {
+      return <Redirect to='/permission' />;
     }
 
     return (
@@ -222,6 +199,14 @@ const Login = ({ setAlert }) => {
 
 Login.propTypes = {
   setAlert: PropTypes.func.isRequired,
-};
+  login: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+  isAdmin: PropTypes.bool
+}
 
-export default connect(null, { setAlert })(Login);
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  isAdmin: state.auth.isAdmin
+});
+
+export default connect(mapStateToProps, {login, setAlert})(Login);

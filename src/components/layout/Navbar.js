@@ -25,7 +25,7 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout}) => {
 	return (
 		<nav className="navbar bg-dark">
 	      <Link to="/">
-	        <img className="logo-img" src={logo} /> 
+	        <img className="logo-img" src={logo} alt=""/> 
 	      </Link>
 	      { !loading && (
 	      	<Fragment>{ isAuthenticated ? authLinks : guestLinks }</Fragment>
