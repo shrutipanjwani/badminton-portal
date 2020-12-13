@@ -1,20 +1,20 @@
-import React, {useEffect} from 'react';
+import React,  { Fragment, useEffect } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Login from './components/auth/LoginForm';
 import Register from './components/auth/RegistrationForm';
 import ResetPassword from './components/auth/ResetPassword';
-import CalendarPage from './components/calendar/Calendar';
+import CalendarPage from './components/Calendar/Calendar';
 // import Profile from './components/profile/Profile';
-import Wallet from './components/wallet/Wallet';
+import Wallet from './components/Wallet/Wallet';
 import EditTime from './adminportal/EditTime';
 import EditCourt from './adminportal/EditCourt';
 import Booking from './adminportal/Booking';
 import RegistererPermission from './adminportal/RegistererPermission';
 import Landing from "./components/layout/Landing";
 import NotFound from './components/layout/NotFound';
-//import PrivateRoute from './components/routing/PrivateRoute';
+import PrivateRoute from './components/routing/PrivateRoute';
 
 //Redux
 import { Provider } from "react-redux";
@@ -26,15 +26,15 @@ if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
 
-
 const App = () => {
-  useEffect(() => {
+useEffect(() => {
     store.dispatch(loadUser());
   }, []);
   return (
     <Provider store={store}>
       <div className="App">
         <Router>
+          <Fragment>
           <Navbar />
           <Route exact path='/' component={Landing} />
           <section className="container1">
@@ -55,6 +55,7 @@ const App = () => {
               <Route component={NotFound} />
             </Switch>
           </section>
+          </Fragment>
         </Router>
       </div>
     </Provider>

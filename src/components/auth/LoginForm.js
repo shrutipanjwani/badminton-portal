@@ -11,7 +11,7 @@ import Alert from "../layout/Alert";
 import axios from "axios";
 import { login } from '../../actions/auth';
 
-const Login = ({ setAlert, isAuthenticated, isAdmin }) => {
+const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
   const [open, setOpen] = useState(false);
 
   const [start, setStart] = useState(false);
@@ -62,8 +62,37 @@ const Login = ({ setAlert, isAuthenticated, isAdmin }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = async (e) => {
-      e.preventDefault();
-      login(email, password);
+    e.preventDefault();  
+    login(email, password);
+    // const config = {
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   }
+    // }
+
+    // const body = JSON.stringify({ email, password });
+    // console.log(body);
+    // try {
+    //   const res = await axios.post('/auth', body, config);
+    //   localStorage.setItem('token', res.data.key);
+    //   if (res.data.role === "Member") {
+        
+    //   };
+
+    //   if (res.data.role === "admin") {
+          
+    //   }
+
+    // } catch(err) {
+    //   console.log(err)      
+    //   if (err.response) {
+    //     setAlert(err.response.data.errors[0].msg, 'danger');
+    //   }else{
+    //     setAlert("Internal Server Error", 'danger');
+    //   }
+
+      
+    // }
   };
 
     const styles = {
@@ -96,16 +125,19 @@ const Login = ({ setAlert, isAuthenticated, isAdmin }) => {
       }
     }
 
-    // Redirect if logged in
     if (isAuthenticated) {
-      return <Redirect to='/calendar' />;
-    }
-    if (isAdmin) {
-      return <Redirect to='/permission' />;
+      console.log(isAdmin)
+      if(isAdmin){
+        console.log(isAdmin)
+       return <Redirect to='/permission' />;
+      }else{
+        console.log(isAdmin)
+       return <Redirect to='/calendar' />;
+      }
     }
 
-    return (
-      <Fragment>
+    
+    return <Fragment>
         <section className="container">
           <h1 className="large text-primary">Sign In</h1>
           <form className="form" onSubmit={(e) => onSubmit(e)}>
@@ -194,8 +226,8 @@ const Login = ({ setAlert, isAuthenticated, isAdmin }) => {
           </p>
         </section>
       </Fragment>
-    );
-}
+    
+};
 
 Login.propTypes = {
   setAlert: PropTypes.func.isRequired,
@@ -209,4 +241,4 @@ const mapStateToProps = state => ({
   isAdmin: state.auth.isAdmin
 });
 
-export default connect(mapStateToProps, {login, setAlert})(Login);
+export default connect(mapStateToProps, {setAlert, login})(Login);
