@@ -5,12 +5,22 @@ import PropTypes from 'prop-types';
 import { logout } from '../../actions/auth';
 import logo from '../../img/logo.png';
 
-const Navbar = ({ auth: { isAuthenticated, loading }, logout}) => {
+const Navbar = ({ auth: { isAuthenticated, loading, isAdmin }, logout}) => {
 	const authLinks = (
 		<ul>
 	        <li>
 	        	<a onClick={logout} href="#!">
-	        		<i className="fas fa-sign-out-alt"></i>{' '}
+	        		<i className="fa fa-sign-out-alt"></i>{' '}
+	        		<span className="hide-sm">Logout</span>
+	        	</a>
+	        </li>
+	    </ul>
+	);
+	const adminLinks = (
+		<ul>
+	        <li>
+	        	<a onClick={logout} href="#!">
+	        		<i className="fa fa-sign-out-alt"></i>{' '}
 	        		<span className="hide-sm">Logout</span>
 	        	</a>
 	        </li>
@@ -18,17 +28,24 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout}) => {
 	);
 	const guestLinks = (
 		<ul>
-	        
+	       <li>
+	        	
+	        </li>
 	    </ul>
 	);
 
 	return (
 		<nav className="navbar bg-dark">
-	      <Link to="/">
-	        <img className="logo-img" src={logo} alt=""/> 
-	      </Link>
+	      <h1>
+	        <Link to="/">
+	        	<img className="logo-img" src={logo} alt=""/> 
+	        </Link>
+	      </h1>
 	      { !loading && (
-	      	<Fragment>{ isAuthenticated ? authLinks : guestLinks }</Fragment>
+	      	<Fragment>
+	      		{ isAuthenticated ? authLinks : guestLinks }
+	      		{ isAdmin ? adminLinks : guestLinks }
+	      	</Fragment>
 	      )}
 	    </nav>
 	);

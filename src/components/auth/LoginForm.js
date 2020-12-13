@@ -11,7 +11,7 @@ import Alert from "../layout/Alert";
 import axios from "axios";
 import { login } from '../../actions/auth';
 
-const Login = ({ setAlert, isAuthenticated, isAdmin }) => {
+const Login = ({ setAlert, isAuthenticated, isAdmin, login }) => {
   const [open, setOpen] = useState(false);
 
   const [start, setStart] = useState(false);

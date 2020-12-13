@@ -1,7 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -77,72 +76,23 @@ const RegistererPermission = () => {
 	const rows = [
 	  createData('John Doe',
 	  	<Button>Approve</Button>,
-	  	<Switch
-	        checked={state.checkedA}
-	        onChange={handleChange}
-	        name="checkedA"
-	        color="primary"
-	        inputProps={{ 'aria-label': 'primary checkbox' }}
-	    />,
-	    <Button>Unapprove</Button>,
 	  ),
 	  createData('Kevin Smith', 
 	  	<Button>Approve</Button>,
-	  	<Switch
-	        checked={state.checkedB}
-	        onChange={handleChange}
-	        name="checkedB"
-	        color="primary"
-	        inputProps={{ 'aria-label': 'primary checkbox' }}
-	    />,
-	  	<Button>Unapprove</Button>,
 	  ),
 	  createData('Mari Mathew', 
 	  	<Button>Approve</Button>,
-	  	<Switch
-	        checked={state.checkedC}
-	        onChange={handleChange}
-	        name="checkedC"
-	        color="primary"
-	        inputProps={{ 'aria-label': 'primary checkbox' }}
-	    />,
-	  	<Button>Unapprove</Button>,
 	  ),
 	  createData('Brad Traversy', 
 	  	<Button>Approve</Button>,
-	  	<Switch
-	        checked={state.checkedD}
-	        onChange={handleChange}
-	        name="checkedD"
-	        color="primary"
-	        inputProps={{ 'aria-label': 'primary checkbox' }}
-	    />,
-	  	<Button>Unapprove</Button>,
 	  ),
 	  createData('John Smith',
 	  	<Button>Approve</Button>,
-	  	<Switch
-	        checked={state.checkedF}
-	        onChange={handleChange}
-	        name="checkedF"
-	        color="primary"
-	        inputProps={{ 'aria-label': 'primary checkbox' }}
-	    />,
-	  	<Button>Unapprove</Button>,
 	  ),
 	];
 	
 	return (
 		<Fragment>
-			<div className={classes.root}>
-		      <AppBar position="static">
-		        <Toolbar>
-		          <Typography variant="h6" className={classes.title}>
-		            Admin Portal
-		          </Typography>
-		        </Toolbar>
-		      </AppBar>
-		    </div>
 		    <br />
 		    <Typography>Approve / Unapprove People</Typography>
 		    <br />

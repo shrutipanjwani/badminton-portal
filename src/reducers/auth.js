@@ -1,6 +1,4 @@
 import {
-	REGISTER_SUCCESS,
-	REGISTER_FAIL,
 	USER_LOADED,
 	AUTH_ERROR,
 	LOGIN_SUCCESS,
@@ -26,10 +24,8 @@ export default function (state = initialState, action) {
 			...state,
 			isAuthenticated: true,
 			loading: false,
-			user: payload,
-			isAdmin: null
+			user: payload
 		}
-		case REGISTER_SUCCESS:
 		case LOGIN_SUCCESS:
 			localStorage.setItem('token', payload.key);
 			console.log(localStorage.token);
@@ -37,10 +33,8 @@ export default function (state = initialState, action) {
 				...state,
 				...payload,
 				isAuthenticated: true,
-				loading: false,
-				isAdmin: null
+				loading: false
 			}
-		case REGISTER_FAIL:
 		case AUTH_ERROR:
 		case LOGIN_FAIL:
 		case LOGOUT:
@@ -49,8 +43,7 @@ export default function (state = initialState, action) {
 				...state,
 				token: null,
 				isAuthenticated: false,
-				loading: false,
-				isAdmin: null
+				loading: false
 			};
 		case ADMIN_LOGIN_SUCCESS: 
 			localStorage.setItem('token', payload.key);
