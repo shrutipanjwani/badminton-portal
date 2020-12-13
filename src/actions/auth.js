@@ -68,33 +68,35 @@ export const loadUser = () => async dispatch => {
 export const login = (email, password) => async dispatch => {
 	const config = {
 		headers: {
-			'Content-Type': 'application/json',
-		},
-	};
+			'Content-Type': 'application/json'
+		}
+	}
 
 	const body = JSON.stringify({ email, password });
-	console.log(body);
+
 	try {
 		const res = await axios.post('/auth', body, config);
-		console.log(res);
-		if (res.data.role === "Member") {
+		console.log(res.data.role)
+		if(res.data.role == "admin"){
+			
+			dispatch({
+			type: ADMIN_LOGIN_SUCCESS,
+			payload: res.data
+			});
+			
+		}else{
+			console.log(res.data.role)
 			dispatch({
 				type: LOGIN_SUCCESS,
-				payload: res.data.key
+				payload: res.data
 			});
-		};
-
-		if (res.data.role === "admin") {
-			dispatch({
-				type: ADMIN_LOGIN_SUCCESS,
-				payload: res.data.key
-			});
-		};
-
-		dispatch(loadUser());
+		}
+	dispatch(loadUser());
+		
+		
 	} catch(err) {
 		const errors = err.response.data.errors;
-		console.log(errors)
+
 		if (errors) {
 			errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
 		}

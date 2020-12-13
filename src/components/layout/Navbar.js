@@ -9,20 +9,20 @@ const Navbar = ({ auth: { isAuthenticated, loading, isAdmin }, logout}) => {
 	const authLinks = (
 		<ul>
 	        <li>
-	        	<a onClick={logout} href="#!">
+	        	<Link onClick={logout} to="/">
 	        		<i className="fas fa-sign-out-alt"></i>{' '}
 	        		<span className="hide-sm">Logout</span>
-	        	</a>
+	        	</Link>
 	        </li>
 	    </ul>
 	);
 	const adminLinks = (
 		<ul>
 	        <li>
-	        	<a onClick={logout} href="#!">
+	        	<Link onClick={logout} to="/">
 	        		<i className="fas fa-sign-out-alt"></i>{' '}
 	        		<span className="hide-sm">Logout</span>
-	        	</a>
+	        	</Link>
 	        </li>
 	    </ul>
 	);
@@ -41,7 +41,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, isAdmin }, logout}) => {
 	        	<img className="logo-img" src={logo} alt=""/> 
 	        </Link>
 	      </h1>
-	      { !loading && (
+	      {!loading && (
 	      	<Fragment>
 	      		{ isAuthenticated ? authLinks : guestLinks }
 	      		{ isAdmin ? adminLinks : guestLinks }
