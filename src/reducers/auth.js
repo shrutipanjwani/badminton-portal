@@ -1,12 +1,11 @@
 import {
-	REGISTER_SUCCESS,
-	REGISTER_FAIL,
 	USER_LOADED,
 	AUTH_ERROR,
 	LOGIN_SUCCESS,
+	ADMIN_LOGIN_SUCCESS,
 	LOGIN_FAIL,
 	LOGOUT,
-	ADMIN_LOGIN_SUCCESS
+	CLEAR_PROFILE
 } from '../actions/types';
 
 const initialState = {
@@ -14,7 +13,7 @@ const initialState = {
 	isAuthenticated: null,
 	loading: true,
 	user: null,
-	isAdmin: null
+	isAdmin : null
 }
 
 export default function (state = initialState, action) {
@@ -26,41 +25,41 @@ export default function (state = initialState, action) {
 			...state,
 			isAuthenticated: true,
 			loading: false,
-			user: payload,
-			isAdmin: null
+			user: payload
 		}
-		case REGISTER_SUCCESS:
 		case LOGIN_SUCCESS:
 			localStorage.setItem('token', payload.key);
-			console.log(localStorage.token);
 			return {
 				...state,
 				...payload,
 				isAuthenticated: true,
 				loading: false,
-				isAdmin: null
+				isAdmin: false
 			}
-		case REGISTER_FAIL:
+		case ADMIN_LOGIN_SUCCESS:
+			localStorage.setItem('token', payload.key);
+			return {
+				...state,
+				...payload,
+				isAdmin: true,
+				loading: false
+			}
 		case AUTH_ERROR:
 		case LOGIN_FAIL:
+		case CLEAR_PROFILE:
 		case LOGOUT:
 			localStorage.removeItem('token');
 			return {
 				...state,
 				token: null,
-				isAuthenticated: false,
+				isAuthenticated: null,
 				loading: false,
-				isAdmin: null
+				user: null,
+				isAdmin: false,
+				key : false,
+				role: false
 			};
-		case ADMIN_LOGIN_SUCCESS: 
-			localStorage.setItem('token', payload.key);
-			return {
-				...state,
-				...payload,
-				isAuthenticated: true,
-				loading: false,
-				isAdmin: true
-			};
+		
 		default: 
 			return state;	
 	}

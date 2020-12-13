@@ -9,8 +9,9 @@ import { setAlert } from '../../actions/alert';
 import PropTypes from "prop-types";
 import Alert from "../layout/Alert";
 import axios from "axios";
+import { login } from '../../actions/auth';
 
-const Login = ({ setAlert }) => {
+const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
   const [open, setOpen] = useState(false);
 
   const [start, setStart] = useState(false);
@@ -62,34 +63,36 @@ const Login = ({ setAlert }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();  
-    const config = {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
+    login(email, password);
+    // const config = {
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   }
+    // }
 
-    const body = JSON.stringify({ email, password });
-    console.log(body);
-    try {
-      const res = await axios.post('/auth', body, config);
-      localStorage.setItem('token', res.data.key);
-      if (res.data.role === "Member") {
-         
-      };
+    // const body = JSON.stringify({ email, password });
+    // console.log(body);
+    // try {
+    //   const res = await axios.post('/auth', body, config);
+    //   localStorage.setItem('token', res.data.key);
+    //   if (res.data.role === "Member") {
+        
+    //   };
 
-      if (res.data.role === "admin") {
+    //   if (res.data.role === "admin") {
           
-      }
+    //   }
 
-    } catch(err) {
-      const errors = err.response.data.errors;
-      console.log(err)
-      if (errors) {
-        setAlert(errors[0].msg, 'danger');
-      }
+    // } catch(err) {
+    //   console.log(err)      
+    //   if (err.response) {
+    //     setAlert(err.response.data.errors[0].msg, 'danger');
+    //   }else{
+    //     setAlert("Internal Server Error", 'danger');
+    //   }
 
       
-    }
+    // }
   };
 
     const styles = {
@@ -122,10 +125,15 @@ const Login = ({ setAlert }) => {
       }
     }
 
-   
+    if (isAuthenticated) {
+      if(isAdmin){
+       return <Redirect to='/permission' />;
+      }
+      return <Redirect to='/calendar' />;
+    }
 
-    return (
-      <Fragment>
+    
+    return <Fragment>
         <section className="container">
           <h1 className="large text-primary">Sign In</h1>
           <form className="form" onSubmit={(e) => onSubmit(e)}>
@@ -214,13 +222,19 @@ const Login = ({ setAlert }) => {
           </p>
         </section>
       </Fragment>
-    );
-}
+    
+};
 
 Login.propTypes = {
   setAlert: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+  isAdmin: PropTypes.bool
 }
 
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  isAdmin: state.auth.isAuthenticated
+});
 
-
-export default connect(null, {setAlert})(Login);
+export default connect(mapStateToProps, {setAlert, login})(Login);
