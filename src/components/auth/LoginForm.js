@@ -31,25 +31,6 @@ const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
   function handleClickOpenEmailRequest() {
       setStart(true);
   }
-  // constructor(props) {
-  //   super(props);
-
-  //   const token = localStorage.getItem("token");
-
-  //   let loggedIn = true;
-  //   if (token == null) {
-  //     loggedIn = false;
-  //   }
-
-  //   this.state = {
-  //     email: "",
-  //     password: "",
-  //     loggedIn,
-  //   };
-
-  //   this.onChange = this.onChange.bind(this);
-  //   this.submitForm = this.submitForm.bind(this);
-  // }
 
   const [formData, setFormData] = useState({
     email: "",
@@ -64,35 +45,6 @@ const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
   const onSubmit = async (e) => {
     e.preventDefault();  
     login(email, password);
-    // const config = {
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   }
-    // }
-
-    // const body = JSON.stringify({ email, password });
-    // console.log(body);
-    // try {
-    //   const res = await axios.post('/auth', body, config);
-    //   localStorage.setItem('token', res.data.key);
-    //   if (res.data.role === "Member") {
-        
-    //   };
-
-    //   if (res.data.role === "admin") {
-          
-    //   }
-
-    // } catch(err) {
-    //   console.log(err)      
-    //   if (err.response) {
-    //     setAlert(err.response.data.errors[0].msg, 'danger');
-    //   }else{
-    //     setAlert("Internal Server Error", 'danger');
-    //   }
-
-      
-    // }
   };
 
     const styles = {

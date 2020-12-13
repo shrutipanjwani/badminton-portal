@@ -1,10 +1,7 @@
-import React, { Component } from "react";
+import React, { Fragment, Component } from "react";
 import { ThemeProvider } from '@material-ui/core/styles';
 import Form from "./FormTwo";
 import Table from "./TableTwo";
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
 class EditCourt extends Component {
@@ -38,18 +35,8 @@ class EditCourt extends Component {
 
   render() {
     return (
-      <ThemeProvider>
-        <div className="App">
-          <div style={{flexGrow: 1}}>
-            <AppBar position="static">
-              <Toolbar>
-                <Typography variant="h6" style={{flexGrow: 1}}>
-                  Admin Portal
-                </Typography>
-              </Toolbar>
-            </AppBar>
-          </div>
-          <br />
+        <Fragment>
+          <h1 className="large text-primary" style={{ marginTop: '120px'}}>Bookings</h1>
           <Form
             onSubmit={submission =>
               this.setState({
@@ -91,8 +78,7 @@ class EditCourt extends Component {
               }
             ]}
           />
-        </div>
-      </ThemeProvider>
+        </Fragment>
     );
   }
 }

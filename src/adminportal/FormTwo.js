@@ -2,10 +2,8 @@ import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from '@material-ui/core/Button';
 import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import NativeSelect from '@material-ui/core/NativeSelect';
 
 export default class Form extends React.Component {
   state = {
@@ -124,7 +122,7 @@ export default class Form extends React.Component {
               id: 'age-native-simple',
             }}
             errorText={this.state.bookingTypeError}
-            style={{ width: '400px'}}
+            style={{ width: '280px'}}
           >
             <option aria-label="None" value="" />
             <option value='Single'>Single</option>
@@ -157,7 +155,7 @@ export default class Form extends React.Component {
               id: 'age-native-simple',
             }}
             errorText={this.state.bookingTimeError}
-            style={{ width: '400px'}}
+            style={{ width: '280px'}}
           >
             <option aria-label="None" value="" />
             <option value='6:00AM - 7:00AM'>6:00AM - 7:00AM</option>
@@ -194,8 +192,8 @@ export default class Form extends React.Component {
         />
         <br />
         <br />
-        <Button type="submit" value="Submit" onClick={e => this.onSubmit(e)}>
-          Add Booking
+        <Button onClick={e => this.onSubmit(e)}>
+          <p className="btn bg-dark">Add Booking</p>
         </Button>
       </form>
     );
