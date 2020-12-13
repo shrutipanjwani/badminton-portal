@@ -126,10 +126,14 @@ const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
     }
 
     if (isAuthenticated) {
+      console.log(isAdmin)
       if(isAdmin){
+        console.log(isAdmin)
        return <Redirect to='/permission' />;
+      }else{
+        console.log(isAdmin)
+       return <Redirect to='/calendar' />;
       }
-      return <Redirect to='/calendar' />;
     }
 
     
@@ -234,7 +238,7 @@ Login.propTypes = {
 
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
-  isAdmin: state.auth.isAuthenticated
+  isAdmin: state.auth.isAdmin
 });
 
 export default connect(mapStateToProps, {setAlert, login})(Login);

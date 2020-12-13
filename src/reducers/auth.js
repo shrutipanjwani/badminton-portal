@@ -21,26 +21,26 @@ export default function (state = initialState, action) {
 
 	switch(type) {
 		case USER_LOADED: 
-		return {
-			...state,
-			isAuthenticated: true,
-			loading: false,
-			user: payload
-		}
+			return {
+				...state,
+				isAuthenticated: true,
+				loading: false,
+				user: payload
+			}
 		case LOGIN_SUCCESS:
 			localStorage.setItem('token', payload.key);
 			return {
 				...state,
 				...payload,
 				isAuthenticated: true,
-				loading: false,
-				isAdmin: false
+				loading: false
 			}
 		case ADMIN_LOGIN_SUCCESS:
 			localStorage.setItem('token', payload.key);
 			return {
 				...state,
 				...payload,
+				isAuthenticated: true,
 				isAdmin: true,
 				loading: false
 			}
