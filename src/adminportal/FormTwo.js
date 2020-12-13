@@ -122,7 +122,7 @@ export default class Form extends React.Component {
               id: 'age-native-simple',
             }}
             errorText={this.state.bookingTypeError}
-            style={{ width: '280px'}}
+            style={{ width: '400px'}}
           >
             <option aria-label="None" value="" />
             <option value='Single'>Single</option>
@@ -155,7 +155,7 @@ export default class Form extends React.Component {
               id: 'age-native-simple',
             }}
             errorText={this.state.bookingTimeError}
-            style={{ width: '280px'}}
+            style={{ width: '400px'}}
           >
             <option aria-label="None" value="" />
             <option value='6:00AM - 7:00AM'>6:00AM - 7:00AM</option>
