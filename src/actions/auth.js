@@ -6,8 +6,8 @@ import {
 	LOGIN_SUCCESS,
 	LOGIN_FAIL,
 	CLEAR_PROFILE,
-	ADMIN_LOGIN_SUCCESS,
-	LOGOUT
+	LOGOUT,
+	ADMIN_LOGIN_SUCCESS
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -25,12 +25,12 @@ export const loadUser = () => async dispatch => {
 			payload: res.data
 		});
 	} catch (err) {
+		console.log(err)
 		dispatch({
 			type: AUTH_ERROR
 		});
 	}
 };
-
 
 // Login User
 export const login = (email, password) => async dispatch => {

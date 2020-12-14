@@ -1,9 +1,6 @@
 import React, {Fragment} from "react";
 import ReactDOM from "react-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -137,16 +134,9 @@ export default function EditTime() {
 
   return (
     <Fragment>
-      <div className={classes.root}>
-      <AppBar position="static">
-          <Toolbar>
-            <Typography variant="h6" className={classes.title}>
-            Admin Portal
-            </Typography>
-          </Toolbar>
-      </AppBar>
-    </div>
+      <div className={classes.root}></div>
       <Paper className={classes.root}>
+      <h1 className="large text-primary" style={{ marginTop: '100px'}}>Edit Time</h1>
       <br />
         <Table className={classes.table} id="table" aria-label="caption table">
           <TableHead>
@@ -187,10 +177,9 @@ export default function EditTime() {
                 <CustomTableCell {...{ row, name: "start", onChange }} />
                 <CustomTableCell {...{ row, name: "end", onChange }} />
                 <TableCell>
-                  <Button size="small"
-                  style={{backgroundColor: '#6200EE', color: '#ffffff'}}>
-                  Add a Break
-                </Button>
+                  <Button size="small">
+                    <p className="btn bg-dark">Add a Break</p>
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

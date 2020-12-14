@@ -187,8 +187,9 @@ img {
   display: inline-block;
   background: var(--light-color);
   color: #333;
-  padding: 0.4rem 1.3rem;
+  padding: 0.4rem 1.2rem;
   font-size: 1rem;
+  border-radius: 5px;
   border: none;
   cursor: pointer;
   margin-right: 0.5rem;
@@ -356,6 +357,13 @@ button {
 }
 
 /* Navbar */
+nav{
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: var(--dark-color);
+}
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -365,8 +373,6 @@ button {
   z-index: 999;
   width: 100%;
   top: 0;
-  border-bottom: solid 1px var(--dark-color);
-  
 }
 
 .navbar ul {
