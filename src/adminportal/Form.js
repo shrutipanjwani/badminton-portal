@@ -65,8 +65,8 @@ export default class Form extends React.Component {
         />
         <br />
         <br />
-        <Button type="submit" value="Submit" onClick={e => this.onSubmit(e)}>
-          Add a Court
+        <Button onClick={e => this.onSubmit(e)}>
+          <p className="btn bg-dark">Add a Court</p>
         </Button>
       </form>
     );
