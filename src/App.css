@@ -1,7 +1,17 @@
 .App {
   text-align: center;
 }
-
+.Nav{
+  position: fixed;
+    top: 0;
+    width: 100vw;
+    z-index: 999;
+}
+.main{
+  position: relative;
+  margin-top:100px;
+  overflow: auto;
+}
 .MuiToolbar-regular {
   background-color: var(--primary-color);
 }
@@ -352,11 +362,11 @@ button {
   align-items: center;
   padding: 0.2rem 2rem;
   position: fixed;
-  z-index: 1;
+  z-index: 999;
   width: 100%;
   top: 0;
   border-bottom: solid 1px var(--dark-color);
-  opacity: 0.9;
+  
 }
 
 .navbar ul {
