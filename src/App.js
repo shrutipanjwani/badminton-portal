@@ -35,7 +35,8 @@ useEffect(() => {
       <div className="App">
         <Router>
           <Fragment>
-          <Navbar />
+          <Navbar className="Nav" />
+          <div className="main">
           <Route exact path='/' component={Landing} />
           <section className="container1">
             <Switch>
@@ -55,6 +56,7 @@ useEffect(() => {
               <Route component={NotFound} />
             </Switch>
           </section>
+          </div>
           </Fragment>
         </Router>
       </div>

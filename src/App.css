@@ -1,7 +1,17 @@
 .App {
   text-align: center;
 }
-
+.Nav{
+  position: fixed;
+    top: 0;
+    width: 100vw;
+    z-index: 999;
+}
+.main{
+  position: relative;
+  margin-top:100px;
+  overflow: auto;
+}
 .MuiToolbar-regular {
   background-color: var(--primary-color);
 }
