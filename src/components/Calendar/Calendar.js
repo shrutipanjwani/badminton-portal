@@ -18,7 +18,8 @@ export default class calendar extends React.Component {
     //weekendsVisible: true,
     currentEvents: [],
     calenderView : 'dayGridMonth',
-    bookedevents: []
+    bookedevents: [],
+    courts : []
   }
   }
 
@@ -47,7 +48,7 @@ export default class calendar extends React.Component {
         }
         bookedeventsvar.push({
           id: createEventId(),
-          title: "Court: " + res.data[i].court.court_name + " | Slot Type : " + type + " | No. of Players:"+res.data[i].players.length,
+          title: "C" + res.data[i].court.court_name + "|" + type + "|"+res.data[i].players.length+"P",
           start: res.data[i].date + 'T' + res.data[i].start_time,
           end: res.data[i].date + 'T' + res.data[i].end_time,
           color : res.data[i].court.colour,
@@ -55,7 +56,22 @@ export default class calendar extends React.Component {
         })
       }
       this.setState({bookedevents : bookedeventsvar})
-      console.log(this.state.bookedevents)
+     // console.log(this.state.bookedevents)
+    } catch(err) {
+		  console.log(err);
+	  }
+  }
+  async getCourtDetails(){
+    const config = {
+		  headers: {
+			  'Content-Type': 'application/json'
+		  }
+	  }
+    try {
+      const res = await axios.get('/court/', config);
+
+      this.setState({courts : res.data})
+      console.log(res.data)
     } catch(err) {
 		  console.log(err);
 	  }
@@ -63,6 +79,7 @@ export default class calendar extends React.Component {
 
   componentDidMount(){
     this.getData();
+    this.getCourtDetails();
   }
 
  
@@ -74,6 +91,7 @@ export default class calendar extends React.Component {
         {this.renderSidebar()}
         <div className='demo-app-main'>
           <FullCalendar
+            height = "80vh"
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             headerToolbar={{
               left: 'prev,next today',
@@ -84,6 +102,7 @@ export default class calendar extends React.Component {
             //editable={true}
             //selectable={true}
             selectMirror={true}
+            allDaySlot = {false}
             //dayMaxEvents={true}
             //weekends={this.state.weekendsVisible}
             events={this.state.bookedevents} // alternatively, use the `events` setting to fetch from a feed
@@ -113,28 +132,20 @@ export default class calendar extends React.Component {
         <div className='demo-app-sidebar-section'>
           <h2>Instructions</h2>
           <ul>
-            <li>Select dates and you will be prompted to create a new event</li>
-            <li>Drag, drop, and resize events</li>
-            <li>Click an event to delete it</li>
+            <li>Please Follow these Instructions to Book a Court</li>
           </ul>
-        </div>
-        {/* 
+          EVENT Title Format = Court ID | Type of event | No. of Players
+        </div> 
         <div className='demo-app-sidebar-section'>
-           <label>
-            <input
-              type='checkbox'
-              checked={this.state.weekendsVisible}
-              onChange={this.handleWeekendsToggle}
-            ></input>
-            toggle weekends
-          </label> 
-        </div> */}
-        <div className='demo-app-sidebar-section'>
+           <h2>All Courts ({this.state.courts.length})</h2>
+          {this.state.courts.map(renderSidebarCourt)}
+        </div> 
+        {/* <div className='demo-app-sidebar-section'>
           <h2>All Events ({this.state.currentEvents.length})</h2>
           <ul>
             {this.state.currentEvents.map(renderSidebarEvent)}
           </ul>
-        </div>
+        </div> */}
       </div>
     )
   }
@@ -190,9 +201,28 @@ function renderEventContent(eventInfo) {
 
 function renderSidebarEvent(event) {
   return (
-    <li key={event.id}>
+    <li>
       <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
       <i>{event.title}</i>
     </li>
+  )
+}
+
+function renderSidebarCourt(event) {
+  var colorcourt = event.colour
+  return (
+    <div style={{
+        backgroundColor: colorcourt
+      }}>
+      <b>Court {event.court_name}</b>
+      <i>Time : {event.start_time} - {event.end_time}</i><br />
+      {event.court_break.length == 0 ? "No Breaks" : event.court_break.map(renderSidebarbreak) }<br /><br />
+    </div>
+  )
+}
+
+function renderSidebarbreak(event) {
+  return (<div>
+      <i>Break {event.break_name} : Time {event.bstart_time} - {event.bend_time}</i></div>
   )
 }
