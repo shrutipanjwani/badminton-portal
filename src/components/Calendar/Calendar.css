@@ -49,6 +49,11 @@ b { /* used for event dates/times */
   padding: 3em;
 }
 
+.fc-event-time, .fc-event-title {
+  padding: 0 1px;
+  white-space: nowrap;
+}
+
 .fc { /* the calendar root */
   max-width: 1100px;
   margin: 0 auto;
