@@ -3,20 +3,72 @@ import FullCalendar, { formatDate } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { INITIAL_EVENTS, createEventId } from './event-utils'
+import { INITIAL_EVENTS, createEventId ,todayStr} from './event-utils'
 import './Calendar.css'
+import axios from "axios";
 
-export default class Calendar extends React.Component {
-
-  state = {
-    //weekendsVisible: true,
-    currentEvents: [],
-    calenderView : 'timeGridDay'
-  }
+export default class calendar extends React.Component {
+  
 
   calendarRef = React.createRef();
+
+  constructor(props){
+    super(props);
+    this. state = {
+    //weekendsVisible: true,
+    currentEvents: [],
+    calenderView : 'dayGridMonth',
+    bookedevents: []
+  }
+  }
+
+  async  getData(){
+    const config = {
+		  headers: {
+			  'Content-Type': 'application/json'
+		  }
+	  }
+
+    try {
+      var bookedeventsvar = [];
+      const res = await axios.get('/booking/', config);
+      for(var i = 0; i < res.data.length; i++){
+        var type = ""
+        switch(res.data[i].type){
+          case 1:
+            type= "Singles";
+            break;
+          case 2:
+            type= "Doubles";
+            break; 
+          default:
+            type = "Full Court";
+            break;
+        }
+        bookedeventsvar.push({
+          id: createEventId(),
+          title: "Court: " + res.data[i].court.court_name + " | Slot Type : " + type + " | No. of Players:"+res.data[i].players.length,
+          start: res.data[i].date + 'T' + res.data[i].start_time,
+          end: res.data[i].date + 'T' + res.data[i].end_time,
+          color : res.data[i].court.colour,
+          booking : res.data[i]
+        })
+      }
+      this.setState({bookedevents : bookedeventsvar})
+      console.log(this.state.bookedevents)
+    } catch(err) {
+		  console.log(err);
+	  }
+  }
+
+  componentDidMount(){
+    this.getData();
+  }
+
+ 
   
   render() {
+    console.log("printing")
     return (
       <div className='demo-app'>
         {this.renderSidebar()}
@@ -28,19 +80,19 @@ export default class Calendar extends React.Component {
               center: 'title',
               right: 'dayGridMonth,timeGridDay'
             }}
-            defaultView={this.state.calenderView}
+            intialView={this.state.calenderView}
             //editable={true}
-            selectable={true}
+            //selectable={true}
             selectMirror={true}
             //dayMaxEvents={true}
             //weekends={this.state.weekendsVisible}
-            initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
+            events={this.state.bookedevents} // alternatively, use the `events` setting to fetch from a feed
             dateClick={this.handleDateSelect}
             eventContent={renderEventContent} // custom render function
             eventClick={this.handleEventClick}
             validRange= {{
               start: new Date(),
-              end: '2022-06-01'
+              end: new Date().setMonth(new Date().getMonth()+6)
             }}
             eventsSet={this.handleEvents} // called after events are initialized/added/changed/removed
             /* you can update a remote database when these fire:
@@ -113,9 +165,10 @@ export default class Calendar extends React.Component {
     //   })
     // }
   }
-
+  
   handleEventClick = (clickInfo) => {
     //DISPLAY EVENT DETAILS OVER SIDEBAR
+    console.log(clickInfo)
   }
 
   handleEvents = (events) => {
