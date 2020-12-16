@@ -1,10 +1,17 @@
 import React, { Fragment, useState } from 'react';
+import { Link } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import { connect } from "react-redux";
+import { setAlert } from '../../actions/alert';
+import PropTypes from "prop-types";
+import Alert from "../layout/Alert";
+import { resetpassword } from '../../actions/auth';
+import { useParams } from 'react-router-dom';
 
-const ResetPassword = ({ setAlert }) => {
+const ResetPassword = ({ setAlert, resetpassword }) => {
   const [open, setOpen] = useState(false);
  
   function handleClose() {
@@ -21,6 +28,8 @@ const ResetPassword = ({ setAlert }) => {
     },
   }
 
+  const params = useParams();
+
   const [formData, setFormData] = useState({
     password: '',
     confirmPassword: ''
@@ -33,11 +42,17 @@ const ResetPassword = ({ setAlert }) => {
 
   const onSubmit = async e => {
     e.preventDefault();
+    //console.log(params);
+    
     if (password !== confirmPassword) {
-      setAlert('Password do not match', 'danger');
-      handleClickOpen(true)
+      setAlert("Password do not match", "danger");
     } else {
-      console.log('SUCCESS');
+     
+      const res = await resetpassword(params.email, params.token, password);
+      
+      if(res){
+        handleClickOpen(true);
+      }
     }
   };
   
@@ -68,6 +83,7 @@ const ResetPassword = ({ setAlert }) => {
                 required
               />
             </div>
+            <Alert />
             <input type="submit" className="btn btn-primary" value="Reset Password"/>
             <Dialog
               open={open}
@@ -79,10 +95,7 @@ const ResetPassword = ({ setAlert }) => {
                   Your Password has been changed successfully
                   <br />
                   <br />
-                  <Button type='submit'
-                  variant="outlined" color="primary" onClick={handleClose}>
-                    OK
-                  </Button>
+                  <Link style={{ width: '130px'}} className="btn btn-primary" to="/signin">Sign back in</Link>
                 </DialogContentText>
               </DialogContent>
             </Dialog>
@@ -92,4 +105,9 @@ const ResetPassword = ({ setAlert }) => {
     );
 }
 
-export default ResetPassword;
+ResetPassword.propTypes = {
+  setAlert: PropTypes.func.isRequired,
+  resetpassword: PropTypes.func.isRequired
+};
+
+export default connect(null, { setAlert, resetpassword })(ResetPassword);

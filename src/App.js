@@ -5,9 +5,9 @@ import Navbar from './components/layout/Navbar';
 import Login from './components/auth/LoginForm';
 import Register from './components/auth/RegistrationForm';
 import ResetPassword from './components/auth/ResetPassword';
-import CalendarPage from './components/Calendar/Calendar';
+import CalendarPage from './components/calendar/Calendar';
 // import Profile from './components/profile/Profile';
-import Wallet from './components/Wallet/Wallet';
+import Wallet from './components/wallet/Wallet';
 import EditTime from './adminportal/EditTime';
 import EditCourt from './adminportal/EditCourt';
 import Booking from './adminportal/Booking';
@@ -44,7 +44,7 @@ useEffect(() => {
             <Switch>
               <Route exact path='/signup' component={Register}/>
               <Route exact path='/signin' component={Login}/>
-              <Route exact path='/resetpassword' component={ResetPassword}/>
+              <Route exact path='/resetpassword/:email/:token' component={ResetPassword}/>
               <Route exact path='/calendar' component={CalendarPage}/>
               <Route exact path='/wallet' component={Wallet}/>
 

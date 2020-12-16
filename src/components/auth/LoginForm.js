@@ -142,13 +142,7 @@ const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
                       </div>
                       <br />
                       <br />
-                      <input
-                        variant="outlined"
-                        type="submit"
-                        onClick={handleClose}
-                        value="Ok"
-                        style={{ padding: '10px', width: '50px', marginTop: '20px'}}
-                      />
+                      <input type="submit" className="btn btn-primary" value="Send Reset Password Email"  onClick={handleClose}/>
                     </form>
                   </DialogContentText>
               </DialogContent>
@@ -164,12 +158,7 @@ const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
                     <p>Please Check in 2-3 Minutes</p>
                     <br />
                     <br />
-                    <Button
-                      variant="outlined"
-                      onClick={handleCloseEmailRequest}
-                    >
-                      <p className="text-primary">OK</p>
-                    </Button>
+                    <input type="submit" className="btn btn-primary" value="OK"  onClick={handleCloseEmailRequest}/>
                   </DialogContentText>
               </DialogContent>
             </Dialog>
