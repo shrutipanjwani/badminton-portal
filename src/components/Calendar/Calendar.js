@@ -60,9 +60,15 @@ export default class calendar extends React.Component {
       this.setState({bookedevents : bookedeventsvar})
      // console.log(this.state.bookedevents)
     } catch(err) {
+      if(this.state.first==0){
+        var a=1
+        this.setState({first: a});
+        this.getData();
+      }else{
 		  alert("your session is expired, login again");
       logout();
       this.props.history.push("/signin");
+      }
 	  }
   }
   async getCourtDetails(){
@@ -77,17 +83,16 @@ export default class calendar extends React.Component {
       this.setState({courts : res.data})
       console.log(res.data)
     } catch(err) {
-<<<<<<< HEAD
-      alert("your session is expired, login again");
-      logout();
-=======
       console.log(err);
       if(this.state.first==0){
         var a=1
         this.setState({first: a});
         this.getData();
-      }
->>>>>>> 147313f714c975e6e87ad6d8f47233f2b2b61500
+      }else{
+		  alert("your session is expired, login again");
+      logout();
+      this.props.history.push("/signin");
+      } 
 	  }
   }
 
