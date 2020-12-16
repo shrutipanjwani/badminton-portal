@@ -6,7 +6,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import { INITIAL_EVENTS, createEventId ,todayStr} from './event-utils'
 import './Calendar.css'
 import axios from "axios";
-
+import { logout } from '../../actions/auth';
 export default class calendar extends React.Component {
   
 
@@ -58,7 +58,9 @@ export default class calendar extends React.Component {
       this.setState({bookedevents : bookedeventsvar})
      // console.log(this.state.bookedevents)
     } catch(err) {
-		  console.log(err);
+		  alert("your session is expired, login again");
+      logout();
+      this.props.history.push("/signin");
 	  }
   }
   async getCourtDetails(){
@@ -73,7 +75,8 @@ export default class calendar extends React.Component {
       this.setState({courts : res.data})
       console.log(res.data)
     } catch(err) {
-		  console.log(err);
+      alert("your session is expired, login again");
+      logout();
 	  }
   }
 
