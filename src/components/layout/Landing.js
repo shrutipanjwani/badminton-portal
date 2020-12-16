@@ -17,8 +17,8 @@ const Landing = ({ isAuthenticated }) => {
 	            Practice like you've never won. Perform like you've never lost.
 	          </p>
 	          <div className="buttons">
+				<Link to="/signin" className="btn btn-light">Sign in</Link>
 	            <Link to="/signup" className="btn btn-primary">Sign Up</Link>
-	            <Link to="/signin" className="btn btn-light">Login</Link>
 	          </div>
 	        </div>
 	      </div>

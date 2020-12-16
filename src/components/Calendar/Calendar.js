@@ -59,7 +59,7 @@ export default class calendar extends React.Component {
         })
       }
       this.setState({bookedevents : bookedeventsvar})
-     // console.log(this.state.bookedevents)
+      this.getCourtDetails();
     } catch(err) {
       if(this.state.first==0){
         var a=1
@@ -81,9 +81,7 @@ export default class calendar extends React.Component {
 	  }
     try {
       const res = await axios.get('/court/', config);
-
       this.setState({courts : res.data})
-      console.log(res.data)
     } catch(err) {
       console.log(err);
       if(this.state.first==0){
@@ -93,16 +91,15 @@ export default class calendar extends React.Component {
       }else{
         if(this.state.alert == 0){
           alert("your session is expired, login again");
+          logout();
+          this.props.history.push("/signin");
         }
-        logout();
-        this.props.history.push("/signin");
       } 
 	  }
   }
 
   componentDidMount(){
     this.getData();
-    this.getCourtDetails();
   }
 
  
