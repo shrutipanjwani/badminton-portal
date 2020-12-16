@@ -639,3 +639,101 @@ nav{
     padding: 0.3rem 0.4rem;
   }
 }
+#badge-panel.tab-pane button {
+  border: 0px;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  background-color: grey;
+  border-radius: 0px;
+  color: #ffffff;
+}
+#badge-panel.tab-pane button.pending {
+  background-color: #5bc0de;
+}
+#badge-panel.tab-pane button.approved {
+  background-color: #5cb85c;
+}
+#badge-panel.tab-pane button.rejected {
+  background-color: #d9534f;
+}
+
+/*------------------------------------------------------------------BADGES-----*/
+.skm-badges .skm-grid-badges {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  gap: 4px;
+  align-items: center;
+  justify-items: center;
+}
+.skm-badges .skm-grid-badges .skm-badge {
+  background: linear-gradient(90deg, #606060 0%, #b4b4b4 100%);
+  display: inline-block;
+  border-radius: 50%;
+  height: 150px;
+  width: 150px;
+}
+.skm-badges .skm-grid-badges .skm-badge figure {
+  background: linear-gradient(90deg, #585858 0%, #a4a4a4 100%);
+  height: 134px;
+  width: 134px;
+  border-radius: 50%;
+  display: inline-block;
+  text-align: center;
+  margin: 8px;
+}
+.skm-badges .skm-grid-badges .skm-badge figure img {
+  width: 134px;
+  height: auto;
+  border-radius: 50%;
+}
+.skm-badges .skm-grid-badges .skm-badge.active figure {
+  background: linear-gradient(90deg, #d47b4a 0%, #c85951 100%);
+}
+.skm-badges .skm-grid-badges .skm-badge.approved {
+  background: linear-gradient(90deg, #298a08 0%, #d8f6ce 100%);
+}
+.skm-badges .skm-grid-badges .skm-badge.pending {
+  background: linear-gradient(90deg, #04b4ae 0%, #ced8f6 100%);
+}
+.skm-badges .skm-grid-badges .skm-badge.rejected {
+  background: linear-gradient(90deg, #b40404 0%, #f5a9a9 100%);
+}
+.skm-badges .skm-grid-badges .skm-badge p {
+  font-weight: bold;
+  color: var(--user-color);
+}
+
+/*------------------------------------------------------------------TABLE-----*/
+.skm-badge-table {
+  padding: 10px 0px 10px 20px;
+}
+.skm-badge-table .badge-table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+.skm-badge-table .badge-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+.skm-badge-table .badge-table tr:hover {
+  background-color: #ddd;
+}
+.skm-badge-table .badge-table tr:first-child {
+  font-weight: bold;
+  color:#28a745
+}
+.skm-badge-table .badge-table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4caf50;
+  color: white;
+}
+.skm-badge-table .badge-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+/*-----------------------------------------------------------------------*/
+
