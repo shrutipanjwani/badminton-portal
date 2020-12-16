@@ -18,6 +18,7 @@ export default class calendar extends React.Component {
     this. state = {
     //weekendsVisible: true,
     first:0,
+    alert:0,
     currentEvents: [],
     calenderView : 'dayGridMonth',
     bookedevents: [],
@@ -65,9 +66,10 @@ export default class calendar extends React.Component {
         this.setState({first: a});
         this.getData();
       }else{
-		  alert("your session is expired, login again");
-      logout();
-      this.props.history.push("/signin");
+        alert("your session is expired, login again");
+        this.setState({alert: 1});
+        logout();
+        this.props.history.push("/signin");
       }
 	  }
   }
@@ -89,9 +91,11 @@ export default class calendar extends React.Component {
         this.setState({first: a});
         this.getData();
       }else{
-		  alert("your session is expired, login again");
-      logout();
-      this.props.history.push("/signin");
+        if(this.state.alert == 0){
+          alert("your session is expired, login again");
+        }
+        logout();
+        this.props.history.push("/signin");
       } 
 	  }
   }
@@ -197,9 +201,9 @@ export default class calendar extends React.Component {
   }
   
   handleEventClick = (clickInfo) => {
-console.log("clickeve",clickInfo.event._def.extendedProps.booking)
-var bookingdata=clickInfo.event._def.extendedProps.booking;
-this.props.history.push('/userbooking',{data:bookingdata});
+    console.log("clickeve",clickInfo.event._def.extendedProps.booking)
+    var bookingdata=clickInfo.event._def.extendedProps.booking;
+    this.props.history.push('/userbooking',{data:bookingdata});
 
     console.log(clickInfo)
 
