@@ -27,7 +27,7 @@ export const loadUser = () => async dispatch => {
 			payload: res.data
 		});
 	} catch (err) {
-		console.log(err)
+		//console.log(err)
 		dispatch({
 			type: AUTH_ERROR
 		});
@@ -46,7 +46,7 @@ export const login = (email, password) => async dispatch => {
 
 	try {
 		const res = await axios.post('/auth', body, config);
-		console.log(res.data.role)
+		//console.log(res.data.role)
 		if(res.data.role == "admin"){
 			
 			dispatch({
@@ -55,7 +55,7 @@ export const login = (email, password) => async dispatch => {
 			});
 			
 		}else{
-			console.log(res.data.role)
+			//console.log(res.data.role)
 			dispatch({
 				type: LOGIN_SUCCESS,
 				payload: res.data
@@ -89,7 +89,7 @@ export const resetpassword = (email, token, password) => async dispatch => {
 		const body = JSON.stringify({ email, token, password});
 		
 		const res = await axios.post('/users/resetPassword', body, config);
-		console.log(res)
+		//console.log(res)
 		dispatch({
 			type: RESET_PASSWORD,
 			payload: res.data
@@ -99,9 +99,9 @@ export const resetpassword = (email, token, password) => async dispatch => {
 		return true;
 
 	} catch (err) {
-		console.log("data =")
+		//console.log("data =")
 		
-		console.log(err.response)
+		//console.log(err.response)
 		
 		dispatch(setAlert(err.response.data.message, 'danger'));
 		
