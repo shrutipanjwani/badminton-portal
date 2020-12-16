@@ -4,7 +4,6 @@ import { setAlert } from './alert';
 import { 
 	GET_PROFILE, 
 	PROFILE_ERROR, 
-	UPDATE_PROFILE, 
 	CLEAR_PROFILE
 } from './types';
 
@@ -45,7 +44,7 @@ export const getProfileById = (userId) => async (dispatch) => {
 };
 
 
-// Create or Update a profile
+// Create a profile
 export const createProfile = (formData, history, edit = false) => async dispatch => {
 	try {
 		const config = {
@@ -79,4 +78,3 @@ export const createProfile = (formData, history, edit = false) => async dispatch
 		});
 	}
 };
-

@@ -212,7 +212,11 @@ function renderSidebarCourt(event) {
   var colorcourt = event.colour
   return (
     <div style={{
-        backgroundColor: colorcourt
+        backgroundColor: colorcourt,
+        borderRadius: '5px',
+        padding: '10px',
+        color: '#ffffff',
+        marginBottom: '10px'
       }}>
       <b>Court {event.court_name}</b>
       <i>Time : {event.start_time} - {event.end_time}</i><br />

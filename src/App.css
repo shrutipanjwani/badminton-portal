@@ -1,6 +1,11 @@
 .App {
   text-align: center;
 }
+
+div, h1, h2, h3, h4, h5, nav, p, .main{
+  font-family: 'Poppins', sans-serif;
+}
+
 .Nav{
   position: fixed;
     top: 0;
@@ -38,16 +43,6 @@
   #table{
     width: 410px;
   }
-}
-
-button[type="submit"]{
-  background: #6200EE;
-  color: #ffffff;
-}
-
-button[type="submit"]:hover{
-  background: #ffffff !important;
-  color: #6200EE !important;
 }
 
 .logo-img{
@@ -368,10 +363,11 @@ nav{
   display: flex;
   justify-content: space-between;
   align-items: center;
+  text-align: right;
   padding: 0.2rem 2rem;
   position: fixed;
   z-index: 999;
-  width: 100%;
+  width: 100vw;
   top: 0;
 }
 
@@ -379,10 +375,18 @@ nav{
   display: flex;
 }
 
+.guest-none{
+  display: none !important;
+}
+
 .navbar a {
   color: #fff;
   padding: 0.45rem;
   margin: 0 0.25rem;
+}
+
+.navbar i{
+  font-size: 22px;
 }
 
 .navbar .welcome span {
@@ -394,6 +398,7 @@ nav{
   position: relative;
   background: url('./img/landing.jpg') no-repeat center center/cover;
   height: 100vh;
+  overflow-y: hidden !important;
 }
 
 .landing-inner {
