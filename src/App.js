@@ -15,8 +15,6 @@ import RegistererPermission from './adminportal/RegistererPermission';
 import Landing from "./components/layout/Landing";
 import NotFound from './components/layout/NotFound';
 import PrivateRoute from './components/routing/PrivateRoute';
-import UserBooking from './components/Booking/Booking';
-
 
 //Redux
 import { Provider } from "react-redux";
@@ -53,7 +51,7 @@ useEffect(() => {
               <Route exact path='/editcourt' component={EditCourt}/>
               <Route exact path='/permission' component={RegistererPermission}/>
               <Route exact path='/booking' component={Booking}/>
-              <Route exact path='/UserBooking' component={UserBooking}/>
+
               {/*Error Page*/}
               <Route component={NotFound} />
             </Switch>
