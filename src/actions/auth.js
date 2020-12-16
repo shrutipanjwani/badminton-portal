@@ -7,7 +7,9 @@ import {
 	LOGIN_FAIL,
 	CLEAR_PROFILE,
 	LOGOUT,
-	ADMIN_LOGIN_SUCCESS
+	ADMIN_LOGIN_SUCCESS,
+	RESET_PASSWORD,
+	RESET_PASSWORD_ERROR
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -73,7 +75,42 @@ export const login = (email, password) => async dispatch => {
 			type: LOGIN_FAIL
 		});
 	}
-}
+};
+
+// Reset password 
+export const resetpassword = (email, token, password) => async dispatch => {
+	try {
+		const config = {
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}
+
+		const body = JSON.stringify({ email, token, password});
+		
+		const res = await axios.post('/users/resetPassword', body, config);
+		console.log(res)
+		dispatch({
+			type: RESET_PASSWORD,
+			payload: res.data
+		});
+		
+		//dispatch(setAlert('Your Password has been changed successfully'));
+		return true;
+
+	} catch (err) {
+		console.log("data =")
+		
+		console.log(err.response)
+		
+		dispatch(setAlert(err.response.data.message, 'danger'));
+		
+		dispatch({
+			type: RESET_PASSWORD_ERROR,
+			payload: { msg: err.response.statusText, status: err.response.status }
+		});
+	}
+};
 
 // Logout / Clear Profile
 

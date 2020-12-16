@@ -5,7 +5,9 @@ import {
 	ADMIN_LOGIN_SUCCESS,
 	LOGIN_FAIL,
 	LOGOUT,
-	CLEAR_PROFILE
+	CLEAR_PROFILE,
+	RESET_PASSWORD,
+	RESET_PASSWORD_ERROR 
 } from '../actions/types';
 
 const initialState = {
@@ -48,6 +50,8 @@ export default function (state = initialState, action) {
 		case LOGIN_FAIL:
 		case CLEAR_PROFILE:
 		case LOGOUT:
+		case RESET_PASSWORD:
+		case RESET_PASSWORD_ERROR:
 			localStorage.removeItem('token');
 			return {
 				...state,
@@ -59,7 +63,6 @@ export default function (state = initialState, action) {
 				key : false,
 				role: false
 			};
-		
 		default: 
 			return state;	
 	}
