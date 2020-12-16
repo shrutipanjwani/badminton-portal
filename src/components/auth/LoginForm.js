@@ -1,5 +1,5 @@
-import React, { Fragment, useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import React, { Fragment, useState, useEffect } from "react";
+import { Link, Redirect, useParams } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -12,6 +12,12 @@ import axios from "axios";
 import { login } from '../../actions/auth';
 
 const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
+
+  useEffect(() => {
+    const params = useParams();
+    console.log(params)
+  });
+
   const [open, setOpen] = useState(false);
 
   const [start, setStart] = useState(false);

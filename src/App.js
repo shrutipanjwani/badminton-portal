@@ -5,6 +5,7 @@ import Navbar from './components/layout/Navbar';
 import Login from './components/auth/LoginForm';
 import Register from './components/auth/RegistrationForm';
 import ResetPassword from './components/auth/ResetPassword';
+import UserVerification from './components/auth/UserVerification';
 import CalendarPage from './components/calendar/Calendar';
 // import Profile from './components/profile/Profile';
 import Wallet from './components/wallet/Wallet';
@@ -43,6 +44,7 @@ useEffect(() => {
               <Route exact path='/signup' component={Register}/>
               <Route exact path='/signin' component={Login}/>
               <Route exact path='/resetpassword/:email/:token' component={ResetPassword}/>
+              <Route exact path='/verify/:email/:token' component={UserVerification}/>
               <Route exact path='/calendar' component={CalendarPage}/>
               <Route exact path='/wallet' component={Wallet}/>
 
