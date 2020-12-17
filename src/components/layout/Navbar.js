@@ -36,10 +36,34 @@ const Navbar = ({ auth: { isAuthenticated, loading, isAdmin }, logout}) => {
 	);
 	const adminLinks = (
 		<ul>
+			<li>
+	        	<Link to="/permission">
+	        		<i className="fas fa-check"></i>{' '}
+	        		<span className="hide-sm"> &nbsp;User Approval</span>
+	        	</Link>
+	        </li>
+			<li>
+	        	<Link to="/booking">
+	        		<i className="fas fa-book"></i>{' '}
+	        		<span className="hide-sm"> &nbsp;Booking</span>
+	        	</Link>
+	        </li>
+			<li>
+	        	<Link to="/editcourt">
+	        		<i className="fas fa-layer-group"></i>{' '}
+	        		<span className="hide-sm"> &nbsp;Court</span>
+	        	</Link>
+	        </li>
+			<li>
+	        	<Link to="/users">
+	        		<i className="fas fa-users"></i>{' '}
+	        		<span className="hide-sm"> &nbsp;Users</span>
+	        	</Link>
+	        </li>
 	        <li>
-	        	<Link onClick={logout} to="/">
+	        	<Link onClick={logout} to="/signin">
 	        		<i className="fas fa-sign-out-alt"></i>{' '}
-	        		{/* <span className="hide-sm">Logout</span> */}
+	        		<span className="hide-sm"> &nbsp;Logout</span>
 	        	</Link>
 	        </li>
 	    </ul>
@@ -57,8 +81,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, isAdmin }, logout}) => {
 	      </h1>
 	      {!loading && (
 	      	<Fragment>
-	      		{ isAuthenticated ? authLinks : guestLinks }
-	      		{ isAdmin ? adminLinks : guestLinks }
+	      		{ isAuthenticated ? (isAdmin ? adminLinks: authLinks) : guestLinks }
 	      	</Fragment>
 	      )}
 	    </nav>
