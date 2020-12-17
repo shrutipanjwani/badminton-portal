@@ -1,5 +1,4 @@
 import React from 'react'
-
 import axios from "axios";
 
 export default class UserBooking extends React.Component {
@@ -34,8 +33,8 @@ export default class UserBooking extends React.Component {
     console.log("printing")
     return (
         
-<div style={{width:"40%"}}>
-<h1 className="large text-primary">Booking Details</h1>
+<div style={{width:"40%", margin: "auto"}}>
+<h1 className="large text-primary" style={{marginTop: "50px"}}>Booking Details</h1>
 
 <div id="badge-panel" class="tab-pane">
   <div class='skm-badge-table'>
