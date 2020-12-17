@@ -8,7 +8,12 @@ import { Link, Redirect } from "react-router-dom";
 import './Calendar.css'
 import axios from "axios";
 import { logout } from '../../actions/auth';
+import store from '../../store';
+
+
+
 export default class calendar extends React.Component {
+  
   
 
   calendarRef = React.createRef();
@@ -24,6 +29,11 @@ export default class calendar extends React.Component {
     bookedevents: [],
     courts : []
   }
+  }
+
+  getCurrentStateFromStore() {
+      console.log(store.getState().user)
+      console.log(store.getState().isAuthenticated)
   }
 
   async  getData(){
@@ -73,6 +83,7 @@ export default class calendar extends React.Component {
       }
 	  }
   }
+  
   async getCourtDetails(){
     const config = {
 		  headers: {
@@ -99,6 +110,7 @@ export default class calendar extends React.Component {
   }
 
   componentDidMount(){
+    this.getCurrentStateFromStore();
     this.getData();
   }
 

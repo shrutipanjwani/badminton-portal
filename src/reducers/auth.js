@@ -3,6 +3,7 @@ import {
 	AUTH_ERROR,
 	LOGIN_SUCCESS,
 	ADMIN_LOGIN_SUCCESS,
+	USER_LOADED_ADMIN,
 	LOGIN_FAIL,
 	LOGOUT,
 	CLEAR_PROFILE,
@@ -22,6 +23,14 @@ export default function (state = initialState, action) {
 	const { type, payload } = action;
 
 	switch(type) {
+		case USER_LOADED_ADMIN: 
+			return {
+				...state,
+				isAuthenticated: true,
+				loading: false,
+				user: payload,
+				isAdmin: true
+			}
 		case USER_LOADED: 
 			return {
 				...state,

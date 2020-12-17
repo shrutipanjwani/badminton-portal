@@ -9,7 +9,8 @@ import {
 	LOGOUT,
 	ADMIN_LOGIN_SUCCESS,
 	RESET_PASSWORD,
-	RESET_PASSWORD_ERROR
+	RESET_PASSWORD_ERROR,
+	USER_LOADED_ADMIN
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -21,11 +22,17 @@ export const loadUser = () => async dispatch => {
 
 	try {
 		const res = await axios.get('/auth');
-
-		dispatch({
-			type: USER_LOADED,
-			payload: res.data
-		});
+		if(res.data.role == "admin"){
+			dispatch({
+				type: USER_LOADED_ADMIN,
+				payload: res.data
+			});
+		}else{	
+			dispatch({
+				type: USER_LOADED,
+				payload: res.data
+			});
+		}
 	} catch (err) {
 		//console.log(err)
 		dispatch({
