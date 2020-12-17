@@ -1,6 +1,7 @@
 import React from 'react'
 
 import axios from "axios";
+import { Button } from '@material-ui/core';
 
 export default class UserBooking extends React.Component {
   
@@ -12,10 +13,15 @@ export default class UserBooking extends React.Component {
     this.state = {
         data:props.location.state.data,
         aviSlot:null,
-        total:null
+        total:null,
+        courttype:[ "Fullcourt",
+        "singles",
+        "Doubles"]
+   
+        }
   }
 
-  }
+
 
   componentWillMount(){
       console.log("datafrom state",this.state.data);
@@ -26,9 +32,27 @@ export default class UserBooking extends React.Component {
         player= 2 - player;
        this.setState({aviSlot: player});
     }
-
+    if(this.state.data.type==0){
+      this.setState({total:4});
+      this.setState({aviSlot: 0});
+    }
+    if(this.state.data.type==2){
+      this.setState({total:4});
+      player= 4 - player;
+      this.setState({aviSlot: player});    }
    
   }    
+
+  Canbook=()=>{
+    
+    if(this.state.data.court_full==true){
+      return(  <p style={{color:"red"}}> Sorry, you cant book slot due to slot unavailability   </p>);
+    }
+      else{
+        return( <Button >Go Ahead And BOOK</Button>);
+
+      }
+  }
 
   render() {
     console.log("printing")
@@ -61,9 +85,16 @@ export default class UserBooking extends React.Component {
         <td>Court number</td>
         <td>{this.state.data.court.court_name}</td>
        </tr>
+       <tr>
+        <td>Court Booking Type</td>
+        <td>{this.state.courttype[this.state.data.type]}</td>
+       </tr>
       </table>
   </div>
+  
 </div>
+{this.Canbook()}
+
 </div>
      
     )}
