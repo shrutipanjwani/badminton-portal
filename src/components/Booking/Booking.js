@@ -11,7 +11,8 @@ export default class UserBooking extends React.Component {
     this.state = {
         data:props.location.state.data,
         aviSlot:null,
-        total:null
+        total:null,
+        button: true
   }
 
   }
@@ -61,6 +62,9 @@ export default class UserBooking extends React.Component {
         <td>{this.state.data.court.court_name}</td>
        </tr>
       </table>
+      <br />
+      {/* <input type="submit" className="btn" value="Add Player" hidden=""/> */}
+      <input type="submit" className="btn btn-primary" value="Add Player" disabled={this.state.button}/>
   </div>
 </div>
 </div>

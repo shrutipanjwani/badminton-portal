@@ -217,6 +217,10 @@ img {
   color: #fff;
 }
 
+.btn-primary:disabled{
+  background-color: grey;
+}
+
 .btn-light,
 .bg-light,
 .badge-light,
