@@ -413,6 +413,12 @@ nav{
   text-align: center;
 }
 
+.rounded{
+  border-radius: 50%;
+  height: 100px;
+  width: 100px;
+}
+
 /* Profiles Page */
 .profile {
   display: grid;
@@ -423,6 +429,7 @@ nav{
   line-height: 1.8;
   margin-bottom: 1rem;
 }
+
 
 /* Profile Page */
 .profile-grid {

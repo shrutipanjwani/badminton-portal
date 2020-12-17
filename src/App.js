@@ -23,6 +23,7 @@ import { Provider } from "react-redux";
 import store from "./store";
 import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
+import PictureUploader from './components/Wallet/pictureUploader';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -57,6 +58,7 @@ useEffect(() => {
               <Route exact path='/permission' component={RegistererPermission}/>
               <Route exact path='/booking' component={Booking}/>
               <Route exact path='/userbooking' component={UserBooking}/>
+              <Route exact path='/picture' component={PictureUploader}/>
               {/*Error Page*/}
               <Route path="" component={NotFound} />
             </Switch>
