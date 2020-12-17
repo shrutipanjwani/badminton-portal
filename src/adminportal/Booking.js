@@ -1,13 +1,14 @@
 import React, { Fragment, Component } from "react";
-import { ThemeProvider } from '@material-ui/core/styles';
 import Form from "./FormTwo";
 import Table from "./TableTwo";
-import Button from '@material-ui/core/Button';
 
-class EditCourt extends Component {
+class Booking extends Component {
+   
   state = {
     data: [],
-    editIdx: -1
+    editIdx: -1,
+    isActive:false,
+    isDisplay: false
   };
 
   handleRemove = i => {
@@ -33,54 +34,80 @@ class EditCourt extends Component {
     }));
   };
 
+  handleShow = ()=>{
+    this.setState({
+      isActive: true
+    })
+  }
+
+  handleStart = ()=>{
+    this.setState({
+      isDisplay: true
+    })
+  }
+
+
   render() {
     return (
         <Fragment>
-          <h1 className="large text-primary" style={{ marginTop: '120px'}}>Bookings</h1>
-          <Form
-            onSubmit={submission =>
-              this.setState({
-                data: [...this.state.data, submission]
-              })}
-          />
-          <Table
-            style={{ margin: 'auto', textAlign: 'center'}}
-            handleRemove={this.handleRemove}
-            startEditing={this.startEditing}
-            editIdx={this.state.editIdx}
-            stopEditing={this.stopEditing}
-            handleChange={this.handleChange}
-            data={this.state.data}
-            header={[
-              {
-                name: "",
-                prop: "courtName"
-              },
-              {
-                name: "",
-                prop: "bookingName"
-              },
-              {
-                name: "",
-                prop: "bookingType"
-              },
-              {
-                name: "",
-                prop: "bookingDate"
-              },
-              {
-                name: "",
-                prop: "bookingTime"
-              },
-              {
-                name: "",
-                prop: "bookingContact"
-              }
-            ]}
-          />
+          <h1 className="large text-primary" style={{ marginTop: "50px"}}>Bookings</h1>
+          <div style={{width: "100%", margin: "auto"}}>
+              <div style={{ width: "50%", float: "left", borderRight: "1px solid grey"}}>
+                <button className="btn btn-primary" onClick={this.handleShow}>New Booking</button>
+               
+              </div>
+              <div style={{ width: "50%", float: "right"}}>
+              {this.state.isActive ? <Fragment>
+                
+                <Form
+                  onSubmit={submission =>
+                    this.setState({
+                      data: [...this.state.data, submission]
+                    })}
+                />
+                <div onClick={this.handleStart} style={{ cursor: 'pointer'}}>
+                  <Table
+                    style={{ margin: 'auto', textAlign: 'center'}}
+                    handleRemove={this.handleRemove}
+                    startEditing={this.startEditing}
+                    editIdx={this.state.editIdx}
+                    stopEditing={this.stopEditing}
+                    handleChange={this.handleChange}
+                    data={this.state.data}
+                    header={[
+                      {
+                        name: "",
+                        prop: "courtName"
+                      },
+                      {
+                        name: "",
+                        prop: "playerName"
+                      },
+                      {
+                        name: "",
+                        prop: "bookingType"
+                      },
+                      {
+                        name: "",
+                        prop: "bookingDate"
+                      },
+                      {
+                        name: "",
+                        prop: "bookingTime"
+                      },
+                      {
+                        name: "",
+                        prop: "bookingContact"
+                      }
+                    ]}
+                  /> 
+                </div>
+              </Fragment> : <h1 style={{ marginTop: "20px"}}>No Bookings </h1> }
+              </div>
+          </div>
         </Fragment>
     );
   }
 }
 
-export default EditCourt;
+export default Booking;

@@ -8,7 +8,7 @@ import Select from '@material-ui/core/Select';
 export default class Form extends React.Component {
   state = {
     courtName: "",
-    bookingName: "",
+    playerName: "",
     bookingType: "",
     bookingDate: "",
     bookingTime: "",
@@ -26,7 +26,7 @@ export default class Form extends React.Component {
     let isError = false;
     const errors = {
       courtNameError: "",
-      bookingNameError: "",
+      playerNameError: "",
       bookingTypeError: "",
       bookingDateError: "",
       bookingTimeError: "",
@@ -43,14 +43,14 @@ export default class Form extends React.Component {
       errors.courtNameError = "Requires Court Name";
     }
 
-    if (this.state.bookingName.indexOf("@") !== -1) {
+    if (this.state.playerName.indexOf("@") !== -1) {
        isError = true;
-       errors.bookingNameError = "Requires Name";
+       errors.playerNameError = "Requires Name";
     }
 
-    if (this.state.bookingName.length < 5) {
+    if (this.state.playerName.length < 5) {
       isError = true;
-      errors.bookingNameError = "Requires Name";
+      errors.playerNameError = "Requires Name";
     }
 
     this.setState({
@@ -70,8 +70,8 @@ export default class Form extends React.Component {
       this.setState({
         courtName: "",
         courtNameError: "",
-        bookingName: "",
-        bookingNameError: "",
+        playerName: "",
+        playerNameError: "",
         bookingType: "",
         bookingTypeError: "",
         bookingDate: "",
@@ -86,7 +86,7 @@ export default class Form extends React.Component {
 
   render() {
     return (
-      <form>
+      <form style={{ marginTop: "20px"}}>
         <TextField
           type="text"
           name="courtName"
@@ -95,19 +95,19 @@ export default class Form extends React.Component {
           onChange={e => this.change(e)}
           errorText={this.state.courtNameError}
           required
-          style={{ width: '30%'}}
+          style={{ width: '55%'}}
         />
         <br />
         <br />
         <TextField
           type="text"
-          name="bookingName"
-          placeholder="Booking By"
-          value={this.state.bookingName}
+          name="playerName"
+          placeholder="Player Name"
+          value={this.state.playerName}
           onChange={e => this.change(e)}
-          errorText={this.state.bookingNameError}
+          errorText={this.state.playerNameError}
           required
-          style={{ width: '30%'}}
+          style={{ width: '55%'}}
         />
         <br />
         <br />
@@ -122,7 +122,7 @@ export default class Form extends React.Component {
               id: 'age-native-simple',
             }}
             errorText={this.state.bookingTypeError}
-            style={{ width: '400px'}}
+            style={{ width: '420px'}}
           >
             <option aria-label="None" value="" />
             <option value='Single'>Single</option>
@@ -140,7 +140,7 @@ export default class Form extends React.Component {
           onChange={e => this.change(e)}
           errorText={this.state.bookingDateError}
           required
-          style={{ width: '30%'}}
+          style={{ width: '55%'}}
         />
         <br />
         <br />
@@ -155,7 +155,7 @@ export default class Form extends React.Component {
               id: 'age-native-simple',
             }}
             errorText={this.state.bookingTimeError}
-            style={{ width: '400px'}}
+            style={{ width: '420px'}}
           >
             <option aria-label="None" value="" />
             <option value='6:00AM - 7:00AM'>6:00AM - 7:00AM</option>
@@ -188,7 +188,7 @@ export default class Form extends React.Component {
           onChange={e => this.change(e)}
           errorText={this.state.bookingContactError}
           required
-          style={{ width: '30%'}}
+          style={{ width: '55%'}}
         />
         <br />
         <br />
