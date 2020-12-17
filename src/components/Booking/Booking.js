@@ -1,5 +1,4 @@
 import React from 'react'
-
 import axios from "axios";
 import { Button } from '@material-ui/core';
 
@@ -19,6 +18,7 @@ export default class UserBooking extends React.Component {
         "Doubles"]
    
         }
+        button: true
   }
 
 
@@ -58,8 +58,8 @@ export default class UserBooking extends React.Component {
     console.log("printing")
     return (
         
-<div style={{width:"40%"}}>
-<h1 className="large text-primary">Booking Details</h1>
+<div style={{width:"40%", margin: "auto"}}>
+<h1 className="large text-primary" style={{marginTop: "50px"}}>Booking Details</h1>
 
 <div id="badge-panel" class="tab-pane">
   <div class='skm-badge-table'>
@@ -90,6 +90,9 @@ export default class UserBooking extends React.Component {
         <td>{this.state.courttype[this.state.data.type]}</td>
        </tr>
       </table>
+      <br />
+      {/* <input type="submit" className="btn" value="Add Player" hidden=""/> */}
+      <input type="submit" className="btn btn-primary" value="Add Player" disabled={this.state.button}/>
   </div>
   
 </div>

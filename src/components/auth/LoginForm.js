@@ -1,5 +1,5 @@
-import React, { Fragment, useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import React, { Fragment, useState, useEffect } from "react";
+import { Link, Redirect, useParams } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -12,6 +12,20 @@ import axios from "axios";
 import { login } from '../../actions/auth';
 
 const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
+  const params = useParams();
+  useEffect(() => {
+        // if(!props.fetched) {
+        //     props.fetchRules();
+        // }
+        if(params.verifydetails !== undefined ){
+          if(params.verifydetails){
+            setAlert("You are verified, Please ask admin to approve." ,  "danger")
+          }
+          else{
+            setAlert("Verification failed , Link is not correct" ,  "danger")
+          }
+        }
+    }, []);
   const [open, setOpen] = useState(false);
 
   const [start, setStart] = useState(false);
@@ -27,6 +41,7 @@ const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
   function handleCloseEmailRequest() {
     setStart(false);
   }
+
 
   function handleClickOpenEmailRequest() {
       setStart(true);
@@ -64,7 +79,7 @@ const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
 
       try {
         res = await axios.get("/users/resetpasswordmail", params);
-        console.log(res);
+        //console.log(res);
         handleClickOpenEmailRequest(true)
       } catch (err) {
         if (err.response.data.errors[0].msg) {
@@ -73,17 +88,17 @@ const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
         else {
           setAlert("Something went Wrong, Please retry");
         }
-        console.log(err.response.data.errors[0].msg)
+        //console.log(err.response.data.errors[0].msg)
       }
     }
 
     if (isAuthenticated) {
-      console.log(isAdmin)
+     // console.log(isAdmin)
       if(isAdmin){
-        console.log(isAdmin)
+        //console.log(isAdmin)
        return <Redirect to='/permission' />;
       }else{
-        console.log(isAdmin)
+        //console.log(isAdmin)
        return <Redirect to='/calendar' />;
       }
     }
@@ -142,13 +157,7 @@ const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
                       </div>
                       <br />
                       <br />
-                      <input
-                        variant="outlined"
-                        type="submit"
-                        onClick={handleClose}
-                        value="Ok"
-                        style={{ padding: '10px', width: '50px', marginTop: '20px'}}
-                      />
+                      <input type="submit" className="btn btn-primary" value="Send Reset Password Email"  onClick={handleClose}/>
                     </form>
                   </DialogContentText>
               </DialogContent>
@@ -164,12 +173,7 @@ const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
                     <p>Please Check in 2-3 Minutes</p>
                     <br />
                     <br />
-                    <Button
-                      variant="outlined"
-                      onClick={handleCloseEmailRequest}
-                    >
-                      <p className="text-primary">OK</p>
-                    </Button>
+                    <input type="submit" className="btn btn-primary" value="OK"  onClick={handleCloseEmailRequest}/>
                   </DialogContentText>
               </DialogContent>
             </Dialog>

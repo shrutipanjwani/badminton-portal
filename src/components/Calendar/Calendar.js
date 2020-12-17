@@ -7,7 +7,7 @@ import { INITIAL_EVENTS, createEventId ,todayStr} from './event-utils'
 import { Link, Redirect } from "react-router-dom";
 import './Calendar.css'
 import axios from "axios";
-
+import { logout } from '../../actions/auth';
 export default class calendar extends React.Component {
   
 
@@ -18,6 +18,7 @@ export default class calendar extends React.Component {
     this. state = {
     //weekendsVisible: true,
     first:0,
+    alert:0,
     currentEvents: [],
     calenderView : 'dayGridMonth',
     bookedevents: [],
@@ -58,9 +59,18 @@ export default class calendar extends React.Component {
         })
       }
       this.setState({bookedevents : bookedeventsvar})
-     // console.log(this.state.bookedevents)
+      this.getCourtDetails();
     } catch(err) {
-		  console.log(err);
+      if(this.state.first==0){
+        var a=1
+        this.setState({first: a});
+        this.getData();
+      }else{
+        alert("your session is expired, login again");
+        this.setState({alert: 1});
+        logout();
+        this.props.history.push("/signin");
+      }
 	  }
   }
   async getCourtDetails(){
@@ -71,22 +81,25 @@ export default class calendar extends React.Component {
 	  }
     try {
       const res = await axios.get('/court/', config);
-
       this.setState({courts : res.data})
-      console.log(res.data)
     } catch(err) {
       console.log(err);
       if(this.state.first==0){
         var a=1
         this.setState({first: a});
         this.getData();
-      }
+      }else{
+        if(this.state.alert == 0){
+          alert("your session is expired, login again");
+          logout();
+          this.props.history.push("/signin");
+        }
+      } 
 	  }
   }
 
   componentDidMount(){
     this.getData();
-    this.getCourtDetails();
   }
 
  
@@ -185,9 +198,9 @@ export default class calendar extends React.Component {
   }
   
   handleEventClick = (clickInfo) => {
-console.log("clickeve",clickInfo.event._def.extendedProps.booking)
-var bookingdata=clickInfo.event._def.extendedProps.booking;
-this.props.history.push('/userbooking',{data:bookingdata});
+    console.log("clickeve",clickInfo.event._def.extendedProps.booking)
+    var bookingdata=clickInfo.event._def.extendedProps.booking;
+    this.props.history.push('/userbooking',{data:bookingdata});
 
     console.log(clickInfo)
 
@@ -223,7 +236,11 @@ function renderSidebarCourt(event) {
   var colorcourt = event.colour
   return (
     <div style={{
-        backgroundColor: colorcourt
+        backgroundColor: colorcourt,
+        borderRadius: '5px',
+        padding: '10px',
+        color: '#ffffff',
+        marginBottom: '10px'
       }}>
       <b>Court {event.court_name}</b>
       <i>Time : {event.start_time} - {event.end_time}</i><br />
