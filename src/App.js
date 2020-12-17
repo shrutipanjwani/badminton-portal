@@ -7,7 +7,6 @@ import Register from './components/auth/RegistrationForm';
 import ResetPassword from './components/auth/ResetPassword';
 import CalendarPage from './components/Calendar/Calendar';
 import UserVerification from './components/auth/UserVerification';
-// import Profile from './components/profile/Profile';
 import Wallet from './components/Wallet/Wallet';
 import EditTime from './adminportal/EditTime';
 import EditCourt from './adminportal/EditCourt';

@@ -1,45 +1,16 @@
 import React, {	Fragment ,useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom'
-import { makeStyles } from '@material-ui/core/styles';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import img from '../../img/user.png'
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 
 const stripePromise = loadStripe("pk_test_51HysuDFhf22CW4TepnCI6ZofveEBAxNFymCNlFW27S1zsShT6ToZMCNdQPZfvDMrfLDD4EOsLOgDfh12Y6DVt10L00VQ0ZYiuP");
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-  card: {
-    minWidth: 275,
-  },
-  heading: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-  center: {
-  	margin: 'auto',
-  },
-}));
-
-
 
 function Wallet() {
 	const [message, setMessage] = useState("");
@@ -55,8 +26,6 @@ function Wallet() {
 		);
 		}
 	}, []);
-
-	const classes = useStyles();
 	
 	let history = useHistory();
 	
@@ -79,22 +48,52 @@ function Wallet() {
 		// using `result.error.message`.
 		}
 	};
+
+	const name = "John Doe"
+	const email = "shrutipanjwani@gmail.com";
+	const phone = "9030320393";
+	const status = "active";
+	const bookings = "12"
+
 	return (
 		<Fragment>
-			<h1 className="large text-primary" style={{marginTop: '150px'}}>Wallet</h1>
-		    <Card className={classes.card}>
-		      <CardContent>
-		        <Typography className="text-primary" color="textSecondary">
-		          	Current Balance: $0
-		        </Typography>
-		      </CardContent>
-		      <CardActions>
-		        <Button size="small" className="text-primary" onClick={handleClick}>
-		        	&nbsp; Add Money to your wallet &nbsp;
-		        	<ArrowRightAltIcon />
-		        </Button>
-		      </CardActions>
-		    </Card>
+			<div className="gradient"  style={{ float: 'left', width: '55%', height: "100vh",
+			color: "#fff"}}>
+				<img
+					class="round-img my-3"
+					style={{ width: '150px', height: '150px' }}
+            		src={img}
+            		alt=""
+          		/>
+		  		<div style={{ width: '60%', textAlign: "left", margin: "auto"}}>
+				  <h1 class="lead">{name}</h1>
+					<p><strong>Email:</strong> &nbsp; {email}</p>
+					<br />
+					<p><strong>Phone No:</strong> &nbsp; {phone}</p>
+					<br />
+					<p><strong>Status:</strong> &nbsp; {status}</p>
+					<br />
+					<p><strong>Total Bookings: </strong> &nbsp; {bookings}</p>
+				</div>
+			</div>
+			<div style={{ float: 'right', width: '45%'}}>
+				<h1 className="large text-primary" style={{marginTop: '150px'}}>Wallet</h1>
+				<Card>
+				<CardContent>
+					<Typography className="text-primary" color="textSecondary">
+						Current Balance: $0
+					</Typography>
+					<br />
+					<input type="number" style={{ padding: '0.4rem' ,fontSize: '1.2rem', border: '1px solid #ccc' }}/>
+				</CardContent>
+				<CardActions>
+					<Button size="small" className="text-primary" onClick={handleClick}>
+						&nbsp; Add Money to your wallet &nbsp;
+						<ArrowRightAltIcon />
+					</Button>
+				</CardActions>
+				</Card>
+			</div>
 		</Fragment>
 	);
 }

@@ -217,6 +217,10 @@ img {
   color: #fff;
 }
 
+.btn-primary:disabled{
+  background-color: grey;
+}
+
 .btn-light,
 .bg-light,
 .badge-light,
@@ -742,5 +746,8 @@ nav{
   padding: 8px;
 }
 
+.gradient {
+  background: linear-gradient(90deg, hsla(351, 63%, 32%, 0.9) 54%, hsla(0, 0%, 100%, 1) 100%);
+}
 /*-----------------------------------------------------------------------*/
 
