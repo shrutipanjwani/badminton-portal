@@ -14,19 +14,13 @@ class UserVerification extends React.Component {
               key: token
             }
           });
-
-          this.props.history.push({
-            pathname: '/signin',
-            search: '?verify=true',
-          })
+          const verify = res.data;
+          this.props.history.push( "/signin/true"  )
             
         } catch(err) {
           
           console.log(err.response);
-          this.props.history.push({
-            pathname: '/signin',
-            search: '?verify=false',
-          })
+          this.props.history.push( "/signin/false" )
         }
     }
     
