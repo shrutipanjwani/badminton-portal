@@ -1,6 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { Link, Redirect, useParams } from "react-router-dom";
-import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
@@ -78,7 +77,7 @@ const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
       e.preventDefault();
 
       try {
-        res = await axios.get("/users/resetpasswordmail", params);
+        await axios.get("/users/resetpasswordmail", params);
         //console.log(res);
         handleClickOpenEmailRequest(true)
       } catch (err) {

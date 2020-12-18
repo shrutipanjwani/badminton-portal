@@ -3,26 +3,24 @@ import FullCalendar, { formatDate } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { INITIAL_EVENTS, createEventId ,todayStr} from './event-utils'
-import { Link, Redirect } from "react-router-dom";
+import { createEventId} from './event-utils'
 import './Calendar.css'
 import axios from "axios";
 import { logout } from '../../actions/auth';
 import store from '../../store';
-
+import setAuthToken from '../../utils/setAuthToken';
 
 
 export default class calendar extends React.Component {
-  
-  
-
   calendarRef = React.createRef();
 
   constructor(props){
     super(props);
-    this. state = {
+    if (localStorage.token) {
+      setAuthToken(localStorage.token);
+    }
+    this.state = {
     //weekendsVisible: true,
-    first:0,
     alert:0,
     currentEvents: [],
     calenderView : 'dayGridMonth',
@@ -32,8 +30,8 @@ export default class calendar extends React.Component {
   }
 
   getCurrentStateFromStore() {
-      console.log(store.getState().user)
-      console.log(store.getState().isAuthenticated)
+      console.log(store.getState().auth)
+      console.log(store.getState().auth)
   }
 
   async  getData(){
@@ -71,16 +69,10 @@ export default class calendar extends React.Component {
       this.setState({bookedevents : bookedeventsvar})
       this.getCourtDetails();
     } catch(err) {
-      if(this.state.first==0){
-        var a=1
-        this.setState({first: a});
-        this.getData();
-      }else{
         alert("your session is expired, login again");
         this.setState({alert: 1});
         logout();
         this.props.history.push("/signin");
-      }
 	  }
   }
   
@@ -94,30 +86,22 @@ export default class calendar extends React.Component {
       const res = await axios.get('/court/', config);
       this.setState({courts : res.data})
     } catch(err) {
-      console.log(err);
-      if(this.state.first==0){
-        var a=1
-        this.setState({first: a});
-        this.getData();
-      }else{
-        if(this.state.alert == 0){
+        console.log(err);
+        if(this.state.alert === 0){
           alert("your session is expired, login again");
           logout();
           this.props.history.push("/signin");
-        }
       } 
 	  }
   }
 
   componentDidMount(){
-    this.getCurrentStateFromStore();
     this.getData();
   }
 
  
   
   render() {
-    console.log("printing")
     return (
       <div className='demo-app'>
         {this.renderSidebar()}
@@ -172,12 +156,6 @@ export default class calendar extends React.Component {
            <h2>All Courts ({this.state.courts.length})</h2>
           {this.state.courts.map(renderSidebarCourt)}
         </div> 
-        {/* <div className='demo-app-sidebar-section'>
-          <h2>All Events ({this.state.currentEvents.length})</h2>
-          <ul>
-            {this.state.currentEvents.map(renderSidebarEvent)}
-          </ul>
-        </div> */}
       </div>
     )
   }
@@ -192,30 +170,12 @@ export default class calendar extends React.Component {
     this.calendarRef.current
         .getApi()
         .changeView('timeGridDay', selectInfo.date)
-    // calendar.changeView('timeGridDay', '2017-06-01');
-    // let title = prompt('Please enter a new title for your event')
-    // let calendarApi = selectInfo.view.calendar
-
-    // calendarApi.unselect() // clear date selection
-
-    // if (title) {
-    //   calendarApi.addEvent({
-    //     id: createEventId(),
-    //     title,
-    //     start: selectInfo.startStr,
-    //     end: selectInfo.endStr,
-    //     allDay: selectInfo.allDay
-    //   })
-    // }
   }
   
   handleEventClick = (clickInfo) => {
     console.log("clickeve",clickInfo.event._def.extendedProps.booking)
     var bookingdata=clickInfo.event._def.extendedProps.booking;
     this.props.history.push('/userbooking',{data:bookingdata});
-
-    console.log(clickInfo)
-
   }
 
   handleEvents = (events) => {
@@ -232,15 +192,6 @@ function renderEventContent(eventInfo) {
       <b>{eventInfo.timeText}</b>
       <i>{eventInfo.event.title}</i>
     </>
-  )
-}
-
-function renderSidebarEvent(event) {
-  return (
-    <li>
-      <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
-      <i>{event.title}</i>
-    </li>
   )
 }
 

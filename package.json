@@ -37,6 +37,7 @@
     "react-scripts": "4.0.1",
     "react-tap-event-plugin": "^3.0.3",
     "react-tap-event-plugin-fix": "^3.0.3",
+    "react-token-auth": "^1.1.7",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",

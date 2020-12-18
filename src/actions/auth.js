@@ -22,20 +22,20 @@ export const loadUser = () => async dispatch => {
 
 	try {
 		const res = await axios.get('/auth');
-		if(res.data.role == "admin"){
-			dispatch({
+		if(res.data.role === "admin"){
+			await dispatch({
 				type: USER_LOADED_ADMIN,
 				payload: res.data
 			});
 		}else{	
-			dispatch({
+			await dispatch({
 				type: USER_LOADED,
 				payload: res.data
 			});
 		}
 	} catch (err) {
-		//console.log(err)
-		dispatch({
+		console.log(err)
+		await dispatch({
 			type: AUTH_ERROR
 		});
 	}
@@ -54,21 +54,21 @@ export const login = (email, password) => async dispatch => {
 	try {
 		const res = await axios.post('/auth', body, config);
 		//console.log(res.data.role)
-		if(res.data.role == "admin"){
+		if(res.data.role === "admin"){
 			
-			dispatch({
+			await dispatch({
 			type: ADMIN_LOGIN_SUCCESS,
 			payload: res.data
 			});
 			
 		}else{
-			//console.log(res.data.role)
-			dispatch({
+			console.log(res.data.role)
+			await dispatch({
 				type: LOGIN_SUCCESS,
 				payload: res.data
 			});
 		}
-	dispatch(loadUser());
+		await dispatch(loadUser());
 		
 		
 	} catch(err) {
@@ -78,7 +78,7 @@ export const login = (email, password) => async dispatch => {
 			errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
 		}
 
-		dispatch({
+		await dispatch({
 			type: LOGIN_FAIL
 		});
 	}
@@ -97,7 +97,7 @@ export const resetpassword = (email, token, password) => async dispatch => {
 		
 		const res = await axios.post('/users/resetPassword', body, config);
 		//console.log(res)
-		dispatch({
+		await dispatch({
 			type: RESET_PASSWORD,
 			payload: res.data
 		});
@@ -110,9 +110,9 @@ export const resetpassword = (email, token, password) => async dispatch => {
 		
 		//console.log(err.response)
 		
-		dispatch(setAlert(err.response.data.message, 'danger'));
+		await dispatch(setAlert(err.response.data.message, 'danger'));
 		
-		dispatch({
+		await dispatch({
 			type: RESET_PASSWORD_ERROR,
 			payload: { msg: err.response.statusText, status: err.response.status }
 		});
@@ -121,7 +121,7 @@ export const resetpassword = (email, token, password) => async dispatch => {
 
 // Logout / Clear Profile
 
-export const logout = () => dispatch => {
-	dispatch({ type: CLEAR_PROFILE });
-	dispatch({ type: LOGOUT });
+export const logout = () => async dispatch => {
+	await dispatch({ type: CLEAR_PROFILE });
+	await dispatch({ type: LOGOUT });
 };

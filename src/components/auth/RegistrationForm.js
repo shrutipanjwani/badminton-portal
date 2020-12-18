@@ -122,7 +122,7 @@ const Register = ({ setAlert }) => {
 
         const body = JSON.stringify(newUser);
         //console.log(res);
-        res = await axios.post("/users/register", body, config);
+        await axios.post("/users/register", body, config);
         //console.log(res);
         handleClickOpen(true);
       } catch (err) {

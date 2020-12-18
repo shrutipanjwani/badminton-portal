@@ -15,7 +15,7 @@ import UserBooking from './components/Booking/Booking';
 import RegistererPermission from './adminportal/RegistererPermission';
 import Landing from "./components/layout/Landing";
 import NotFound from './components/layout/NotFound';
-import PrivateRoute from './components/routing/PrivateRoute';
+//import PrivateRoute from './components/routing/PrivateRoute';
 
 //Redux
 import { Provider } from "react-redux";
@@ -29,9 +29,13 @@ if (localStorage.token) {
 }
 
 const App = () => {
-useEffect(() => {
-    store.dispatch(loadUser());
+  useEffect( () => {
+    async function fetchData(){
+      await store.dispatch(loadUser());
+    }
+    fetchData();
   }, []);
+  
   return (
     <Provider store={store}>
       <div className="App">
