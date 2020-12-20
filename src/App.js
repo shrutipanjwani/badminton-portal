@@ -29,9 +29,13 @@ if (localStorage.token) {
 }
 
 const App = () => {
-useEffect(() => {
-    store.dispatch(loadUser());
+  useEffect( () => {
+    async function fetchData(){
+      await store.dispatch(loadUser());
+    }
+    fetchData();
   }, []);
+  
   return (
     <Provider store={store}>
       <div className="App">

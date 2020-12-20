@@ -9,25 +9,29 @@ import CardContent from '@material-ui/core/CardContent';
 import img from '../../img/user.png'
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
+import { setAlert } from '../../actions/alert';
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
 const stripePromise = loadStripe("pk_test_51HysuDFhf22CW4TepnCI6ZofveEBAxNFymCNlFW27S1zsShT6ToZMCNdQPZfvDMrfLDD4EOsLOgDfh12Y6DVt10L00VQ0ZYiuP");
 
-function Wallet() {
-	const [message, setMessage] = useState("");
+const Wallet = async ({ setAlert }) =>  {
+	const [name, setName] = useState("");
+	const [email, setEmail] = useState("");
+	const [phone, setPhone] = useState("");
+	const [wallet, setWallet] = useState(0);
+	const [status, setStatus] = useState("");
+	const [bookings, setBookings] = useState(0);
 	useEffect(() => {
 		// Check to see if this is a redirect back from Checkout
 		const query = new URLSearchParams(window.location.search);
 		if (query.get("success")) {
-		alert("Order placed! You will receive an email confirmation.");
+			alert("Order placed! You will receive an email confirmation.");
 		}
 		if (query.get("canceled")) {
-		alert(
-			"Order canceled -- continue to shop around and checkout when you're ready."
-		);
+			alert("Order canceled -- continue to shop around and checkout when you're ready.");
 		}
 	}, []);
-	
-	let history = useHistory();
 	
 	const handleClick = async (event) => {
 		const config = {
@@ -37,7 +41,6 @@ function Wallet() {
 		}
 		const stripe = await stripePromise;
 		const response = await axios.post("/wallet/create-checkout-session", config);
-		console.log(response);
 		// When the customer clicks on the button, redirect them to Checkout.
 		const result = await stripe.redirectToCheckout({
 			sessionId: response.data.id,
@@ -48,12 +51,6 @@ function Wallet() {
 		// using `result.error.message`.
 		}
 	};
-
-	const name = "John Doe"
-	const email = "shrutipanjwani@gmail.com";
-	const phone = "9030320393";
-	const status = "active";
-	const bookings = "12"
 
 	return (
 		<Fragment>
@@ -98,4 +95,8 @@ function Wallet() {
 	);
 }
 
-export default Wallet;
+Wallet.propTypes = {
+  setAlert: PropTypes.func.isRequired
+}
+
+export default connect({setAlert})(Wallet);

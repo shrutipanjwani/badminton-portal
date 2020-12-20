@@ -14,7 +14,6 @@ class UserVerification extends React.Component {
               key: token
             }
           });
-          const verify = res.data;
           this.props.history.push( "/signin/true"  )
             
         } catch(err) {

@@ -77,7 +77,7 @@ const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
       e.preventDefault();
 
       try {
-        res = await axios.get("/users/resetpasswordmail", params);
+        await axios.get("/users/resetpasswordmail", params);
         //console.log(res);
         handleClickOpenEmailRequest(true)
       } catch (err) {
