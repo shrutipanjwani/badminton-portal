@@ -13,7 +13,14 @@ export default class Form extends React.Component {
     bookingDate: "",
     bookingTime: "",
     bookingContact: "",
+    isBooking: false
   };
+
+  handleAdd = ()=>{
+    this.setState({
+      isBooking: true
+    });
+  }
 
   change = e => {
     // this.props.onChange({ [e.target.name]: e.target.value });
@@ -33,24 +40,9 @@ export default class Form extends React.Component {
       bookingContactError: "",
     };
 
-    if (this.state.courtName.indexOf("@") !== -1) {
-       isError = true;
-       errors.courtNameError = "Requires Court Name";
-    }
-
-    if (this.state.courtName.length < 5) {
+    if (this.state.bookingType.length < 5) {
       isError = true;
-      errors.courtNameError = "Requires Court Name";
-    }
-
-    if (this.state.playerName.indexOf("@") !== -1) {
-       isError = true;
-       errors.playerNameError = "Requires Name";
-    }
-
-    if (this.state.playerName.length < 5) {
-      isError = true;
-      errors.playerNameError = "Requires Name";
+      errors.bookingTypeError = "Requires Type";
     }
 
     this.setState({
@@ -79,16 +71,19 @@ export default class Form extends React.Component {
         bookingTime: "",
         bookingTimeError: "",
         bookingContact: "",
-        bookingContactError: ""
+        bookingContactError: "",
+        // isBooking: true
       });
     }
+    //console.log(this.state)
   };
+
 
   render() {
     return (
       <form style={{ marginTop: "20px"}}>
         <TextField
-          type="text"
+          type="number"
           name="courtName"
           placeholder="Court Name"
           value={this.state.courtName}
@@ -100,9 +95,9 @@ export default class Form extends React.Component {
         <br />
         <br />
         <TextField
-          type="text"
+          type="email"
           name="playerName"
-          placeholder="Player Name"
+          placeholder="Email"
           value={this.state.playerName}
           onChange={e => this.change(e)}
           errorText={this.state.playerNameError}
@@ -144,39 +139,30 @@ export default class Form extends React.Component {
         />
         <br />
         <br />
-        <FormControl>
-          <InputLabel htmlFor="age-native-simple">Booking Time</InputLabel>
-          <Select
-            native
-            value={this.state.bookingTime}
-            onChange={e => this.change(e)}
-            inputProps={{
-              name: 'bookingTime',
-              id: 'age-native-simple',
-            }}
-            errorText={this.state.bookingTimeError}
-            style={{ width: '420px'}}
-          >
-            <option aria-label="None" value="" />
-            <option value='6:00AM - 7:00AM'>6:00AM - 7:00AM</option>
-            <option value='7:00AM - 8:00AM'>7:00AM - 8:00AM</option>
-            <option value='8:00AM - 9:00AM'>8:00AM - 9:00AM</option>
-            <option value='9:00AM - 10:00AM'>9:00AM - 10:00AM</option>
-            <option value='10:00AM - 11:00AM'>10:00AM - 11:00AM</option>
-            <option value='11:00AM - 12:00PM'>11:00AM - 12:00PM</option>
-            <option value='12:00PM - 1:00PM'>12:00PM - 1:00PM</option>
-            <option value='1:00PM - 2:00PM'>1:00PM - 2:00PM</option>
-            <option value='2:00PM - 3:00PM'>2:00PM - 3:00PM</option>
-            <option value='3:00PM - 4:00PM'>3:00PM - 4:00PM</option>
-            <option value='4:00PM - 5:00PM'>4:00PM - 5:00PM</option>
-            <option value='5:00PM - 6:00PM'>5:00PM - 6:00PM</option>
-            <option value='6:00PM - 7:00PM'>6:00PM - 7:00PM</option>
-            <option value='7:00PM - 8:00PM'>7:00PM - 8:00PM</option>
-            <option value='8:00PM - 9:00PM'>8:00PM - 9:00PM</option>
-            <option value='9:00PM - 10:00PM'>9:00PM - 10:00PM</option>
-            <option value='10:00PM - 11:00PM'>10:00PM - 11:00PM</option>
-          </Select>
-        </FormControl>
+        <p>Booking Start Time</p>
+        <TextField
+          type="time"
+          name="bookingStartTime"
+          placeholder="Booking Start Time"
+          value={this.state.bookingStartTime}
+          onChange={e => this.change(e)}
+          errorText={this.state.bookingStartTimeError}
+          required
+          style={{ width: '55%'}}
+        />
+        <br />
+        <br />
+        <p>Booking End Time</p>
+        <TextField
+          type="time"
+          name="bookingEndTime"
+          placeholder="Booking End Time"
+          value={this.state.bookingEndTime}
+          onChange={e => this.change(e)}
+          errorText={this.state.bookingEndTimeError}
+          required
+          style={{ width: '55%'}}
+        />
         <br />
         <br />
         <TextField
@@ -191,7 +177,7 @@ export default class Form extends React.Component {
           style={{ width: '55%'}}
         />
         <br />
-        <br />
+        <br /> 
         <Button onClick={e => this.onSubmit(e)}>
           <p className="btn bg-dark">Add Booking</p>
         </Button>

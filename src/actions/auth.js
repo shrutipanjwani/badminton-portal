@@ -54,7 +54,7 @@ export const login = (email, password) => async dispatch => {
 	try {
 		const res = await axios.post('/auth', body, config);
 		//console.log(res.data.role)
-		if(res.data.role == "admin"){
+		if(res.data.role === "admin"){
 			
 			dispatch({
 			type: ADMIN_LOGIN_SUCCESS,

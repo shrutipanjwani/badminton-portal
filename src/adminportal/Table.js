@@ -58,7 +58,7 @@ export default ({
   handleChange,
   stopEditing
 }) => (
-  <Table style={{ width: '400px', margin: 'auto'}}>
+  <Table style={{ width: '500px', margin: 'auto'}}>
     <TableHead>
       <TableRow>
         {header.map((x, i) => (

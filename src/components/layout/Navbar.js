@@ -43,7 +43,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, isAdmin }, logout}) => {
 	        	</Link>
 	        </li>
 			<li>
-	        	<Link to="/booking">
+	        	<Link to="/adminbooking">
 	        		<i className="fas fa-book"></i>{' '}
 	        		<span className="hide-sm"> &nbsp;Booking</span>
 	        	</Link>

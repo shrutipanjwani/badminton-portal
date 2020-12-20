@@ -4,7 +4,6 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { INITIAL_EVENTS, createEventId ,todayStr} from './event-utils'
-import { Link, Redirect } from "react-router-dom";
 import './Calendar.css'
 import axios from "axios";
 import { logout } from '../../actions/auth';
@@ -71,7 +70,7 @@ export default class calendar extends React.Component {
       this.setState({bookedevents : bookedeventsvar})
       this.getCourtDetails();
     } catch(err) {
-      if(this.state.first==0){
+      if(this.state.first===0){
         var a=1
         this.setState({first: a});
         this.getData();
@@ -95,12 +94,12 @@ export default class calendar extends React.Component {
       this.setState({courts : res.data})
     } catch(err) {
       console.log(err);
-      if(this.state.first==0){
+      if(this.state.first===0){
         var a=1
         this.setState({first: a});
         this.getData();
       }else{
-        if(this.state.alert == 0){
+        if(this.state.alert === 0){
           alert("your session is expired, login again");
           logout();
           this.props.history.push("/signin");

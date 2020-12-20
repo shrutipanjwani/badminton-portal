@@ -5,24 +5,24 @@ import Navbar from './components/layout/Navbar';
 import Login from './components/auth/LoginForm';
 import Register from './components/auth/RegistrationForm';
 import ResetPassword from './components/auth/ResetPassword';
-import CalendarPage from './components/Calendar/Calendar';
+import CalendarPage from './components/calendar/Calendar';
 import UserVerification from './components/auth/UserVerification';
-import Wallet from './components/Wallet/Wallet';
+import Wallet from './components/wallet/Wallet';
 import EditTime from './adminportal/EditTime';
 import EditCourt from './adminportal/EditCourt';
-import Booking from './adminportal/Booking';
-import UserBooking from './components/Booking/Booking';
+import AdminBooking from './adminportal/Booking';
+import Booking from './components/Booking/Booking';
 import RegistererPermission from './adminportal/RegistererPermission';
 import Landing from "./components/layout/Landing";
 import NotFound from './components/layout/NotFound';
-import PrivateRoute from './components/routing/PrivateRoute';
+//import PrivateRoute from './components/routing/PrivateRoute';
 
 //Redux
 import { Provider } from "react-redux";
 import store from "./store";
 import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
-import PictureUploader from './components/Wallet/pictureUploader';
+import PictureUploader from './components/wallet/pictureUploader';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -50,13 +50,13 @@ useEffect(() => {
               <Route exact path='/verify/:email/:token' component={UserVerification}/>
               <Route exact path='/calendar' component={CalendarPage}/>
               <Route exact path='/wallet' component={Wallet}/>
+              <Route exact path='/booking' component={Booking}/>
 
               {/* Admin Portal */}
               <Route exact path='/edittime' component={EditTime}/>
               <Route exact path='/editcourt' component={EditCourt}/>
               <Route exact path='/permission' component={RegistererPermission}/>
-              <Route exact path='/booking' component={Booking}/>
-              <Route exact path='/userbooking' component={UserBooking}/>
+              <Route exact path='/adminbooking' component={AdminBooking}/>
               <Route exact path='/picture' component={PictureUploader}/>
               {/*Error Page*/}
               <Route path="" component={NotFound} />

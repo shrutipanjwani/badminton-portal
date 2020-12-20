@@ -1,8 +1,7 @@
 import React from "react";
 import axios from "axios";
-import { Button } from "@material-ui/core";
 
-export default class UserBooking extends React.Component {
+export default class Booking extends React.Component {
   constructor(props) {
     super(props);
     console.log("newdata", this.props.location.state.data);
@@ -72,16 +71,16 @@ export default class UserBooking extends React.Component {
     console.log("datafrom state", this.state.data);
     var player = this.state.data.players.length;
     console.log("playernow", player);
-    if (this.state.data.type == 1) {
+    if (this.state.data.type === 1) {
       this.setState({ total: 2 });
       player = 2 - player;
       this.setState({ aviSlot: player });
     }
-    if (this.state.data.type == 0) {
+    if (this.state.data.type === 0) {
       this.setState({ total: 4 });
       this.setState({ aviSlot: 0 });
     }
-    if (this.state.data.type == 2) {
+    if (this.state.data.type === 2) {
       this.setState({ total: 4 });
       player = 4 - player;
       this.setState({ aviSlot: player });
@@ -89,7 +88,7 @@ export default class UserBooking extends React.Component {
   }
 
   Canbook = () => {
-    if (this.state.data.court_full == true) {
+    if (this.state.data.court_full === true) {
       return (
         <p style={{ color: "red" }}>
           {" "}
