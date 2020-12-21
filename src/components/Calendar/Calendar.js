@@ -57,9 +57,13 @@ export default class calendar extends React.Component {
             type = "Full Court";
             break;
         }
+         let playersname = " | ";
+        for(var j = 0; j < res.data[i].players.length; j++){
+          playersname = playersname + res.data[i].user[j].name + " , " 
+        }
         bookedeventsvar.push({
           id: createEventId(),
-          title: "C" + res.data[i].court.court_name + "|" + type + "|"+res.data[i].players.length+"P",
+          title: "C" + res.data[i].court.court_name + " | " + type + playersname + "",
           start: res.data[i].date + 'T' + res.data[i].start_time,
           end: res.data[i].date + 'T' + res.data[i].end_time,
           color : res.data[i].court.colour,
@@ -69,10 +73,11 @@ export default class calendar extends React.Component {
       this.setState({bookedevents : bookedeventsvar})
       this.getCourtDetails();
     } catch(err) {
-        alert("your session is expired, login again");
-        this.setState({alert: 1});
+        
+        //this.setState({alert: 1});
         logout();
         this.props.history.push("/signin");
+        alert("your session is expired, login again");
 	  }
   }
   

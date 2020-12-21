@@ -15,7 +15,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, isAdmin }, logout}) => {
 	        	</Link>
 	        </li>
 			<li>
-	        	<Link to="/booking">
+	        	<Link to="/newbooking">
 	        		<i className="fas fa-book"></i>{' '}
 	        		<span className="hide-sm"> &nbsp;New Booking</span>
 	        	</Link>

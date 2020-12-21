@@ -11,6 +11,7 @@ import Wallet from './components/Wallet/Wallet';
 import EditTime from './adminportal/EditTime';
 import EditCourt from './adminportal/EditCourt';
 import Booking from './adminportal/Booking';
+import NewBooking from './components/Booking/NewBooking';
 import UserBooking from './components/Booking/Booking';
 import RegistererPermission from './adminportal/RegistererPermission';
 import Landing from "./components/layout/Landing";
@@ -54,6 +55,7 @@ const App = () => {
               <Route exact path='/verify/:email/:token' component={UserVerification}/>
               <Route exact path='/calendar' component={CalendarPage}/>
               <Route exact path='/wallet' component={Wallet}/>
+              <Route exact path='/newbooking' component={NewBooking}/>
 
               {/* Admin Portal */}
               <Route exact path='/edittime' component={EditTime}/>
