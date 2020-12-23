@@ -3,11 +3,7 @@ import FullCalendar, { formatDate } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-<<<<<<< HEAD
-import { INITIAL_EVENTS, createEventId ,todayStr} from './event-utils'
-=======
 import { createEventId} from './event-utils'
->>>>>>> 530335dda266ee386b67fc76307660f383b1c565
 import './Calendar.css'
 import axios from "axios";
 import { logout } from '../../actions/auth';
@@ -73,14 +69,6 @@ export default class calendar extends React.Component {
       this.setState({bookedevents : bookedeventsvar})
       this.getCourtDetails();
     } catch(err) {
-<<<<<<< HEAD
-      if(this.state.first===0){
-        var a=1
-        this.setState({first: a});
-        this.getData();
-      }else{
-=======
->>>>>>> 530335dda266ee386b67fc76307660f383b1c565
         alert("your session is expired, login again");
         this.setState({alert: 1});
         logout();
@@ -98,16 +86,7 @@ export default class calendar extends React.Component {
       const res = await axios.get('/court/', config);
       this.setState({courts : res.data})
     } catch(err) {
-<<<<<<< HEAD
-      console.log(err);
-      if(this.state.first===0){
-        var a=1
-        this.setState({first: a});
-        this.getData();
-      }else{
-=======
         console.log(err);
->>>>>>> 530335dda266ee386b67fc76307660f383b1c565
         if(this.state.alert === 0){
           alert("your session is expired, login again");
           logout();

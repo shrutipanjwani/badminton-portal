@@ -1,9 +1,6 @@
 import React from "react";
 import axios from "axios";
-<<<<<<< HEAD
-=======
 //import { Button } from "@material-ui/core";
->>>>>>> 530335dda266ee386b67fc76307660f383b1c565
 
 export default class Booking extends React.Component {
   constructor(props) {
