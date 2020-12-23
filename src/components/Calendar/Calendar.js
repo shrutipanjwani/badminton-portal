@@ -3,7 +3,7 @@ import FullCalendar, { formatDate } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { createEventId} from './event-utils'
+import { INITIAL_EVENTS, createEventId ,todayStr} from './event-utils'
 import './Calendar.css'
 import axios from "axios";
 import { logout } from '../../actions/auth';
@@ -57,9 +57,13 @@ export default class calendar extends React.Component {
             type = "Full Court";
             break;
         }
+         let playersname = " | ";
+        for(var j = 0; j < res.data[i].players.length; j++){
+          playersname = playersname + res.data[i].user[j].name + " , " 
+        }
         bookedeventsvar.push({
           id: createEventId(),
-          title: "C" + res.data[i].court.court_name + "|" + type + "|"+res.data[i].players.length+"P",
+          title: "C" + res.data[i].court.court_name + " | " + type + playersname + "",
           start: res.data[i].date + 'T' + res.data[i].start_time,
           end: res.data[i].date + 'T' + res.data[i].end_time,
           color : res.data[i].court.colour,
@@ -72,7 +76,7 @@ export default class calendar extends React.Component {
         alert("your session is expired, login again");
         this.setState({alert: 1});
         logout();
-        this.props.history.push("/signin");
+        this.props.history.replace("/signin");
 	  }
   }
   
@@ -90,7 +94,7 @@ export default class calendar extends React.Component {
         if(this.state.alert === 0){
           alert("your session is expired, login again");
           logout();
-          this.props.history.push("/signin");
+          this.props.history.replace("/signin");
       } 
 	  }
   }
@@ -175,7 +179,7 @@ export default class calendar extends React.Component {
   handleEventClick = (clickInfo) => {
     console.log("clickeve",clickInfo.event._def.extendedProps.booking)
     var bookingdata=clickInfo.event._def.extendedProps.booking;
-    this.props.history.push('/userbooking',{data:bookingdata});
+    this.props.history.replace('/userbooking',{data:bookingdata});
   }
 
   handleEvents = (events) => {

@@ -62,7 +62,6 @@ export const login = (email, password) => async dispatch => {
 			});
 			
 		}else{
-			console.log(res.data.role)
 			await dispatch({
 				type: LOGIN_SUCCESS,
 				payload: res.data
@@ -73,9 +72,11 @@ export const login = (email, password) => async dispatch => {
 		
 	} catch(err) {
 		const errors = err.response.data.errors;
-
+	
 		if (errors) {
 			errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+		}else{
+			dispatch(setAlert(err.response.statusText, 'danger'))
 		}
 
 		await dispatch({

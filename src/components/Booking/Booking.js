@@ -13,6 +13,8 @@ export default class Booking extends React.Component {
       total: null,
       courttype: ["Fullcourt", "singles", "Doubles"],
       userdata: null,
+      tifOptions : null,
+      newtifOptions : null 
     };
   }
 
@@ -34,22 +36,26 @@ export default class Booking extends React.Component {
   checkWallet() {
     var rqamount = parseInt(this.state.data.court.price) / this.state.total;
 
-    console.log("you need this to REgister", rqamount);
+    console.log("you need this to Register", rqamount);
     if (this.state.userdata.wallet < rqamount) {
       alert("Sorry unable to reg due to low balance ");
       return;
     } else {
-      alert(
+      if (window.confirm(
         "We are Booking u for this Slot, Your wallet balance will be " +
           (this.state.userdata.wallet - rqamount)
-      );
+      )) {
+        this.updatebooking(rqamount);
+      } else {
+        // Do nothing
+      }
 
-      this.updatebooking();
+     
     }
   }
 
-  async updatebooking() {
-    console.log("hey update booking is getting called");
+  async updatebooking(rqamount) {
+  
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -57,10 +63,21 @@ export default class Booking extends React.Component {
     };
     try {
       await axios.put(
-        "/booking/update/" + this.state.data._id,
+        "/booking/update/" + this.state.data._id + "/" + rqamount,
         config
       );
       this.getBalance();
+      alert("Booking successfull");
+      const player = ((this.state.aviSlot - 1) === 0 ) ? true : false;
+      let newdata = this.state.data;
+      newdata.court_full = player;
+      this.setState ({aviSlot : this.state.aviSlot - 1 , data : newdata});
+      let players = (<tr><td>{this.state.userdata.name}</td>
+        <td>{this.state.userdata.email}</td>
+        <td>+{this.state.userdata.phone.country}-{this.state.userdata.phone.digits}</td>
+      </tr>);
+      console.log (players)
+      this.setState({newtifOptions : players});
     } catch (err) {
       console.log(err.response.data.errors[0]);
       alert(err.response.data.errors[0]);
@@ -69,9 +86,7 @@ export default class Booking extends React.Component {
 
   componentWillMount() {
     this.getBalance();
-    console.log("datafrom state", this.state.data);
     var player = this.state.data.players.length;
-    console.log("playernow", player);
     if (this.state.data.type === 1) {
       this.setState({ total: 2 });
       player = 2 - player;
@@ -86,6 +101,14 @@ export default class Booking extends React.Component {
       player = 4 - player;
       this.setState({ aviSlot: player });
     }
+    var user = this.state.data.user;
+    var tifOptionsvar = Object.keys(user).map(function(key) {
+      return (<tr><td>{user[key].name}</td>
+        <td>{user[key].email}</td>
+        <td>+{user[key].phone.country}-{user[key].phone.digits}</td>
+      </tr>);
+    });
+    this.setState({tifOptions : tifOptionsvar});
   }
 
   Canbook = () => {
@@ -93,7 +116,7 @@ export default class Booking extends React.Component {
       return (
         <p style={{ color: "red" }}>
           {" "}
-          Sorry, you cant book slot due to slot unavailability{" "}
+          Sorry, you cant book slot either due to slot unavailability or freezed by admin{" "}
         </p>
       );
     } else {
@@ -109,13 +132,14 @@ export default class Booking extends React.Component {
   };
 
   render() {
-    console.log("printing");
+   
     return (
       <div style={{ width: "40%", margin: "auto" }}>
         <h1 className="large text-primary" style={{ marginTop: "50px" }}>
           Booking Details
         </h1>
-
+      <div>
+        
         <div id="badge-panel" class="tab-pane">
           <div class="skm-badge-table">
             <table class="badge-table">
@@ -146,11 +170,25 @@ export default class Booking extends React.Component {
                 <td>{this.state.courttype[this.state.data.type]}</td>
               </tr>
             </table>
+          </div>
+            {this.Canbook()}
+            <div id="badge-panel" class="tab-pane">
+              <div class="skm-badge-table">
+              <table class="badge-table">
+              <tr>
+                <td>Players Name</td>
+                <td>Email</td>
+                <td>Phone Number</td>
+              </tr>
+              {this.state.tifOptions}
+              {this.state.newtifOptions}
+            </table>
+            </div>
+            </div>
             <br />
             {/* <input type="submit" className="btn" value="Add Player" hidden=""/> */}
           </div>
         </div>
-        {this.Canbook()}
       </div>
     );
   }
