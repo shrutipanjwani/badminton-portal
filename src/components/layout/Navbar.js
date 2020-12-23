@@ -9,25 +9,25 @@ const Navbar = ({ auth: { isAuthenticated, loading, isAdmin }, logout}) => {
 	const authLinks = (
 		<ul>
 			<li>
-	        	<Link to="/calendar">
+	        	<Link to="/calendar" replace >
 	        		<i className="fas fa-th-large"></i>{' '}
 	        		<span className="hide-sm"> &nbsp;Dashboard</span>
 	        	</Link>
 	        </li>
 			<li>
-	        	<Link to="/newbooking">
+	        	<Link to="/newbooking" replace >
 	        		<i className="fas fa-book"></i>{' '}
 	        		<span className="hide-sm"> &nbsp;New Booking</span>
 	        	</Link>
 	        </li>
 			<li>
-	        	<Link to="/wallet">
+	        	<Link to="/wallet" replace >
 	        		<i className="fas fa-user"></i>{' '}
 	        		<span className="hide-sm"> &nbsp;Wallet</span>
 	        	</Link>
 	        </li>
 	        <li>
-	        	<Link onClick={logout} to="/">
+	        	<Link onClick={logout} to="/" replace >
 	        		<i className="fas fa-sign-out-alt"></i>{' '}
 	        		<span className="hide-sm"> &nbsp;Logout</span>
 	        	</Link>
@@ -37,31 +37,31 @@ const Navbar = ({ auth: { isAuthenticated, loading, isAdmin }, logout}) => {
 	const adminLinks = (
 		<ul>
 			<li>
-	        	<Link to="/permission">
+	        	<Link to="/permission" replace>
 	        		<i className="fas fa-check"></i>{' '}
 	        		<span className="hide-sm"> &nbsp;User Approval</span>
 	        	</Link>
 	        </li>
 			<li>
-	        	<Link to="/booking">
+	        	<Link to="/adminbooking" replace>
 	        		<i className="fas fa-book"></i>{' '}
 	        		<span className="hide-sm"> &nbsp;Booking</span>
 	        	</Link>
 	        </li>
 			<li>
-	        	<Link to="/editcourt">
+	        	<Link to="/editcourt" replace>
 	        		<i className="fas fa-layer-group"></i>{' '}
 	        		<span className="hide-sm"> &nbsp;Court</span>
 	        	</Link>
 	        </li>
 			<li>
-	        	<Link to="/users">
+	        	<Link to="/users" replace>
 	        		<i className="fas fa-users"></i>{' '}
 	        		<span className="hide-sm"> &nbsp;Users</span>
 	        	</Link>
 	        </li>
 	        <li>
-	        	<Link onClick={logout} to="/signin">
+	        	<Link onClick={logout} to="/signin" replace> 
 	        		<i className="fas fa-sign-out-alt"></i>{' '}
 	        		<span className="hide-sm"> &nbsp;Logout</span>
 	        	</Link>
@@ -75,7 +75,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, isAdmin }, logout}) => {
 	return (
 		<nav className="navbar bg-dark">
 	      <h1>
-	        <Link to="/">
+	        <Link to="/" replace>
 	        	<img className="logo-img" src={logo} alt=""/> 
 	        </Link>
 	      </h1>

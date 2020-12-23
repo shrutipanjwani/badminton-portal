@@ -10,7 +10,6 @@ import UserVerification from './components/auth/UserVerification';
 import Wallet from './components/Wallet/Wallet';
 import EditTime from './adminportal/EditTime';
 import EditCourt from './adminportal/EditCourt';
-import Booking from './adminportal/Booking';
 import NewBooking from './components/Booking/NewBooking';
 import UserBooking from './components/Booking/Booking';
 import RegistererPermission from './adminportal/RegistererPermission';
@@ -24,15 +23,18 @@ import store from "./store";
 import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
 import PictureUploader from './components/Wallet/pictureUploader';
+import AdminBooking from './adminportal/Booking'
 
-if (localStorage.token) {
-  setAuthToken(localStorage.token);
-}
+
 
 const App = () => {
   useEffect( () => {
     async function fetchData(){
-      await store.dispatch(loadUser());
+      if (localStorage.token) {
+        setAuthToken(localStorage.token);
+        await store.dispatch(loadUser());
+      }
+      
     }
     fetchData();
   }, []);
@@ -56,13 +58,13 @@ const App = () => {
               <Route exact path='/calendar' component={CalendarPage}/>
               <Route exact path='/wallet' component={Wallet}/>
               <Route exact path='/newbooking' component={NewBooking}/>
+              <Route exact path='/userbooking' component={UserBooking}/>
 
               {/* Admin Portal */}
               <Route exact path='/edittime' component={EditTime}/>
               <Route exact path='/editcourt' component={EditCourt}/>
               <Route exact path='/permission' component={RegistererPermission}/>
-              <Route exact path='/booking' component={Booking}/>
-              <Route exact path='/userbooking' component={UserBooking}/>
+              <Route exact path='/adminbooking' component={AdminBooking}/>
               <Route exact path='/picture' component={PictureUploader}/>
               {/*Error Page*/}
               <Route path="" component={NotFound} />

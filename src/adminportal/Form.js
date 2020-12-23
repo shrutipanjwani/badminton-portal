@@ -4,7 +4,10 @@ import Button from '@material-ui/core/Button';
 
 export default class Form extends React.Component {
   state = {
-    courtName: ""
+    courtName: "",
+    startTime: "",
+    endTime: "",
+    price: ""
   };
 
   change = e => {
@@ -17,17 +20,30 @@ export default class Form extends React.Component {
   validate = () => {
     let isError = false;
     const errors = {
-      courtNameError: ""
+      courtNameError: "", 
+      startTimeError: "",
+      endTimeError: "",
+      priceError: ""
     };
 
-    if (this.state.courtName.indexOf("@") !== -1) {
-       isError = true;
-       errors.courtNameError = "Requires Court Name";
+    if (this.state.courtName.length < 1) {
+      isError = true;
+      errors.courtNameError = "Requires Name";
     }
 
-    if (this.state.courtName.length < 5) {
+    if (this.state.startTime.length < 2) {
       isError = true;
-      errors.courtNameError = "Requires Court Name";
+      errors.startTimeError = "Requires Time";
+    }
+
+    if (this.state.endTime.length < 2) {
+      isError = true;
+      errors.endTimeError = "Requires Time";
+    }
+
+    if (this.state.price.length < 1) {
+      isError = true;
+      errors.priceError = "Requires Price";
     }
 
     this.setState({
@@ -46,7 +62,13 @@ export default class Form extends React.Component {
       // clear form
       this.setState({
         courtName: "",
-        courtNameError: ""
+        courtNameError: "",
+        startTime: "",
+        startTimeError:"",
+        endTime: "",
+        endTimeError: "",
+        price: "",
+        priceError: ""
       });
     }
   };
@@ -55,12 +77,48 @@ export default class Form extends React.Component {
     return (
       <form>
         <TextField
-          type="text"
+          type="number"
           name="courtName"
           placeholder="Court Name"
           value={this.state.courtName}
           onChange={e => this.change(e)}
           errorText={this.state.courtNameError}
+          required
+        />
+        <br />
+        <br />
+        <TextField
+          type="time"
+          name="startTime"
+          placeholder="Start Time"
+          value={this.state.startTime}
+          onChange={e => this.change(e)}
+          errorText={this.state.startTimeError}
+          required
+          style={{ width: "200px"}}
+        />
+        <br />
+        <br />
+        <TextField
+          type="time"
+          name="endTime"
+          placeholder="End Time"
+          value={this.state.endTime}
+          onChange={e => this.change(e)}
+          errorText={this.state.endTimeError}
+          required
+          style={{ width: "200px"}}
+        />
+        <br />
+        <br />
+        $
+        <TextField
+          type="number"
+          name="price"
+          placeholder="Price"
+          value={this.state.price}
+          onChange={e => this.change(e)}
+          errorText={this.state.priceError}
           required
         />
         <br />

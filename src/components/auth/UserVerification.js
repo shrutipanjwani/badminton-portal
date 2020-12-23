@@ -14,12 +14,12 @@ class UserVerification extends React.Component {
               key: token
             }
           });
-          this.props.history.push( "/signin/true"  )
+          this.props.history.replace( "/signin/true"  )
             
         } catch(err) {
           
           console.log(err.response);
-          this.props.history.push( "/signin/false" )
+          this.props.history.replace( "/signin/false" )
         }
     }
     

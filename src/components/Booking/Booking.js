@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 //import { Button } from "@material-ui/core";
 
-export default class UserBooking extends React.Component {
+export default class Booking extends React.Component {
   constructor(props) {
     super(props);
     console.log("newdata", this.props.location.state.data);
@@ -41,17 +41,21 @@ export default class UserBooking extends React.Component {
       alert("Sorry unable to reg due to low balance ");
       return;
     } else {
-      alert(
+      if (window.confirm(
         "We are Booking u for this Slot, Your wallet balance will be " +
           (this.state.userdata.wallet - rqamount)
-      );
+      )) {
+        this.updatebooking(rqamount);
+      } else {
+        // Do nothing
+      }
 
-      this.updatebooking(rqamount);
+     
     }
   }
 
   async updatebooking(rqamount) {
-    console.log("hey update booking is getting called");
+  
     const config = {
       headers: {
         "Content-Type": "application/json",

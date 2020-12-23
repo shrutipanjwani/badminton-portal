@@ -95,10 +95,10 @@ const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
      // console.log(isAdmin)
       if(isAdmin){
         //console.log(isAdmin)
-       return <Redirect to='/permission' />;
+       return <Redirect to='/permission' replace />;
       }else{
         //console.log(isAdmin)
-       return <Redirect to='/calendar' />;
+       return <Redirect to='/calendar' replace />;
       }
     }
 

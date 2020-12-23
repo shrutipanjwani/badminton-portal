@@ -76,7 +76,7 @@ export default class Wallet extends React.Component {
 			alert("your session is expired, login again");
 			//this.setState({alert: 1});
 			//logout();
-			this.props.history.push("/signin");
+			this.props.history.replace("/signin");
 		}
 	}
 

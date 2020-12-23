@@ -29,7 +29,6 @@ export default class RegistererPermission extends Component{
 		const phone = "9030320393";
 		const status = "active";
 		const bookings = "12";
-		const wallet = '$0' 
 
 		return (
 			<Fragment>
@@ -94,7 +93,6 @@ export default class RegistererPermission extends Component{
 										html={this.state.html} // innerHTML of the editable div
 										disabled={false}       // use true to disable editing
 									/>
-									<i className="fas fa-edit"></i>
 									<button className="btn btn-primary" onChange={this.handleChange}><i className="fas fa-check"></i> &nbsp;Done</button>
 								</p>
 							</div>
