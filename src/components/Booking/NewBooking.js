@@ -1,6 +1,7 @@
 import React, { Fragment, Component } from "react";
 import axios from "axios";
 import Form from "./FormTwo";
+import Alert from '@material-ui/lab/Alert';
 
 class NewBooking extends Component {
   
@@ -36,7 +37,8 @@ class NewBooking extends Component {
       var userdata = await axios.get('/auth/', config);
       console.log(userdata.data)
       if (userdata.wallet < rqamount) {
-        alert("Sorry unable to reg due to low balance ");
+        <Alert variant="filled" severity="error">Sorry unable to reg due to low balance</Alert>
+        //alert("Sorry unable to reg due to low balance ");
         return;
       } else {
         console.log(userdata.data.wallet  , rqamount , (userdata.data.wallet - rqamount))
@@ -47,8 +49,8 @@ class NewBooking extends Component {
         }
       }
     }catch(err) {
-    
-			alert("your session is expired, login again");
+      <Alert variant="filled" severity="error">your session is expired, login again</Alert>
+			//alert("your session is expired, login again");
 			//this.setState({alert: 1});
 			//logout();
 			this.props.history.replace("/signin");
@@ -75,11 +77,12 @@ class NewBooking extends Component {
     }
     try {
       const res = await axios.post('/booking/', body, config);
-      alert("Booking successfull");
+      <Alert variant="filled" severity="success">Booking successfull</Alert>
+      //alert("Booking successfull");
     } catch (err) {
       console.log(err.response.data.errors[0]);
-      alert(err.response.data.errors[0]);
-    
+      <Alert variant="filled" severity="error">{err.response.data.errors[0]}</Alert>
+      //alert(err.response.data.errors[0]);
     }
   }
 

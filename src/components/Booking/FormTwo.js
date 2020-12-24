@@ -1,5 +1,4 @@
 import React from "react";
-import TextField from "@material-ui/core/TextField";
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -8,6 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import TimePicker from 'rc-time-picker';
 import 'rc-time-picker/assets/index.css';
 import moment from 'moment';
+import Alert from '@material-ui/lab/Alert';
 
 export default class Form extends React.Component {
   state = {
@@ -169,7 +169,7 @@ export default class Form extends React.Component {
 
   render() {
     return (
-      <form style={{ marginTop: "20px"}}>
+      <form style={{ marginTop: "20px"}} className="form">
         <FormControl>
           {/* <InputLabel htmlFor="age-native-simple">Booking Type</InputLabel> */}
           <Select
@@ -212,8 +212,17 @@ export default class Form extends React.Component {
         <br />
         <br />
         <DatePicker
-           selected={this.state.bookingDefaultDate}
-           name = "bookingDate"
+            // style={{width: "200px"}}
+            selected={this.state.bookingDefaultDate}
+            name = "bookingDate"
+            // customStyles={{
+            //   dateTouch:{
+            //     width:'200px',
+            //   },
+            //   dateTouchBody: {
+            //     width:'200px',
+            //   },
+            // }}
             onChange={e => this.changeDate(e)}
             placeholderText="Booking Date"
             minDate={new Date()}
@@ -222,6 +231,7 @@ export default class Form extends React.Component {
         />
         <br /><br />
         <TimePicker
+          style={{ width: "180px" }}
           minuteStep = "30"
           showSecond= {false}
           hideDisabledOptions = {true}
@@ -232,6 +242,7 @@ export default class Form extends React.Component {
           required
         />
         <TimePicker
+          style={{ width: "180px" }}
           minuteStep = {30}
           showSecond= {false}
           //hideDisabledOptions = {true}
@@ -246,7 +257,9 @@ export default class Form extends React.Component {
         />
         <br />
         <br />
-        <p>{this.state.error}</p> 
+        {/* <Alert severity="error">{this.state.error}</Alert> */}
+        <p className="btn-danger">{this.state.error}</p>
+        <br /> 
         <Button onClick={e => this.onSubmit(e)}>
           <p className="btn bg-dark">Add Booking</p>
         </Button>

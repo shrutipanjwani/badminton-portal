@@ -3,7 +3,7 @@ import FullCalendar, { formatDate } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { INITIAL_EVENTS, createEventId ,todayStr} from './event-utils'
+import { createEventId } from './event-utils'
 import './Calendar.css'
 import axios from "axios";
 import { logout } from '../../actions/auth';
@@ -73,10 +73,11 @@ export default class calendar extends React.Component {
       this.setState({bookedevents : bookedeventsvar})
       this.getCourtDetails();
     } catch(err) {
-        alert("your session is expired, login again");
-        this.setState({alert: 1});
+        // this.setState({alert: 1});
+        console.log(err)
         logout();
         this.props.history.replace("/signin");
+        alert("your session is expired, login again");
 	  }
   }
   

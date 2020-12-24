@@ -12,6 +12,7 @@ div, h1, h2, h3, h4, h5, nav, p, .main{
     width: 100vw;
     z-index: 999;
 }
+
 .main{
   position: relative;
   margin-top:100px;

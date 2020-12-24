@@ -5,9 +5,9 @@ import Navbar from './components/layout/Navbar';
 import Login from './components/auth/LoginForm';
 import Register from './components/auth/RegistrationForm';
 import ResetPassword from './components/auth/ResetPassword';
-import CalendarPage from './components/Calendar/Calendar';
+import CalendarPage from './components/calendar/Calendar';
 import UserVerification from './components/auth/UserVerification';
-import Wallet from './components/Wallet/Wallet';
+import Wallet from './components/wallet/Wallet';
 import EditTime from './adminportal/EditTime';
 import EditCourt from './adminportal/EditCourt';
 import NewBooking from './components/Booking/NewBooking';
@@ -22,7 +22,7 @@ import { Provider } from "react-redux";
 import store from "./store";
 import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
-import PictureUploader from './components/Wallet/pictureUploader';
+import PictureUploader from './components/wallet/pictureUploader';
 import AdminBooking from './adminportal/Booking'
 
 
