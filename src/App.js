@@ -56,6 +56,7 @@ const App = () => {
               <Route exact path='/resetpassword/:email/:token' component={ResetPassword}/>
               <Route exact path='/verify/:email/:token' component={UserVerification}/>
               <Route exact path='/calendar' component={CalendarPage}/>
+              <Route exact path='/wallet/:sessionId' component={Wallet}/>
               <Route exact path='/wallet' component={Wallet}/>
               <Route exact path='/newbooking' component={NewBooking}/>
               <Route exact path='/userbooking' component={UserBooking}/>

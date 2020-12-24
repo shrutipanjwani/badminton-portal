@@ -8,17 +8,20 @@ import CardContent from '@material-ui/core/CardContent';
 import img from '../../img/user.png'
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
+import setAuthToken from '../../utils/setAuthToken';
 
 
 const stripePromise = loadStripe("pk_test_51HysuDFhf22CW4TepnCI6ZofveEBAxNFymCNlFW27S1zsShT6ToZMCNdQPZfvDMrfLDD4EOsLOgDfh12Y6DVt10L00VQ0ZYiuP");
 
 export default class Wallet extends React.Component {
 
+
 	constructor(props){
     	super(props);
-		// if (localStorage.token) {
-		// setAuthToken(localStorage.token);
-		// }
+		if (localStorage.token) {
+			setAuthToken(localStorage.token);
+		}
+
 		this.state = {
 			name :"",
 			email : "",
@@ -46,6 +49,7 @@ export default class Wallet extends React.Component {
 			const result = await stripe.redirectToCheckout({
 				sessionId: response.data.id,
 			});
+			
 			if (result.error) {
 				alert("Please check your Internet Connection");
 			}
@@ -61,6 +65,13 @@ export default class Wallet extends React.Component {
 			}
 		}
 
+		var sessionId = this.props.match.params.sessionId
+
+		if(sessionId){
+			const resCheckout = await axios.post('/wallet/check-payement/'+sessionId ,config);
+		}
+		
+
 		try {
 			const res = await axios.get('/auth/', config);
 			const boookingsVar = await axios.get("/booking/user", config);
@@ -73,10 +84,7 @@ export default class Wallet extends React.Component {
 
 			//var token = this.props.match.params.token;
 		} catch(err) {
-			alert("your session is expired, login again");
-			//this.setState({alert: 1});
-			//logout();
-			this.props.history.replace("/signin");
+			
 		}
 	}
 
