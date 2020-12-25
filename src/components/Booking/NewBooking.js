@@ -1,10 +1,9 @@
 import React, { Fragment, Component } from "react";
 import axios from "axios";
 import Form from "./FormTwo";
-import Alert from '@material-ui/lab/Alert';
 import Modal from "../Modal";
 import ReactDOM from "react-dom";
-
+import moment from 'moment';
 class NewBooking extends Component {
   
   state = {
@@ -12,7 +11,19 @@ class NewBooking extends Component {
     editIdx: -1,
     isActive:false,
     isDisplay: false,
-    courts : []
+    courts : [],
+    show: false,
+    alertmsg : ""
+  };
+
+  showModal = e => {
+    this.setState({
+      show: !this.state.show
+    });
+  };
+
+  onClose = e => {
+    this.props.onClose && this.props.onClose(e);
   };
 
   handleStart = ()=>{
@@ -21,16 +32,21 @@ class NewBooking extends Component {
 
   async checkWallet(submission) {
   try{
-    var index = this.state.courts.findIndex(x => x.court_name === submission.courtName);
-    var rqamount = 0 , players = 0;
-    if(parseInt(submission.bookingType) == 0){
-      rqamount = this.state.courts[index].price;
-    }else{
-      players = parseInt(submission.bookingType)*2;
-      rqamount = this.state.courts[index].price/players ;
-    }
-    
-  
+      var index = this.state.courts.findIndex(x => x.court_name === submission.courtName);
+      var rqamount = 0 , players = 0;
+      var startTime=moment(submission.startTime, "HH:mm:ss");
+      var endTime=moment(submission.endTime, "HH:mm:ss");
+      var duration = moment.duration(endTime.diff(startTime));
+      var hours = parseFloat(duration.asHours());
+
+      let totamount = parseInt(this.state.courts[index].price)*(hours);
+      console.log(submission.start_time);console.log(endTime);console.log(startTime);console.log(hours);
+      if(parseInt(submission.bookingType) == 0){
+        rqamount = totamount;
+      }else{
+        players = parseInt(submission.bookingType)*2;
+        rqamount = totamount/players ;
+      }
       const config = {
 		    headers: {
 			    'Content-Type': 'application/json'
@@ -39,20 +55,25 @@ class NewBooking extends Component {
       var userdata = await axios.get('/auth/', config);
       console.log(userdata.data)
       if (userdata.wallet < rqamount) {
-        <Alert variant="filled" severity="error">Sorry unable to reg due to low balance</Alert>
+        this.setState({
+        alertmsg : "Sorry unable to reg due to low balance "
+        })
+        this.showModal(true)
         //alert("Sorry unable to reg due to low balance ");
         return;
       } else {
         console.log(userdata.data.wallet  , rqamount , (userdata.data.wallet - rqamount))
-        if(<Modal show={this.state.show} onClose={this.showModal}>{"We are Booking you for this Slot, Your wallet balance will be "+(userdata.data.wallet - rqamount)}</Modal>){
-        // if (window.confirm("We are Booking you for this Slot, Your wallet balance will be "+(userdata.data.wallet - rqamount))) {
-        //   this.newBookingFun(submission);
+        if (window.confirm("Total Price :"+rqamount+"\nPress Ok To confirm ")) {
+          this.newBookingFun(submission);
         } else {
           // Do nothing
         }
       }
     }catch(err) {
-      <Alert variant="filled" severity="error">Your session is expired, login again</Alert>
+      this.setState({
+        alertmsg : "your session is expired, login again"
+      })
+      this.showModal(true)
 			//alert("your session is expired, login again");
 			//this.setState({alert: 1});
 			//logout();
@@ -80,11 +101,17 @@ class NewBooking extends Component {
     }
     try {
       const res = await axios.post('/booking/', body, config);
-      <Alert variant="filled" severity="success">Booking successfull</Alert>
+      this.setState({
+        alertmsg : "Booking successfull"
+      })
+      this.showModal(true)
       //alert("Booking successfull");
     } catch (err) {
       console.log(err.response.data.errors[0]);
-      <Alert variant="filled" severity="error">{err.response.data.errors[0]}</Alert>
+      this.setState({
+        alertmsg : err.response.data.errors[0]
+      })
+      this.showModal(true)
       //alert(err.response.data.errors[0]);
     }
   }
@@ -111,18 +138,19 @@ class NewBooking extends Component {
   render() {
     return (
         <Fragment>
+          <Modal show={this.state.show} onClose={this.showModal}>{this.state.alertmsg}</Modal>
           <h1 className="large text-primary" style={{ marginTop: "50px"}}>Bookings</h1>
           <div style={{width: "100%", margin: "auto"}}>
-              <div style={{ width: "50%", float: "left", borderRight: "1px solid grey"}}>
+              <div style={{ width: "60%", float: "left", borderRight: "1px solid grey"}}>
                 {/* <button className="btn btn-primary" onClick={this.handleShow}>New Booking</button> */}
-                <div style={{ width: "70%", margin: "auto"}}>
+                <div style={{ width: "80%", margin: "auto"}}>
                   <h2>All Courts ({this.state.courts.length})</h2><br />
                   <div class="grid-container">
                      {this.state.courts.map(renderSidebarCourt)}
                   </div>
                 </div>
               </div>
-              <div style={{ width: "50%", float: "right"}}>        
+              <div style={{ width: "40%", float: "right"}}>        
                 <Form
                   data={this.state.courts} onSubmit={submission => 
                    this.checkWallet(submission)}
@@ -150,8 +178,10 @@ function renderSidebarCourt(event) {
         marginBottom: '10px'
       }} class = 'grid-item'>
       <b>Court {event.court_name}</b><br />
+      Court Price : $ {event.price} per hr. <br />
       <i>Time : {event.start_time} - {event.end_time}</i><br />
-      {event.court_break.length == 0 ? "No Breaks" : event.court_break.map(renderSidebarbreak) }
+      {event.court_break.length == 0 ? "No Breaks" : event.court_break.map(renderSidebarbreak)}
+      
     </div>
   )
 }

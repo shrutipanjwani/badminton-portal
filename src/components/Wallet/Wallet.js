@@ -100,7 +100,7 @@ export default class Wallet extends React.Component {
 		}
 		try {
 			const res = await axios.get('/auth/', config);
-			const boookingsVar = await axios.get("/booking/user", config);
+			const boookingsVar = await axios.get("/booking/userLength", config);
 			this.setState({name: res.data.name});
 			this.setState({email: res.data.email});
 			this.setState({phone: "+" + res.data.phone.country + "-" + res.data.phone.digits});
@@ -129,7 +129,7 @@ export default class Wallet extends React.Component {
 						src={img}
 						alt=""
 					/> */}
-					<PictureUploader />
+					<PictureUploader/>
 					<div style={{ width: '60%', textAlign: "left", margin: "auto"}}>
 					<h1 class="lead">{this.state.name}</h1>
 						<p><strong>Email:</strong> &nbsp; {this.state.email}</p>

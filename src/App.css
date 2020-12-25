@@ -763,6 +763,7 @@ nav{
   transform: scale(1);
   opacity: 1;
   visibility: visible;
+  margin : auto
 }
 .modal.off {
   opacity: 0;
