@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from "axios";
+import icon from "../../img/user.png";
 
 export default class PictureUploader extends React.Component {
   constructor(props) {
@@ -7,7 +8,7 @@ export default class PictureUploader extends React.Component {
 
     this.state = {
       picture: false,
-      src: false
+      src: this.props.data
     }
   }
   
@@ -21,19 +22,6 @@ export default class PictureUploader extends React.Component {
     });
   }
   
-  renderPreview() {
-    if(this.state.src) {
-      return (
-        <img  class="rounded" alt="Avatar" src={this.state.src}/>
-      );
-    } else {
-      return (
-        <p>
-        No Preview
-        </p>
-      );
-    }
-  }
 
   async upload() {
     var formData = new FormData();
@@ -50,20 +38,17 @@ export default class PictureUploader extends React.Component {
   render() {
     return (
       <div style={{marginTop: "20px"}}>
-        <input
-          className="btn btn-primary"
-          type="file"
-          onChange={this.handlePictureSelected.bind(this)}
-        />
-        <br/>
-        <div>
-          <p>
-            {this.renderPreview()}
-          </p>
+        <div class="image-upload">
+          <label for="file-input">
+              <img src={this.state.src ? this.state.src : icon} className="rounded"/>
+              <i className="fa fa-edit" style={{ fontSize: "22px", marginLeft: "-25px", zIndex: "99", backgroundColor: "#841e2d", borderRadius: "50%"}}></i>
+          </label>
+          <input id="file-input" type="file" onChange={this.handlePictureSelected.bind(this)}/>
         </div>
-        <button className="btn btn-primary" onClick={this.upload.bind(this)}>
-          Upload
-        </button>
+        <br/>
+        {/* <button className="btn btn-primary" onClick={this.upload.bind(this)}>
+         <i className="fa fa-camera"></i>
+        </button> */}
       </div>
     );
   }

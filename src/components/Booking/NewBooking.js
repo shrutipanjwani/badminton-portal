@@ -1,8 +1,9 @@
 import React, { Fragment, Component } from "react";
 import axios from "axios";
 import Form from "./FormTwo";
-import Modal from "../Modal";
 import ReactDOM from "react-dom";
+import Confirm from "../Confirm";
+import "@reach/dialog/styles.css";
 
 class NewBooking extends Component {
   
@@ -12,7 +13,8 @@ class NewBooking extends Component {
     isActive:false,
     isDisplay: false,
     courts : [],
-    show: false
+    show: false,
+    open: true
   };
 
   showModal = e => {
@@ -53,7 +55,7 @@ class NewBooking extends Component {
         return;
       } else {
         console.log(userdata.data.wallet  , rqamount , (userdata.data.wallet - rqamount))
-        if (window.confirm("We are Booking you for this Slot, Your wallet balance will be "+(userdata.data.wallet - rqamount))) {
+        if (window.confirm("We are Booking you for this Slot, Your wallet balance will be "+(userdata.data.wallet - rqamount))){
           this.newBookingFun(submission);
         } else {
           // Do nothing
@@ -114,12 +116,13 @@ class NewBooking extends Component {
     this.getCourtDetails();
   }
 
+  handleSubmit = () => alert("Submitted");
+
   render() {
     return (
         <Fragment>
           <h1 className="large text-primary" style={{ marginTop: "50px"}}>Bookings</h1>
           <div style={{width: "100%", margin: "auto"}}>
-              <Modal show={this.state.show} onClose={this.showModal}>your session is expired, login again</Modal>
               <div style={{ width: "50%", float: "left", borderRight: "1px solid grey"}}>
                 {/* <button className="btn btn-primary" onClick={this.handleShow}>New Booking</button> */}
                 <div style={{ width: "50%", margin: "auto"}}>
@@ -136,6 +139,15 @@ class NewBooking extends Component {
                 </div>
               </div>
           </div>
+          <Confirm title="Confirm" description="Are you sure?">
+              {(confirm) => (
+                <form onSubmit={confirm(this.handleSubmit)}>
+                  <p>
+                    <button>Submit</button>
+                  </p>
+                </form>
+              )}
+          </Confirm>
         </Fragment>
     );
   }
