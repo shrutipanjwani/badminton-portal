@@ -1,7 +1,6 @@
 import React, { Fragment, Component } from "react";
 import axios from "axios";
 import Form from "./FormTwo";
-import Alert from '@material-ui/lab/Alert';
 import Modal from "../Modal";
 import ReactDOM from "react-dom";
 
@@ -12,7 +11,18 @@ class NewBooking extends Component {
     editIdx: -1,
     isActive:false,
     isDisplay: false,
-    courts : []
+    courts : [],
+    show: false
+  };
+
+  showModal = e => {
+    this.setState({
+      show: !this.state.show
+    });
+  };
+
+  onClose = e => {
+    this.props.onClose && this.props.onClose(e);
   };
 
   handleStart = ()=>{
@@ -39,20 +49,18 @@ class NewBooking extends Component {
       var userdata = await axios.get('/auth/', config);
       console.log(userdata.data)
       if (userdata.wallet < rqamount) {
-        <Alert variant="filled" severity="error">Sorry unable to reg due to low balance</Alert>
         //alert("Sorry unable to reg due to low balance ");
         return;
       } else {
         console.log(userdata.data.wallet  , rqamount , (userdata.data.wallet - rqamount))
-        if(<Modal show={this.state.show} onClose={this.showModal}>{"We are Booking you for this Slot, Your wallet balance will be "+(userdata.data.wallet - rqamount)}</Modal>){
-        // if (window.confirm("We are Booking you for this Slot, Your wallet balance will be "+(userdata.data.wallet - rqamount))) {
-        //   this.newBookingFun(submission);
+        if (window.confirm("We are Booking you for this Slot, Your wallet balance will be "+(userdata.data.wallet - rqamount))) {
+          this.newBookingFun(submission);
         } else {
           // Do nothing
         }
       }
     }catch(err) {
-      <Alert variant="filled" severity="error">Your session is expired, login again</Alert>
+      this.showModal(true)
 			//alert("your session is expired, login again");
 			//this.setState({alert: 1});
 			//logout();
@@ -80,11 +88,9 @@ class NewBooking extends Component {
     }
     try {
       const res = await axios.post('/booking/', body, config);
-      <Alert variant="filled" severity="success">Booking successfull</Alert>
       //alert("Booking successfull");
     } catch (err) {
       console.log(err.response.data.errors[0]);
-      <Alert variant="filled" severity="error">{err.response.data.errors[0]}</Alert>
       //alert(err.response.data.errors[0]);
     }
   }
@@ -113,16 +119,11 @@ class NewBooking extends Component {
         <Fragment>
           <h1 className="large text-primary" style={{ marginTop: "50px"}}>Bookings</h1>
           <div style={{width: "100%", margin: "auto"}}>
+              <Modal show={this.state.show} onClose={this.showModal}>your session is expired, login again</Modal>
               <div style={{ width: "50%", float: "left", borderRight: "1px solid grey"}}>
                 {/* <button className="btn btn-primary" onClick={this.handleShow}>New Booking</button> */}
                 <div style={{ width: "50%", margin: "auto"}}>
                   <h2>All Courts ({this.state.courts.length})</h2>
-                  <div class="grid-container">
-                    <div class="grid-item">1</div>
-                    <div class="grid-item">2</div>
-                    <div class="grid-item">3</div>  
-                    <div class="grid-item">4</div>
-                  </div>
                   {this.state.courts.map(renderSidebarCourt)}
                 </div>
               </div>

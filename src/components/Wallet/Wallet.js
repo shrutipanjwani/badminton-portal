@@ -96,7 +96,7 @@ export default class Wallet extends React.Component {
 						src={img}
 						alt=""
 					/> */}
-					<PictureUploader />
+					<PictureUploader/>
 					<div style={{ width: '60%', textAlign: "left", margin: "auto"}}>
 					<h1 class="lead">{this.state.name}</h1>
 						<p><strong>Email:</strong> &nbsp; {this.state.email}</p>

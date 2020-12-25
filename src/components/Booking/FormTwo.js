@@ -11,7 +11,6 @@ import moment from 'moment';
 
 export default class Form extends React.Component {
   state = {
-    show: false,
     courtName: "",
     error: "",
     bookingType: "",
@@ -27,16 +26,6 @@ export default class Form extends React.Component {
     endTimeMinuteDisabled : [],
     startTimeSet : true,
     startDetails:[]
-  };
-
-  showModal = e => {
-    this.setState({
-      show: !this.state.show
-    });
-  };
-
-  onClose = e => {
-    this.props.onClose && this.props.onClose(e);
   };
 
   validate = () => {
@@ -63,7 +52,6 @@ export default class Form extends React.Component {
     const err = this.validate();
     if (!err) {
       await this.props.onSubmit(this.state);
-      await this.showModal();
       // clear form
       this.clear();
     }

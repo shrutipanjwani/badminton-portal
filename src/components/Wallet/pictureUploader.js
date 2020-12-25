@@ -39,8 +39,8 @@ export default class PictureUploader extends React.Component {
     var formData = new FormData();
 
     await formData.append("file", this.state.picture);
-    
-    axios.post("users/uploadfile",  formData).then(res => { 
+
+    axios.post("/users/uploadfile",  formData).then(res => { 
         console.log(res.formData)
           this.setState({ avatar: res.formData.url }, () => {
         })
@@ -49,10 +49,9 @@ export default class PictureUploader extends React.Component {
 
   render() {
     return (
-      <div>
-        <h5>Picture Uploader</h5>
-
+      <div style={{marginTop: "20px"}}>
         <input
+          className="btn btn-primary"
           type="file"
           onChange={this.handlePictureSelected.bind(this)}
         />
@@ -62,8 +61,7 @@ export default class PictureUploader extends React.Component {
             {this.renderPreview()}
           </p>
         </div>
-        <hr/>
-        <button onClick={this.upload.bind(this)}>
+        <button className="btn btn-primary" onClick={this.upload.bind(this)}>
           Upload
         </button>
       </div>
