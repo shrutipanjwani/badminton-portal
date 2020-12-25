@@ -30,7 +30,8 @@ export default class Wallet extends React.Component {
 			status : "",
 			bookings : 0,
 			wallet : 0,
-			addToWallet: 0
+			addToWallet: 0,
+			src:false
 		}
 		this.handleClick=this.handleClick.bind(this);
   	}
@@ -107,6 +108,7 @@ export default class Wallet extends React.Component {
 			this.setState({status: "Active"});
 			this.setState({bookings: boookingsVar.data.Length});
 			this.setState({wallet: res.data.wallet});
+			this.setState({src: res.data.avatar});
 
 			//var token = this.props.match.params.token;
 		} catch(err) {
@@ -129,7 +131,7 @@ export default class Wallet extends React.Component {
 						src={img}
 						alt=""
 					/> */}
-					<PictureUploader/>
+					<PictureUploader data={this.state.src}/>
 					<div style={{ width: '60%', textAlign: "left", margin: "auto"}}>
 					<h1 class="lead">{this.state.name}</h1>
 						<p><strong>Email:</strong> &nbsp; {this.state.email}</p>

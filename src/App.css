@@ -832,3 +832,15 @@ nav{
   margin-right: 10px;
   text-align: center;
 }
+
+/* Camera icon */
+.image-upload > input
+{
+    display: none;
+}
+
+.image-upload img
+{
+    width: 100px;
+    cursor: pointer;
+}

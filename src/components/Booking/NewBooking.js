@@ -1,7 +1,6 @@
 import React, { Fragment, Component } from "react";
 import axios from "axios";
 import Form from "./FormTwo";
-import Modal from "../Modal";
 import ReactDOM from "react-dom";
 import moment from 'moment';
 class NewBooking extends Component {
@@ -135,6 +134,8 @@ class NewBooking extends Component {
     this.getCourtDetails();
   }
 
+  handleSubmit = () => alert("Submitted");
+
   render() {
     return (
         <Fragment>
@@ -159,6 +160,15 @@ class NewBooking extends Component {
                 </div>
               </div>
           </div>
+          <Confirm title="Confirm" description="Are you sure?">
+              {(confirm) => (
+                <form onSubmit={confirm(this.handleSubmit)}>
+                  <p>
+                    <button>Submit</button>
+                  </p>
+                </form>
+              )}
+          </Confirm>
         </Fragment>
     );
   }
