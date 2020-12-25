@@ -115,15 +115,11 @@ class NewBooking extends Component {
           <div style={{width: "100%", margin: "auto"}}>
               <div style={{ width: "50%", float: "left", borderRight: "1px solid grey"}}>
                 {/* <button className="btn btn-primary" onClick={this.handleShow}>New Booking</button> */}
-                <div style={{ width: "50%", margin: "auto"}}>
-                  <h2>All Courts ({this.state.courts.length})</h2>
+                <div style={{ width: "70%", margin: "auto"}}>
+                  <h2>All Courts ({this.state.courts.length})</h2><br />
                   <div class="grid-container">
-                    <div class="grid-item">1</div>
-                    <div class="grid-item">2</div>
-                    <div class="grid-item">3</div>  
-                    <div class="grid-item">4</div>
+                     {this.state.courts.map(renderSidebarCourt)}
                   </div>
-                  {this.state.courts.map(renderSidebarCourt)}
                 </div>
               </div>
               <div style={{ width: "50%", float: "right"}}>        
@@ -152,8 +148,8 @@ function renderSidebarCourt(event) {
         padding: '10px',
         color: '#ffffff',
         marginBottom: '10px'
-      }}>
-      <b>Court {event.court_name}</b>
+      }} class = 'grid-item'>
+      <b>Court {event.court_name}</b><br />
       <i>Time : {event.start_time} - {event.end_time}</i><br />
       {event.court_break.length == 0 ? "No Breaks" : event.court_break.map(renderSidebarbreak) }
     </div>
