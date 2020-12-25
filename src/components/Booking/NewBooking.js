@@ -2,6 +2,8 @@ import React, { Fragment, Component } from "react";
 import axios from "axios";
 import Form from "./FormTwo";
 import Alert from '@material-ui/lab/Alert';
+import Modal from "../Modal";
+import ReactDOM from "react-dom";
 
 class NewBooking extends Component {
   
@@ -42,14 +44,15 @@ class NewBooking extends Component {
         return;
       } else {
         console.log(userdata.data.wallet  , rqamount , (userdata.data.wallet - rqamount))
-        if (window.confirm("We are Booking u for this Slot, Your wallet balance will be "+(userdata.data.wallet - rqamount))) {
-          this.newBookingFun(submission);
+        if(<Modal show={this.state.show} onClose={this.showModal}>{"We are Booking you for this Slot, Your wallet balance will be "+(userdata.data.wallet - rqamount)}</Modal>){
+        // if (window.confirm("We are Booking you for this Slot, Your wallet balance will be "+(userdata.data.wallet - rqamount))) {
+        //   this.newBookingFun(submission);
         } else {
           // Do nothing
         }
       }
     }catch(err) {
-      <Alert variant="filled" severity="error">your session is expired, login again</Alert>
+      <Alert variant="filled" severity="error">Your session is expired, login again</Alert>
 			//alert("your session is expired, login again");
 			//this.setState({alert: 1});
 			//logout();
@@ -114,6 +117,12 @@ class NewBooking extends Component {
                 {/* <button className="btn btn-primary" onClick={this.handleShow}>New Booking</button> */}
                 <div style={{ width: "50%", margin: "auto"}}>
                   <h2>All Courts ({this.state.courts.length})</h2>
+                  <div class="grid-container">
+                    <div class="grid-item">1</div>
+                    <div class="grid-item">2</div>
+                    <div class="grid-item">3</div>  
+                    <div class="grid-item">4</div>
+                  </div>
                   {this.state.courts.map(renderSidebarCourt)}
                 </div>
               </div>
@@ -130,6 +139,9 @@ class NewBooking extends Component {
     );
   }
 }
+
+const rootElement = document.getElementById("root");
+ReactDOM.render(<NewBooking />, rootElement);
 
 function renderSidebarCourt(event) {
   var colorcourt = event.colour

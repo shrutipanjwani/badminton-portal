@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import Alert from '@material-ui/lab/Alert';
 //import { Button } from "@material-ui/core";
 
 export default class Booking extends React.Component {
@@ -38,7 +39,8 @@ export default class Booking extends React.Component {
 
     console.log("you need this to Register", rqamount);
     if (this.state.userdata.wallet < rqamount) {
-      alert("Sorry unable to reg due to low balance ");
+      <Alert variant="filled" severity="error">Sorry unable to reg due to low balance</Alert>
+      //alert("Sorry unable to reg due to low balance ");
       return;
     } else {
       if (window.confirm(
@@ -67,7 +69,8 @@ export default class Booking extends React.Component {
         config
       );
       this.getBalance();
-      alert("Booking successfull");
+      <Alert variant="filled" severity="success">Booking successfull</Alert>
+      //alert("Booking successfull");
       const player = ((this.state.aviSlot - 1) === 0 ) ? true : false;
       let newdata = this.state.data;
       newdata.court_full = player;
@@ -80,7 +83,8 @@ export default class Booking extends React.Component {
       this.setState({newtifOptions : players});
     } catch (err) {
       console.log(err.response.data.errors[0]);
-      alert(err.response.data.errors[0]);
+      <Alert variant="filled" severity="error">{err.response.data.errors[0]}</Alert>
+      //alert(err.response.data.errors[0]);
     }
   }
 

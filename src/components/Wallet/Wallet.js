@@ -1,11 +1,12 @@
-import React, {	Fragment ,useState, useEffect } from 'react';
+import React, {	Fragment} from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import img from '../../img/user.png'
+//import img from '../../img/user.png';
+import PictureUploader from "./pictureUploader";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 
@@ -89,12 +90,13 @@ export default class Wallet extends React.Component {
 			<Fragment>
 				<div className="gradient"  style={{ float: 'left', width: '55%', height: "100vh",
 				color: "#fff"}}>
-					<img
+					{/* <img
 						class="round-img my-3"
 						style={{ width: '150px', height: '150px' }}
 						src={img}
 						alt=""
-					/>
+					/> */}
+					<PictureUploader />
 					<div style={{ width: '60%', textAlign: "left", margin: "auto"}}>
 					<h1 class="lead">{this.state.name}</h1>
 						<p><strong>Email:</strong> &nbsp; {this.state.email}</p>

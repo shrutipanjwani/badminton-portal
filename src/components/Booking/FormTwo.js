@@ -7,10 +7,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import TimePicker from 'rc-time-picker';
 import 'rc-time-picker/assets/index.css';
 import moment from 'moment';
-import Alert from '@material-ui/lab/Alert';
+//import Alert from '@material-ui/lab/Alert';
 
 export default class Form extends React.Component {
   state = {
+    show: false,
     courtName: "",
     error: "",
     bookingType: "",
@@ -26,6 +27,16 @@ export default class Form extends React.Component {
     endTimeMinuteDisabled : [],
     startTimeSet : true,
     startDetails:[]
+  };
+
+  showModal = e => {
+    this.setState({
+      show: !this.state.show
+    });
+  };
+
+  onClose = e => {
+    this.props.onClose && this.props.onClose(e);
   };
 
   validate = () => {
@@ -50,8 +61,9 @@ export default class Form extends React.Component {
    onSubmit =async e => {
     e.preventDefault();
     const err = this.validate();
-     if (!err) {
+    if (!err) {
       await this.props.onSubmit(this.state);
+      await this.showModal();
       // clear form
       this.clear();
     }
@@ -181,7 +193,7 @@ export default class Form extends React.Component {
               id: 'age-native-simple',
             }}
             errorText={this.state.courtNameError}
-            style={{ width: '350px'}}
+            style={{ width: '250px'}}
             required
           >
             <option aria-label="None" value="" disabled>Court Name</option>
@@ -200,7 +212,7 @@ export default class Form extends React.Component {
               id: 'age-native-simple',
             }}
             errorText={this.state.bookingTypeError}
-            style={{ width: '350px'}}
+            style={{ width: '250px'}}
             required
           >
             <option aria-label="None" value="" disabled>Booking Type</option>
@@ -231,7 +243,7 @@ export default class Form extends React.Component {
         />
         <br /><br />
         <TimePicker
-          style={{ width: "180px" }}
+          style={{ width: "125px" }}
           minuteStep = "30"
           showSecond= {false}
           hideDisabledOptions = {true}
@@ -242,7 +254,7 @@ export default class Form extends React.Component {
           required
         />
         <TimePicker
-          style={{ width: "180px" }}
+          style={{ width: "125px" }}
           minuteStep = {30}
           showSecond= {false}
           //hideDisabledOptions = {true}
