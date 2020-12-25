@@ -1,5 +1,6 @@
 import React from 'react';
-//import axios from "axios";
+import axios from "axios";
+
 export default class PictureUploader extends React.Component {
   constructor(props) {
     super(props);
@@ -38,8 +39,12 @@ export default class PictureUploader extends React.Component {
     var formData = new FormData();
 
     await formData.append("file", this.state.picture);
-  
-    //const res = axios.post("users/uploadfile", formData); 
+    
+    axios.post("users/uploadfile",  formData).then(res => { 
+        console.log(res.formData)
+          this.setState({ avatar: res.formData.url }, () => {
+        })
+    })
   }
 
   render() {
