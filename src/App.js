@@ -5,9 +5,9 @@ import Navbar from './components/layout/Navbar';
 import Login from './components/auth/LoginForm';
 import Register from './components/auth/RegistrationForm';
 import ResetPassword from './components/auth/ResetPassword';
-import CalendarPage from './components/calendar/Calendar';
+import CalendarPage from './components/Calendar/Calendar';
 import UserVerification from './components/auth/UserVerification';
-import Wallet from './components/wallet/Wallet';
+import Wallet from './components/Wallet/Wallet';
 import EditTime from './adminportal/EditTime';
 import EditCourt from './adminportal/EditCourt';
 import NewBooking from './components/Booking/NewBooking';
@@ -22,7 +22,7 @@ import { Provider } from "react-redux";
 import store from "./store";
 import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
-import PictureUploader from './components/wallet/pictureUploader';
+import PictureUploader from './components/Wallet/pictureUploader';
 import AdminBooking from './adminportal/Booking'
 
 
@@ -56,6 +56,7 @@ const App = () => {
               <Route exact path='/resetpassword/:email/:token' component={ResetPassword}/>
               <Route exact path='/verify/:email/:token' component={UserVerification}/>
               <Route exact path='/calendar' component={CalendarPage}/>
+              <Route exact path='/wallet/:sessionId' component={Wallet}/>
               <Route exact path='/wallet' component={Wallet}/>
               <Route exact path='/newbooking' component={NewBooking}/>
               <Route exact path='/userbooking' component={UserBooking}/>

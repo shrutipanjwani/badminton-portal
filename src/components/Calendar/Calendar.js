@@ -212,7 +212,7 @@ function renderSidebarCourt(event) {
       }}>
       <b>Court {event.court_name}</b>
       <i>Time : {event.start_time} - {event.end_time}</i><br />
-      {event.court_break.length == 0 ? "No Breaks" : event.court_break.map(renderSidebarbreak) }<br /><br />
+      {event.court_break.length == 0 ? "No Breaks" : event.court_break.map(renderSidebarbreak) }
     </div>
   )
 }

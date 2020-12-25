@@ -13,19 +13,26 @@ export default class Form extends React.Component {
   state = {
     courtName: "",
     error: "",
+    isBooking: false,
+    courtSet : true,
+    courtTimeHourDisabled : [],
+    courttimeMinuteDisabled : [],
     bookingType: "",
+
     bookingDefaultDate: null,
     bookingDate: null,
-    isBooking: false,
+
     bookingDefaultStartTime: moment( ).set({hour:0,minute:0,second:0,millisecond:0}),
-    bookingDefaultEndTime: null,
     bookingStartTime: null,
+    startTimeSet : true,
+    startDetails:[],
+    startTime : "",
+
+    bookingDefaultEndTime: null,
     bookingEndTime : null,
     endTime : "",
     endTimeHourDisabled : [],
     endTimeMinuteDisabled : [],
-    startTimeSet : true,
-    startDetails:[]
   };
 
   validate = () => {
@@ -77,7 +84,9 @@ export default class Form extends React.Component {
         startDetails:[],
         bookingDate : "",
         startTime: "",
-        endTime : ""
+        endTime : "",
+        courtTimeHourDisabled: [],
+         courtSet : false
         //isBooking: true
       });
   }
@@ -97,9 +106,33 @@ export default class Form extends React.Component {
 
   changeCourt = e => {
     // this.props.onChange({ [e.target.name]: e.target.value })
+    var courtTimeHourDisabledvar = [];
+    const courtSelected = this.props.data.find(o => o.court_name === e.target.value);
+    const starttimearr = courtSelected.start_time.split(':',2);
+    const endtimearr = courtSelected.end_time.split(':',2);
+    courtTimeHourDisabledvar = Array.from(Array(parseInt(starttimearr[0])).keys());
+    for(var i = parseInt(parseInt(endtimearr[0])); i<= 24 ; i++){
+        courtTimeHourDisabledvar.push(i);
+    }
+    if(endtimearr[1] == "30"){
+      courtTimeHourDisabledvar = courtTimeHourDisabledvar.filter(item => item !== parseInt(endtimearr[0]))
+    }
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
+      courtStartTimeHourDisabled: courtTimeHourDisabledvar
+                                  .filter(item => item !== parseInt(starttimearr[0])),
+      courtEndTimeHourDisabled : courtTimeHourDisabledvar
+                                  .filter(item => item !== parseInt(endtimearr[0])),
+      courtSet : false  ,
+      courtstarttime : starttimearr,
+      courtendtime : endtimearr,
+      bookingDefaultEndTime :  null,
+      startTimeSet : true,
+      bookingStartTime: null,
+      startTime : "" , endTime : "" ,
+      endTimeMinuteDisabled : [] 
     });
+      
   };
 
   changeDate = e => {
@@ -114,17 +147,41 @@ export default class Form extends React.Component {
     });
 
   };
-
-
+  disabledMinutes = ( hour ) => {
+    let minutes = []
+      if(hour == this.state.courtstarttime[0] && this.state.courtstarttime[1] == "30"){
+        minutes = [0]; 
+      }
+      if(hour == this.state.courtendtime[0] && this.state.courtendtime[1] == "30"){
+        minutes = [30]; 
+      } 
+    return minutes
+  }
+  disabledMinutesEndTime = (hour) => {
+    let minutes = this.state.endTimeMinuteDisabled;
+      if(hour == this.state.courtendtime[0] && this.state.courtendtime[1] == "00"){
+         minutes = [30]; 
+      }
+      // if(hour == this.state.courtendtime[0] && this.state.courtendtime[1] == "30"){
+      //   minutes = [30]; 
+      // } 
+    return minutes; 
+  }
   changeStartTime = e =>{
     if(!e){
-      this.setState({bookingDefaultEndTime :  null})
+      this.setState({bookingDefaultEndTime :  null,endTimeMinuteDisabled : [] })
       this.setState({startTimeSet : true})
       this.setState({bookingStartTime: null });
       this.setState({startTime : "" , endTime : ""})
     }else{
-      this.setState({bookingStartTime: e });
+     
       var date = new Date(e), Hour = ("0" + date.getHours()).slice(-2), Min = ("0" + date.getMinutes()).slice(-2);
+      if(Hour == this.state.courtstarttime[0] && this.state.courtstarttime[1] == "30"){
+        this.setState({ bookingStartTime:e.set({hour:Hour,minute:30})})
+      }else{
+        this.setState({bookingStartTime: e });
+      }
+     
       this.setState({startTime : Hour+":"+Min+":00"})
       var dateArr = [ date.getHours() , date.getMinutes()]
       this.setState({startDetails : dateArr})
@@ -231,27 +288,35 @@ export default class Form extends React.Component {
         />
         <br /><br />
         <TimePicker
+<<<<<<< HEAD
+          style={{ width: "180px" }}
+          minuteStep = {30}
+=======
           style={{ width: "125px" }}
           minuteStep = "30"
+>>>>>>> e650b32ffbbbf3a391e90b68b930ae6a75454b57
           showSecond= {false}
           hideDisabledOptions = {true}
           placeholder= "Start Time"
           defaultOpenValue= {this.state.bookingDefaultStartTime} 
+          disabledHours = {() => this.state.courtStartTimeHourDisabled}
+          disabledMinutes =  {e => this.disabledMinutes(e)}
           value= {this.state.bookingStartTime}
           onChange={e => this.changeStartTime(e)}
+          disabled = {this.state.courtSet}
           required
         />
         <TimePicker
           style={{ width: "125px" }}
           minuteStep = {30}
           showSecond= {false}
-          //hideDisabledOptions = {true}
+          hideDisabledOptions = {true}
           placeholder= "End Time"
           onChange={e => this.changeEndTime(e)}
           value={this.state.bookingDefaultEndTime}
           defaultOpenValue= {this.state.bookingDefaultEndTime} 
-          disabledHours = {() => this.state.endTimeHourDisabled}
-          disabledMinutes = {() => this.state.endTimeMinuteDisabled}
+          disabledHours = {() => this.state.endTimeHourDisabled.concat(this.state.courtEndTimeHourDisabled)}
+          disabledMinutes = {e => this.disabledMinutesEndTime(e)}
           disabled = {this.state.startTimeSet}
           required
         />

@@ -9,17 +9,20 @@ import CardContent from '@material-ui/core/CardContent';
 import PictureUploader from "./pictureUploader";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
+import setAuthToken from '../../utils/setAuthToken';
 
 
 const stripePromise = loadStripe("pk_test_51HysuDFhf22CW4TepnCI6ZofveEBAxNFymCNlFW27S1zsShT6ToZMCNdQPZfvDMrfLDD4EOsLOgDfh12Y6DVt10L00VQ0ZYiuP");
 
 export default class Wallet extends React.Component {
 
+
 	constructor(props){
     	super(props);
-		// if (localStorage.token) {
-		// setAuthToken(localStorage.token);
-		// }
+		if (localStorage.token) {
+			setAuthToken(localStorage.token);
+		}
+
 		this.state = {
 			name :"",
 			email : "",
@@ -47,11 +50,16 @@ export default class Wallet extends React.Component {
 			const result = await stripe.redirectToCheckout({
 				sessionId: response.data.id,
 			});
+			
 			if (result.error) {
 				alert("Please check your Internet Connection");
 			}
 		}catch(err){
-			alert(err.response.data);
+			if(err.response.data.msg){
+				alert(err.response.data);
+			}else {
+			alert(err.response.data);}
+			console.log(err);
 		}	
 	};
 	
@@ -62,6 +70,34 @@ export default class Wallet extends React.Component {
 			}
 		}
 
+		var sessionId = this.props.match.params.sessionId
+
+		if(sessionId){
+			try{ 
+				const resCheckout = await axios.post('/wallet/check-payement/'+sessionId ,config);
+				await this.loadData();
+				if(resCheckout.data === "Success"){
+					alert("Payment Successfull");
+				}else if(resCheckout.data === "Failed"){
+					alert("Payment Failed");
+				}
+				this.props.history.replace('/wallet');
+			}catch(err){
+				await this.loadData();
+				alert("invalid_request_error");
+				this.props.history.replace('/wallet');
+			}
+		}else{
+			await this.loadData();
+		}		
+	}
+
+	async loadData(){
+		const config = {
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}
 		try {
 			const res = await axios.get('/auth/', config);
 			const boookingsVar = await axios.get("/booking/user", config);
@@ -74,10 +110,7 @@ export default class Wallet extends React.Component {
 
 			//var token = this.props.match.params.token;
 		} catch(err) {
-			alert("your session is expired, login again");
-			//this.setState({alert: 1});
-			//logout();
-			this.props.history.replace("/signin");
+			
 		}
 	}
 
