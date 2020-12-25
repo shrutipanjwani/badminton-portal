@@ -290,7 +290,8 @@ export default class Form extends React.Component {
             required
         />
         <br /><br />
-        <TimePicker
+        
+         <TimePicker
           style={{ width: "125px" }}
           minuteStep = {30}
           showSecond= {false}
@@ -302,8 +303,8 @@ export default class Form extends React.Component {
           value= {this.state.bookingStartTime}
           onChange={e => this.changeStartTime(e)}
           disabled = {this.state.courtSet}
-          required
-        />
+         // required
+        /> 
         <TimePicker
           style={{ width: "125px" }}
           minuteStep = {30}
@@ -316,7 +317,7 @@ export default class Form extends React.Component {
           disabledHours = {() => this.state.endTimeHourDisabled.concat(this.state.courtEndTimeHourDisabled)}
           disabledMinutes = {e => this.disabledMinutesEndTime(e)}
           disabled = {this.state.startTimeSet}
-          required
+          //required
         />
         <br />
         <br />
