@@ -101,7 +101,7 @@ export default class Wallet extends React.Component {
 		}
 		try {
 			const res = await axios.get('/auth/', config);
-			const boookingsVar = await axios.get("/booking/user", config);
+			const boookingsVar = await axios.get("/booking/userLength", config);
 			this.setState({name: res.data.name});
 			this.setState({email: res.data.email});
 			this.setState({phone: "+" + res.data.phone.country + "-" + res.data.phone.digits});

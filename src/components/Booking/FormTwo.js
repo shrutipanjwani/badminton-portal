@@ -178,7 +178,7 @@ export default class Form extends React.Component {
       var date = new Date(e), Hour = ("0" + date.getHours()).slice(-2), Min = ("0" + date.getMinutes()).slice(-2);
       if(Hour == this.state.courtstarttime[0] && this.state.courtstarttime[1] == "30"){
         this.setState({ bookingStartTime:e.set({hour:Hour,minute:30})})
-      }else{
+      }else {
         this.setState({bookingStartTime: e });
       }
      
@@ -208,7 +208,10 @@ export default class Form extends React.Component {
       this.setState({endTime : ""})
     }else{
       var date = new Date(e), Hour = ("0" + date.getHours()).slice(-2), Min = ("0" + date.getMinutes()).slice(-2);
-      if(this.state.startDetails[0] == date.getHours() && this.state.startDetails[1] == 0){
+      if(Hour == this.state.courtendtime[0] && this.state.courtendtime[1] == "00"){
+         this.setState({bookingDefaultEndTime :  e.set({minute:0})})
+         this.setState({endTime : Hour+":00:00"})
+      }else if(this.state.startDetails[0] == date.getHours() && this.state.startDetails[1] == 0){
         this.setState({bookingDefaultEndTime :  e.set({minute:30})})
         this.setState({endTimeMinuteDisabled : [0]})
         this.setState({endTime : Hour+":30:00"})
@@ -289,7 +292,7 @@ export default class Form extends React.Component {
         <br /><br />
         <TimePicker
           style={{ width: "125px" }}
-          minuteStep = "30"
+          minuteStep = {30}
           showSecond= {false}
           hideDisabledOptions = {true}
           placeholder= "Start Time"

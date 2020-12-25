@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import moment from 'moment';
 import Alert from '@material-ui/lab/Alert';
 //import { Button } from "@material-ui/core";
 
@@ -35,8 +36,15 @@ export default class Booking extends React.Component {
   }
 
   checkWallet() {
-    var rqamount = parseInt(this.state.data.court.price) / this.state.total;
+    var rqamount = 0;
+    var startTime=moment(this.state.data.start_time, "HH:mm:ss");
+    var endTime=moment(this.state.data.end_time, "HH:mm:ss");
+    var duration = moment.duration(endTime.diff(startTime));
+    var hours = parseFloat(duration.asHours());
 
+    let totamount = parseInt(this.state.data.court.price)*(hours);
+    rqamount = totamount/this.state.total;
+    
     console.log("you need this to Register", rqamount);
     if (this.state.userdata.wallet < rqamount) {
       <Alert variant="filled" severity="error">Sorry unable to reg due to low balance</Alert>
@@ -57,15 +65,26 @@ export default class Booking extends React.Component {
   }
 
   async updatebooking(rqamount) {
-  
+    
     const config = {
       headers: {
         "Content-Type": "application/json",
       },
     };
     try {
+      var user = this.state.data.user;
+      var playersbody = Object.keys(user).map(function(key) {
+        return user[key].name+"\t"+user[key].email+"\t"+user[key].phone.country+"-"+user[key].phone.digits+"\n";
+      });
+      playersbody = playersbody.toString()+this.state.userdata.name+"\t"+this.state.userdata.email+"\t"+this.state.userdata.phone.country+"-"+this.state.userdata.phone.digits+"\n";
+      console.log(playersbody.toString()+this.state.userdata.name+"\t"+this.state.userdata.email+"\t"+this.state.userdata.phone.country+"-"+this.state.userdata.phone.digits+"\n");
+      const body = {
+        playersBooked : playersbody
+      }
+      console.log(body)
       await axios.put(
         "/booking/update/" + this.state.data._id + "/" + rqamount,
+        body,
         config
       );
       this.getBalance();
@@ -82,8 +101,11 @@ export default class Booking extends React.Component {
       console.log (players)
       this.setState({newtifOptions : players});
     } catch (err) {
-      console.log(err.response.data.errors[0]);
+      if(err.response){
       <Alert variant="filled" severity="error">{err.response.data.errors[0]}</Alert>
+      }else{
+        console.log(err)
+      }
       //alert(err.response.data.errors[0]);
     }
   }

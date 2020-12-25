@@ -210,9 +210,10 @@ function renderSidebarCourt(event) {
         color: '#ffffff',
         marginBottom: '10px'
       }}>
-      <b>Court {event.court_name}</b>
+      <b>Court {event.court_name}</b><br />Court Price : $ {event.price} / hr<br />
       <i>Time : {event.start_time} - {event.end_time}</i><br />
       {event.court_break.length == 0 ? "No Breaks" : event.court_break.map(renderSidebarbreak) }
+      
     </div>
   )
 }
