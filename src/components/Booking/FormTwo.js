@@ -292,11 +292,7 @@ export default class Form extends React.Component {
         <br /><br />
         <TimePicker
           style={{ width: "125px" }}
-<<<<<<< HEAD
           minuteStep = {30}
-=======
-          minuteStep = "30"
->>>>>>> 34a438fc11efe0df291b2dd90c52f5de815b8cab
           showSecond= {false}
           hideDisabledOptions = {true}
           placeholder= "Start Time"
