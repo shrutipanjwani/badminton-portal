@@ -54,7 +54,11 @@ export default class Wallet extends React.Component {
 				alert("Please check your Internet Connection");
 			}
 		}catch(err){
-			alert(err.response.data);
+			if(err.response.data.msg){
+				alert(err.response.data);
+			}else {
+			alert(err.response.data);}
+			console.log(err);
 		}	
 	};
 	
@@ -68,10 +72,31 @@ export default class Wallet extends React.Component {
 		var sessionId = this.props.match.params.sessionId
 
 		if(sessionId){
-			const resCheckout = await axios.post('/wallet/check-payement/'+sessionId ,config);
-		}
-		
+			try{ 
+				const resCheckout = await axios.post('/wallet/check-payement/'+sessionId ,config);
+				await this.loadData();
+				if(resCheckout.data === "Success"){
+					alert("Payment Successfull");
+				}else if(resCheckout.data === "Failed"){
+					alert("Payment Failed");
+				}
+				this.props.history.replace('/wallet');
+			}catch(err){
+				await this.loadData();
+				alert("invalid_request_error");
+				this.props.history.replace('/wallet');
+			}
+		}else{
+			await this.loadData();
+		}		
+	}
 
+	async loadData(){
+		const config = {
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}
 		try {
 			const res = await axios.get('/auth/', config);
 			const boookingsVar = await axios.get("/booking/user", config);

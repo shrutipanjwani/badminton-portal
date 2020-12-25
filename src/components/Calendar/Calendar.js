@@ -3,7 +3,7 @@ import FullCalendar, { formatDate } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { INITIAL_EVENTS, createEventId ,todayStr} from './event-utils'
+import { createEventId } from './event-utils'
 import './Calendar.css'
 import axios from "axios";
 import { logout } from '../../actions/auth';
@@ -73,21 +73,8 @@ export default class calendar extends React.Component {
       this.setState({bookedevents : bookedeventsvar})
       this.getCourtDetails();
     } catch(err) {
-// <<<<<<< HEAD
-        
-        //this.setState({alert: 1});
-// =======
-// <<<<<<< HEAD
-//       if(this.state.first===0){
-//         var a=1
-//         this.setState({first: a});
-//         this.getData();
-//       }else{
-// =======
-// >>>>>>> 530335dda266ee386b67fc76307660f383b1c565
-//         alert("your session is expired, login again");
-//         this.setState({alert: 1});
-// >>>>>>> 24dc877e91bc007ca419f5e64991b5dafe3bdd40
+        // this.setState({alert: 1});
+        console.log(err)
         logout();
         this.props.history.replace("/signin");
         alert("your session is expired, login again");
@@ -104,16 +91,7 @@ export default class calendar extends React.Component {
       const res = await axios.get('/court/', config);
       this.setState({courts : res.data})
     } catch(err) {
-// <<<<<<< HEAD
-//       console.log(err);
-//       if(this.state.first===0){
-//         var a=1
-//         this.setState({first: a});
-//         this.getData();
-//       }else{
-// =======
-//         console.log(err);
-// >>>>>>> 530335dda266ee386b67fc76307660f383b1c565
+        console.log(err);
         if(this.state.alert === 0){
           alert("your session is expired, login again");
           logout();
@@ -234,7 +212,7 @@ function renderSidebarCourt(event) {
       }}>
       <b>Court {event.court_name}</b>
       <i>Time : {event.start_time} - {event.end_time}</i><br />
-      {event.court_break.length == 0 ? "No Breaks" : event.court_break.map(renderSidebarbreak) }<br /><br />
+      {event.court_break.length == 0 ? "No Breaks" : event.court_break.map(renderSidebarbreak) }
     </div>
   )
 }
