@@ -3,6 +3,9 @@ import axios from "axios";
 import Form from "./FormTwo";
 import ReactDOM from "react-dom";
 import moment from 'moment';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+
 class NewBooking extends Component {
   
   state = {
@@ -10,19 +13,7 @@ class NewBooking extends Component {
     editIdx: -1,
     isActive:false,
     isDisplay: false,
-    courts : [],
-    show: false,
-    alertmsg : ""
-  };
-
-  showModal = e => {
-    this.setState({
-      show: !this.state.show
-    });
-  };
-
-  onClose = e => {
-    this.props.onClose && this.props.onClose(e);
+    courts : []
   };
 
   handleStart = ()=>{
@@ -54,11 +45,8 @@ class NewBooking extends Component {
       var userdata = await axios.get('/auth/', config);
       console.log(userdata.data)
       if (userdata.wallet < rqamount) {
-        this.setState({
-        alertmsg : "Sorry unable to reg due to low balance "
-        })
-        this.showModal(true)
-        //alert("Sorry unable to reg due to low balance ");
+        confirmAlert({title: 'Lets Badminton',message: "Sorry unable to reg due to low balance",
+        buttons: [{label: 'Ok',onClick: () => {}}]});
         return;
       } else {
         console.log(userdata.data.wallet  , rqamount , (userdata.data.wallet - rqamount))
@@ -69,11 +57,8 @@ class NewBooking extends Component {
         }
       }
     }catch(err) {
-      this.setState({
-        alertmsg : "your session is expired, login again"
-      })
-      this.showModal(true)
-			//alert("your session is expired, login again");
+      confirmAlert({title: 'Lets Badminton',message: "your session is expired, login again",
+      buttons: [{label: 'Ok',onClick: () => {}}]});
 			//this.setState({alert: 1});
 			//logout();
 			this.props.history.replace("/signin");
@@ -100,18 +85,12 @@ class NewBooking extends Component {
     }
     try {
       const res = await axios.post('/booking/', body, config);
-      this.setState({
-        alertmsg : "Booking successfull"
-      })
-      this.showModal(true)
-      //alert("Booking successfull");
+      confirmAlert({title: 'Lets Badminton',message: "Booking successfull",
+      buttons: [{label: 'Ok',onClick: () => {}}]}); 
     } catch (err) {
       console.log(err.response.data.errors[0]);
-      this.setState({
-        alertmsg : err.response.data.errors[0]
-      })
-      this.showModal(true)
-      //alert(err.response.data.errors[0]);
+      confirmAlert({title: 'Lets Badminton',message: err.response.data.errors[0],
+      buttons: [{label: 'Ok',onClick: () => {}}]}); 
     }
   }
 
@@ -134,12 +113,9 @@ class NewBooking extends Component {
     this.getCourtDetails();
   }
 
-  handleSubmit = () => alert("Submitted");
-
   render() {
     return (
         <Fragment>
-          <Modal show={this.state.show} onClose={this.showModal}>{this.state.alertmsg}</Modal>
           <h1 className="large text-primary" style={{ marginTop: "50px"}}>Bookings</h1>
           <div style={{width: "100%", margin: "auto"}}>
               <div style={{ width: "60%", float: "left", borderRight: "1px solid grey"}}>
@@ -160,15 +136,6 @@ class NewBooking extends Component {
                 </div>
               </div>
           </div>
-          <Confirm title="Confirm" description="Are you sure?">
-              {(confirm) => (
-                <form onSubmit={confirm(this.handleSubmit)}>
-                  <p>
-                    <button>Submit</button>
-                  </p>
-                </form>
-              )}
-          </Confirm>
         </Fragment>
     );
   }

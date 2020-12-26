@@ -11,6 +11,8 @@ import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 import setAuthToken from '../../utils/setAuthToken';
 
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 const stripePromise = loadStripe("pk_test_51HysuDFhf22CW4TepnCI6ZofveEBAxNFymCNlFW27S1zsShT6ToZMCNdQPZfvDMrfLDD4EOsLOgDfh12Y6DVt10L00VQ0ZYiuP");
 
@@ -53,18 +55,25 @@ export default class Wallet extends React.Component {
 			});
 			
 			if (result.error) {
-				alert("Please check your Internet Connection");
+				confirmAlert({title: 'Lets Badminton',message: 'Please check your Internet Connection',
+            	buttons: [{label: 'Ok',onClick: () => {}}]});
+				//alert("Please check your Internet Connection");
 			}
 		}catch(err){
 			if(err.response.data.msg){
-				alert(err.response.data);
+				confirmAlert({title: 'Lets Badminton',message: err.response.data,
+            	buttons: [{label: 'Ok',onClick: () => {}}]});
+				//alert(err.response.data);
 			}else {
-			alert(err.response.data);}
+				confirmAlert({title: 'Lets Badminton',message: err.response.data,
+            	buttons: [{label: 'Ok',onClick: () => {}}]});
+			//alert(err.response.data);}
 			console.log(err);
 		}	
-	};
+	}
+}
 	
-	async  getData(){
+	async getData() {
 		const config = {
 			headers: {
 				'Content-Type': 'application/json'
@@ -78,14 +87,20 @@ export default class Wallet extends React.Component {
 				const resCheckout = await axios.post('/wallet/check-payement/'+sessionId ,config);
 				await this.loadData();
 				if(resCheckout.data === "Success"){
-					alert("Payment Successfull");
+					confirmAlert({title: 'Lets Badminton',message: "Payment Successfull",
+            		buttons: [{label: 'Ok',onClick: () => {}}]});
+					//alert("Payment Successfull");
 				}else if(resCheckout.data === "Failed"){
-					alert("Payment Failed");
+					confirmAlert({title: 'Lets Badminton',message: "Payment Failed",
+            		buttons: [{label: 'Ok',onClick: () => {}}]});
+					//alert("Payment Failed");
 				}
 				this.props.history.replace('/wallet');
 			}catch(err){
 				await this.loadData();
-				alert("invalid_request_error");
+				confirmAlert({title: 'Lets Badminton',message: "invalid_request_error",
+            	buttons: [{label: 'Ok',onClick: () => {}}]});
+				//alert("invalid_request_error");
 				this.props.history.replace('/wallet');
 			}
 		}else{
@@ -109,7 +124,7 @@ export default class Wallet extends React.Component {
 			this.setState({bookings: boookingsVar.data.Length});
 			this.setState({wallet: res.data.wallet});
 			this.setState({src: res.data.avatar});
-
+			console.log(res.data.avatar);
 			//var token = this.props.match.params.token;
 		} catch(err) {
 			

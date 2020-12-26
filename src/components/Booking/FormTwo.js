@@ -7,7 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import TimePicker from 'rc-time-picker';
 import 'rc-time-picker/assets/index.css';
 import moment from 'moment';
-//import Alert from '@material-ui/lab/Alert';
+
 
 export default class Form extends React.Component {
   state = {
@@ -320,7 +320,6 @@ export default class Form extends React.Component {
         />
         <br />
         <br />
-        {/* <Alert severity="error">{this.state.error}</Alert> */}
         <p className="btn-danger">{this.state.error}</p>
         <br /> 
         <Button onClick={e => this.onSubmit(e)}>

@@ -26,7 +26,7 @@ export default class PictureUploader extends React.Component {
   async upload() {
     var formData = new FormData();
 
-    await formData.append("file", this.state.picture);
+    await formData.append("picture", this.state.picture);       
 
     axios.post("/users/uploadfile",  formData).then(res => { 
         console.log(res.formData)
@@ -41,7 +41,8 @@ export default class PictureUploader extends React.Component {
         <div class="image-upload">
           <label for="file-input">
               <img src={this.state.src ? this.state.src : icon} className="rounded"/>
-              <i className="fa fa-edit" style={{ fontSize: "22px", marginLeft: "-25px", zIndex: "99", backgroundColor: "#841e2d", borderRadius: "50%"}}></i>
+              <i className="fa fa-edit" style={{ fontSize: "22px", marginLeft: "-25px", 
+              zIndex: "99", backgroundColor: "#841e2d", borderRadius: "50%"}}></i>
           </label>
           <input id="file-input" type="file" onChange={this.handlePictureSelected.bind(this)}/>
         </div>

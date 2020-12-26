@@ -1,8 +1,10 @@
 import React from "react";
 import axios from "axios";
 import moment from 'moment';
-import Alert from '@material-ui/lab/Alert';
-//import { Button } from "@material-ui/core";
+import { Fragment } from "react";
+
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 export default class Booking extends React.Component {
   constructor(props) {
@@ -16,7 +18,7 @@ export default class Booking extends React.Component {
       courttype: ["Fullcourt", "singles", "Doubles"],
       userdata: null,
       tifOptions : null,
-      newtifOptions : null 
+      newtifOptions : null
     };
   }
 
@@ -47,20 +49,29 @@ export default class Booking extends React.Component {
     
     console.log("you need this to Register", rqamount);
     if (this.state.userdata.wallet < rqamount) {
-      <Alert variant="filled" severity="error">Sorry unable to reg due to low balance</Alert>
-      //alert("Sorry unable to reg due to low balance ");
+      confirmAlert({title: 'Lets Badminton',message: "Sorry unable to reg due to low balance",
+      buttons: [{label: 'Ok',onClick: () => {}}]});
       return;
     } else {
-      if (window.confirm(
-        "We are Booking u for this Slot, Your wallet balance will be " +
-          (this.state.userdata.wallet - rqamount)
-      )) {
-        this.updatebooking(rqamount);
-      } else {
-        // Do nothing
-      }
+      confirmAlert({
+        title: 'Confirm to submit',
+        message: "We are Booking u for this Slot, Your wallet balance will be " +
+        (this.state.userdata.wallet - rqamount),
+        buttons: [
+          {
+            label: 'Yes',
+            onClick: () => {
+              this.updatebooking(rqamount);
+            }
+          },
+          {
+            label: 'No',
+            onClick: () => {
 
-     
+            }
+          }
+        ]
+      });
     }
   }
 
@@ -88,8 +99,9 @@ export default class Booking extends React.Component {
         config
       );
       this.getBalance();
-      <Alert variant="filled" severity="success">Booking successfull</Alert>
-      //alert("Booking successfull");
+     
+      confirmAlert({title: 'Lets Badminton',message: "Booking successfull",
+      buttons: [{label: 'Ok',onClick: () => {}}]});
       const player = ((this.state.aviSlot - 1) === 0 ) ? true : false;
       let newdata = this.state.data;
       newdata.court_full = player;
@@ -102,11 +114,11 @@ export default class Booking extends React.Component {
       this.setState({newtifOptions : players});
     } catch (err) {
       if(err.response){
-      <Alert variant="filled" severity="error">{err.response.data.errors[0]}</Alert>
+        confirmAlert({title: 'Lets Badminton',message: err.response.data.errors[0],
+        buttons: [{label: 'Ok',onClick: () => {}}]});
       }else{
         console.log(err)
       }
-      //alert(err.response.data.errors[0]);
     }
   }
 
@@ -160,62 +172,64 @@ export default class Booking extends React.Component {
   render() {
    
     return (
-      <div style={{ width: "40%", margin: "auto" }}>
-        <h1 className="large text-primary" style={{ marginTop: "50px" }}>
-          Booking Details
-        </h1>
-      <div>
-        
-        <div id="badge-panel" class="tab-pane">
-          <div class="skm-badge-table">
-            <table class="badge-table">
-              <tr>
-                <td>Slots Available</td>
-                <td>
-                  {this.state.aviSlot} of ({this.state.total})
-                </td>
-              </tr>
-              <tr>
-                <td>Date</td>
-                <td>{this.state.data.date}</td>
-              </tr>
-              <tr>
-                <td>Start time</td>
-                <td>{this.state.data.start_time}</td>
-              </tr>
-              <tr>
-                <td>End Time</td>
-                <td>{this.state.data.end_time}</td>
-              </tr>
-              <tr>
-                <td>Court number</td>
-                <td>{this.state.data.court.court_name}</td>
-              </tr>
-              <tr>
-                <td>Court Booking Type</td>
-                <td>{this.state.courttype[this.state.data.type]}</td>
-              </tr>
-            </table>
-          </div>
-            {this.Canbook()}
-            <div id="badge-panel" class="tab-pane">
-              <div class="skm-badge-table">
+      <Fragment>
+        <div style={{ width: "40%", margin: "auto" }}>
+          <h1 className="large text-primary" style={{ marginTop: "50px" }}>
+            Booking Details
+          </h1>
+        <div>
+          
+          <div id="badge-panel" class="tab-pane">
+            <div class="skm-badge-table">
               <table class="badge-table">
-              <tr>
-                <td>Players Name</td>
-                <td>Email</td>
-                <td>Phone Number</td>
-              </tr>
-              {this.state.tifOptions}
-              {this.state.newtifOptions}
-            </table>
+                <tr>
+                  <td>Slots Available</td>
+                  <td>
+                    {this.state.aviSlot} of ({this.state.total})
+                  </td>
+                </tr>
+                <tr>
+                  <td>Date</td>
+                  <td>{this.state.data.date}</td>
+                </tr>
+                <tr>
+                  <td>Start time</td>
+                  <td>{this.state.data.start_time}</td>
+                </tr>
+                <tr>
+                  <td>End Time</td>
+                  <td>{this.state.data.end_time}</td>
+                </tr>
+                <tr>
+                  <td>Court number</td>
+                  <td>{this.state.data.court.court_name}</td>
+                </tr>
+                <tr>
+                  <td>Court Booking Type</td>
+                  <td>{this.state.courttype[this.state.data.type]}</td>
+                </tr>
+              </table>
             </div>
+              {this.Canbook()}
+              <div id="badge-panel" class="tab-pane">
+                <div class="skm-badge-table">
+                <table class="badge-table">
+                <tr>
+                  <td>Players Name</td>
+                  <td>Email</td>
+                  <td>Phone Number</td>
+                </tr>
+                {this.state.tifOptions}
+                {this.state.newtifOptions}
+              </table>
+              </div>
+              </div>
+              <br />
+              {/* <input type="submit" className="btn" value="Add Player" hidden=""/> */}
             </div>
-            <br />
-            {/* <input type="submit" className="btn" value="Add Player" hidden=""/> */}
           </div>
         </div>
-      </div>
+      </Fragment>
     );
   }
 }
