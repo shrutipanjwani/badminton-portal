@@ -118,7 +118,7 @@ class NewBooking extends Component {
         <Fragment>
           <h1 className="large text-primary" style={{ marginTop: "50px"}}>Bookings</h1>
           <div style={{width: "100%", margin: "auto"}}>
-              <div style={{ width: "60%", float: "left", borderRight: "1px solid grey"}}>
+              <div style={{ width: "50%", float: "left", borderRight: "1px solid grey"}}>
                 {/* <button className="btn btn-primary" onClick={this.handleShow}>New Booking</button> */}
                 <div style={{ width: "80%", margin: "auto"}}>
                   <h2>All Courts ({this.state.courts.length})</h2><br />
@@ -127,7 +127,7 @@ class NewBooking extends Component {
                   </div>
                 </div>
               </div>
-              <div style={{ width: "40%", float: "right"}}>        
+              <div style={{ width: "50%", float: "right"}}>        
                 <Form
                   data={this.state.courts} onSubmit={submission => 
                    this.checkWallet(submission)}
