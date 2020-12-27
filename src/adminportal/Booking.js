@@ -5,15 +5,24 @@ import * as ReactDOM from 'react-dom';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import axios from "axios";
+import setAuthToken from '../utils/setAuthToken';
 
 class AdminBooking extends Component {
- 
-  state = {
-    data: [],
-    editIdx: -1,
-    isDisplay: 2,
-    value: []
-  };
+  constructor(props){
+    super(props);
+      if (localStorage.token) {
+        setAuthToken(localStorage.token);
+      }
+
+      this.state = {
+        bookings: [],
+        data: [],
+        editIdx: -1,
+        isDisplay: 2,
+        value: []
+      }
+  }
 
   handleRemove = i => {
     this.setState(state => ({
@@ -37,6 +46,23 @@ class AdminBooking extends Component {
       )
     }));
   };
+
+  async loadData(){
+    
+		try {
+			const res = await axios.get('/booking').then(res => {
+				var bookings = res.data
+            this.setState({bookings : bookings})
+            console.log(res.data)
+			})
+		} catch(err) {
+			
+		}
+  }
+  
+  componentDidMount(){
+		this.loadData();
+	}
 
   handleShow = ()=>{
     this.setState({
@@ -100,6 +126,14 @@ class AdminBooking extends Component {
                 <div>
                 <Fragment>
                   <div onClick={this.handleStart} style={{ cursor: 'pointer', marginTop: "20px"}}>
+                    <table>
+                      <tbody>
+                        <tr style={{ textAlign: "left", cursor: "pointer"}}>
+                          {this.state.booking}
+                          {/* {this.state.bookings.map((item, index) => (<td key={index}>{item.booking}</td>)) } */}
+                        </tr>
+                      </tbody>
+                    </table>
                     <Table
                       style={{ margin: 'auto', textAlign: 'center'}}
                       handleRemove={this.handleRemove}
