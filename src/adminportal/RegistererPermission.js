@@ -32,7 +32,7 @@ export default class RegistererPermission extends Component{
 		 this.setState({
 			 isActive: true
 		 })
-		 
+		 	
 	 }
 
 	async getData(userId){
