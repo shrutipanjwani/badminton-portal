@@ -9,7 +9,10 @@ import axios from "axios";
 import { logout } from '../../actions/auth';
 import store from '../../store';
 import setAuthToken from '../../utils/setAuthToken';
+import { Fragment } from 'react'
 
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 export default class calendar extends React.Component {
   calendarRef = React.createRef();
@@ -20,13 +23,13 @@ export default class calendar extends React.Component {
       setAuthToken(localStorage.token);
     }
     this.state = {
-    //weekendsVisible: true,
-    alert:0,
-    currentEvents: [],
-    calenderView : 'dayGridMonth',
-    bookedevents: [],
-    courts : []
-  }
+      //weekendsVisible: true,
+      alert:0,
+      currentEvents: [],
+      calenderView : 'dayGridMonth',
+      bookedevents: [],
+      courts : []
+    }
   }
 
   getCurrentStateFromStore() {
@@ -77,7 +80,8 @@ export default class calendar extends React.Component {
         console.log(err)
         logout();
         this.props.history.replace("/signin");
-        alert("your session is expired, login again");
+        confirmAlert({title: 'Lets Badminton',message: "Your session is expired, login again",
+        buttons: [{label: 'Ok',onClick: () => {}}]});
 	  }
   }
   
@@ -93,7 +97,8 @@ export default class calendar extends React.Component {
     } catch(err) {
         console.log(err);
         if(this.state.alert === 0){
-          alert("your session is expired, login again");
+          confirmAlert({title: 'Lets Badminton',message: "Your session is expired, login again",
+          buttons: [{label: 'Ok',onClick: () => {}}]});
           logout();
           this.props.history.replace("/signin");
       } 
@@ -108,42 +113,44 @@ export default class calendar extends React.Component {
   
   render() {
     return (
-      <div className='demo-app'>
-        {this.renderSidebar()}
-        <div className='demo-app-main'>
-          <FullCalendar
-            height = "80vh"
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            headerToolbar={{
-              left: 'prev,next today',
-              center: 'title',
-              right: 'dayGridMonth,timeGridDay'
-            }}
-            intialView={this.state.calenderView}
-            //editable={true}
-            //selectable={true}
-            selectMirror={true}
-            allDaySlot = {false}
-            //dayMaxEvents={true}
-            //weekends={this.state.weekendsVisible}
-            events={this.state.bookedevents} // alternatively, use the `events` setting to fetch from a feed
-            dateClick={this.handleDateSelect}
-            eventContent={renderEventContent} // custom render function
-            eventClick={this.handleEventClick}
-            validRange= {{
-              start: new Date(),
-              end: new Date().setMonth(new Date().getMonth()+6)
-            }}
-            eventsSet={this.handleEvents} // called after events are initialized/added/changed/removed
-            /* you can update a remote database when these fire:
-            eventAdd={function(){}}
-            eventChange={function(){}}
-            eventRemove={function(){}}
-            */
-           ref={this.calendarRef}
-          />
+      <Fragment>
+        <div className='demo-app'>
+          {this.renderSidebar()}
+          <div className='demo-app-main'>
+            <FullCalendar
+              height = "80vh"
+              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+              headerToolbar={{
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridDay'
+              }}
+              intialView={this.state.calenderView}
+              //editable={true}
+              //selectable={true}
+              selectMirror={true}
+              allDaySlot = {false}
+              //dayMaxEvents={true}
+              //weekends={this.state.weekendsVisible}
+              events={this.state.bookedevents} // alternatively, use the `events` setting to fetch from a feed
+              dateClick={this.handleDateSelect}
+              eventContent={renderEventContent} // custom render function
+              eventClick={this.handleEventClick}
+              validRange= {{
+                start: new Date(),
+                end: new Date().setMonth(new Date().getMonth()+6)
+              }}
+              eventsSet={this.handleEvents} // called after events are initialized/added/changed/removed
+              /* you can update a remote database when these fire:
+              eventAdd={function(){}}
+              eventChange={function(){}}
+              eventRemove={function(){}}
+              */
+            ref={this.calendarRef}
+            />
+          </div>
         </div>
-      </div>
+      </Fragment>
     )
   }
 

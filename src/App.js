@@ -22,7 +22,6 @@ import { Provider } from "react-redux";
 import store from "./store";
 import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
-import PictureUploader from './components/Wallet/pictureUploader';
 import AdminBooking from './adminportal/Booking'
 
 
@@ -66,7 +65,6 @@ const App = () => {
               <Route exact path='/editcourt' component={EditCourt}/>
               <Route exact path='/permission' component={RegistererPermission}/>
               <Route exact path='/adminbooking' component={AdminBooking}/>
-              <Route exact path='/picture' component={PictureUploader}/>
               {/*Error Page*/}
               <Route path="" component={NotFound} />
             </Switch>

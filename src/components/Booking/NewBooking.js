@@ -14,17 +14,7 @@ class NewBooking extends Component {
     isActive:false,
     isDisplay: false,
     courts : [],
-    show: false,
-  };
-
-  showModal = e => {
-    this.setState({
-      show: !this.state.show
-    });
-  };
-
-  onClose = e => {
-    this.props.onClose && this.props.onClose(e);
+    loading : false
   };
 
   handleStart = ()=>{
@@ -32,44 +22,43 @@ class NewBooking extends Component {
   }
 
   async checkWallet(submission) {
-    try{
-        var index = this.state.courts.findIndex(x => x.court_name === submission.courtName);
-        var rqamount = 0 , players = 0;
-        var startTime=moment(submission.startTime, "HH:mm:ss");
-        var endTime=moment(submission.endTime, "HH:mm:ss");
-        var duration = moment.duration(endTime.diff(startTime));
-        var hours = parseFloat(duration.asHours());
+  try{
+      var index = this.state.courts.findIndex(x => x.court_name === submission.courtName);
+      var rqamount = 0 , players = 0;
+      var startTime=moment(submission.startTime, "HH:mm:ss");
+      var endTime=moment(submission.endTime, "HH:mm:ss");
+      var duration = moment.duration(endTime.diff(startTime));
+      var hours = parseFloat(duration.asHours());
 
-        let totamount = parseInt(this.state.courts[index].price)*(hours);
-        console.log(submission.start_time);console.log(endTime);console.log(startTime);console.log(hours);
-        if(parseInt(submission.bookingType) == 0){
-          rqamount = totamount;
-        }else{
-          players = parseInt(submission.bookingType)*2;
-          rqamount = totamount/players ;
-        }
-        const config = {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        };
-        var userdata = await axios.get('/auth/', config);
-        console.log(userdata.data)
-        if (userdata.wallet < rqamount) {
-          confirmAlert({title: 'Lets Badminton',message: 'Sorry unable to Complete Booking due to low balance',
-            buttons: [{label: 'Ok',onClick: () => {}}]});
-
-          //alert("Sorry unable to reg due to low balance ");
-          return;
-        } else {
-          console.log(userdata.data.wallet  , rqamount , (userdata.data.wallet - rqamount))
-          confirmAlert({
+      let totamount = parseInt(this.state.courts[index].price)*(hours);
+      console.log(submission.start_time);console.log(endTime);console.log(startTime);console.log(hours);
+      if(parseInt(submission.bookingType) == 0){
+        rqamount = totamount;
+      }else{
+        players = parseInt(submission.bookingType)*2;
+        rqamount = totamount/players ;
+      }
+      const config = {
+		    headers: {
+			    'Content-Type': 'application/json'
+		    }
+	    };
+      var userdata = await axios.get('/auth/', config);
+      console.log(userdata.data)
+      if (userdata.wallet < rqamount) {
+        confirmAlert({title: 'Lets Badminton',message: "Sorry unable to reg due to low balance",
+        buttons: [{label: 'Ok',onClick: () => {}}]});
+        return;
+      } else {
+        console.log(userdata.data.wallet  , rqamount , (userdata.data.wallet - rqamount))
+        confirmAlert({
             title: 'Confirm to submit',
             message: 'Total Price :'+rqamount,
             buttons: [
               {
                 label: 'Yes',
                 onClick: () => {
+                  this.setState({loading : true})
                    this.newBookingFun(submission);
                 }
               },
@@ -81,22 +70,14 @@ class NewBooking extends Component {
               }
             ]
           });
-          // if (window.confirm("Total Price :"+rqamount+"\nPress Ok To confirm ")) {
-          //   this.newBookingFun(submission);
-          // } else {
-          //   // Do nothing
-          // }
-        }
-      }catch(err) {
-        this.setState({
-          alertmsg : "your session is expired, login again"
-        })
-        this.showModal(true)
-        //alert("your session is expired, login again");
-        //this.setState({alert: 1});
-        //logout();
-        this.props.history.replace("/signin");
       }
+    }catch(err) {
+      confirmAlert({title: 'Lets Badminton',message: "your session is expired, login again",
+      buttons: [{label: 'Ok',onClick: () => {}}]});
+			//this.setState({alert: 1});
+			//logout();
+			this.props.history.replace("/signin");
+		}
 
   }
 
@@ -119,18 +100,14 @@ class NewBooking extends Component {
     }
     try {
       const res = await axios.post('/booking/', body, config);
-      this.setState({
-        alertmsg : "Booking successfull"
-      })
-      this.showModal(true)
-      //alert("Booking successfull");
+      this.setState({loading : false})
+      confirmAlert({title: 'Lets Badminton',message: "Booking successfull",
+      buttons: [{label: 'Ok',onClick: () => {}}]}); 
     } catch (err) {
       console.log(err.response.data.errors[0]);
-      this.setState({
-        alertmsg : err.response.data.errors[0]
-      })
-      this.showModal(true)
-      //alert(err.response.data.errors[0]);
+      this.setState({loading : false})
+      confirmAlert({title: 'Lets Badminton',message: err.response.data.errors[0],
+      buttons: [{label: 'Ok',onClick: () => {}}]}); 
     }
   }
 
@@ -152,11 +129,6 @@ class NewBooking extends Component {
   componentDidMount(){
     this.getCourtDetails();
   }
-
-  handleSubmit = (confirm) => {
-   let res =  confirm()
-   console.log(res)
-  };;
 
   render() {
     return (
