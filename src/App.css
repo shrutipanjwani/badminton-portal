@@ -820,3 +820,22 @@ nav{
   font-size: 12px;
   cursor: pointer;
 }
+
+i {
+  font-style: normal;
+}
+
+.css-2b097c-container {
+  position: relative;
+  box-sizing: border-box;
+  width: 200px;
+  height: 100% !important;
+}
+
+.css-1pahdxg-control:hover{
+  border-color: #841e2d !important;
+}
+
+.css-1pahdxg-control{
+  border-color: #841e2d !important;
+}

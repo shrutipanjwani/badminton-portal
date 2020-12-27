@@ -42,6 +42,7 @@ export default class Form extends React.Component {
     });
   }
 
+
   change = e => {
     // this.props.onChange({ [e.target.name]: e.target.value });
     this.setState({

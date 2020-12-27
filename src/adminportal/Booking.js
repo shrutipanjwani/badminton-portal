@@ -2,11 +2,11 @@ import React, { Fragment, Component } from "react";
 import Form from "./FormTwo";
 import Table from "./TableTwo";
 import * as ReactDOM from 'react-dom';
-import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import axios from "axios";
 import setAuthToken from '../utils/setAuthToken';
+import Select from 'react-select';
+
 
 class AdminBooking extends Component {
   constructor(props){
@@ -20,8 +20,13 @@ class AdminBooking extends Component {
         data: [],
         editIdx: -1,
         isDisplay: 2,
-        value: []
+        value: [],
+        selectedOption: 'courtname',
+        courts:[]
       }
+      
+      this.handleSelect = this.handleSelect.bind(this);
+
   }
 
   handleRemove = i => {
@@ -47,6 +52,11 @@ class AdminBooking extends Component {
     }));
   };
 
+  handleSelect = (selectedOption) => {
+    this.setState({ selectedOption });
+    console.log(`Option selected:`, selectedOption);
+  }
+
   async loadData(){
     
 		try {
@@ -59,9 +69,23 @@ class AdminBooking extends Component {
 			
 		}
   }
-  
-  componentDidMount(){
-		this.loadData();
+
+  async getCourtDetails(){
+    const config = {
+		  headers: {
+			  'Content-Type': 'application/json'
+		  }
+	  }
+    try {
+      const res = await axios.get('/court/', config);
+      this.setState({courts : res.data})
+    } catch(err) {
+        console.log(err);
+	  }
+  }
+  async componentDidMount(){
+    await this.loadData();
+    await this.getCourtDetails();
 	}
 
   handleShow = ()=>{
@@ -76,16 +100,20 @@ class AdminBooking extends Component {
     })
   }
 
+  handleSelect(event) {
+    console.log(event.target.value)
+    this.setState({selectedOption: event.target.value});
 
+  }
+  
   render() {
     let booking;
     if (this.state.isDisplay === 0) {
       booking = 
         <Form
-        onSubmit={submission =>
-          this.setState({
-            data: [...this.state.data, submission]
-          })}
+        data={this.state.courts}
+       // onSubmit={submission => 
+       //   this.checkWallet(submission)}
         />
     }
     else if(this.state.isDisplay === 1) {
@@ -96,30 +124,29 @@ class AdminBooking extends Component {
         <h1 style={{ marginTop: "20px"}}>No Bookings</h1>
     }
 
+    const { selectedOption } = this.state;
+
     return (
         <Fragment>
           <h1 className="large text-primary" style={{ marginTop: "50px"}}>Bookings</h1>
           <div style={{width: "100%", margin: "auto"}}>
-              <div style={{ width: "50%", float: "left", borderRight: "1px solid grey"}}>
+              <div style={{ width: "50%", float: "left", borderRight: "1px solid grey", height: "100vh"}}>
                 <button className="btn btn-primary" onClick={this.handleShow} style={{ marginRight: "20px"}}>New Booking</button>
-                <FormControl style={{marginTop:"-10px", marginRight: "20px"}}>
-                  <InputLabel htmlFor="age-native-simple">Search By</InputLabel>
-                  <Select
-                    native
-                    inputProps={{
-                      name: 'Search By',
-                      id: 'age-native-simple',
-                    }}
-                    style={{ width: '200px'}}
-                  >
-                    <option aria-label="None" value="" />
-                    <option value='Email ID'>Email ID</option>
-                    <option value='Court Name'>Court Name</option>
-                    <option value='Booking Type'>Booking Type</option>
-                    <option value='Booking Date'>Booking Date</option>
-                  </Select>
+                <FormControl style={{marginTop:"-25px", marginRight: "20px"}}>
+                  <label style={{textAlign: "left"}}>Search By</label>
+                  <select value={this.state.selectedOption} onChange={this.handleSelect} style={{ width: '200px', padding: "10px"}}>
+
+                    <option value="email">Email Id</option>
+
+                    <option value="courtname">Court Name</option>
+
+                    <option value="bookingtype">Booking Type</option>
+
+                    <option value="bookingdate">Booking Date</option>
+
+                  </select>
                 </FormControl>
-                <input type="search" style={{ padding: "8px", width: "200px"}} />
+                <input type="search" pattern="\d*" style={{ padding: "8px", width: "200px"}} />
                 <i className="fas fa-search" 
                 style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "6px", borderRadius: "5px",
                 color: "#fff", cursor: "pointer"}}></i>

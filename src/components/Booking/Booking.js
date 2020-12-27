@@ -2,7 +2,6 @@ import React from "react";
 import axios from "axios";
 import moment from 'moment';
 import { Fragment } from "react";
-
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
@@ -18,7 +17,8 @@ export default class Booking extends React.Component {
       courttype: ["Fullcourt", "singles", "Doubles"],
       userdata: null,
       tifOptions : null,
-      newtifOptions : null
+      newtifOptions : null,
+      loading: true
     };
   }
 

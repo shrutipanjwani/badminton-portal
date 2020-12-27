@@ -37,7 +37,7 @@ b { /* used for event dates/times */
 
 .demo-app-main {
   flex-grow: 1;
-  padding: 3em;
+  padding: 0.5em;
 }
 
 .fc-title {
@@ -47,11 +47,24 @@ b { /* used for event dates/times */
 }
 
 .fc { /* the calendar root */
-  max-width: 1100px;
+  max-width: 1300px;
   margin: 0 auto;
 
 }
 
 .fc-button-group button, .fc-today-button{
   text-transform: uppercase !important;
+}
+
+.fc-theme-standard td, .fc-theme-standard th {
+  width: 178px;
+}
+
+.fc-direction-ltr .fc-daygrid-event.fc-event-start, .fc-direction-rtl .fc-daygrid-event.fc-event-end {
+  margin-left: 3px;
+}
+
+.fc-daygrid-event {
+  position: relative;
+  white-space: normal;
 }

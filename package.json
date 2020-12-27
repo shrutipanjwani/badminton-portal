@@ -51,6 +51,7 @@
     "react-redux": "^7.2.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
+    "react-select": "^3.1.1",
     "react-tap-event-plugin": "^3.0.3",
     "react-tap-event-plugin-fix": "^3.0.3",
     "react-token-auth": "^1.1.7",
