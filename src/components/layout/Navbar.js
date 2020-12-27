@@ -54,12 +54,6 @@ const Navbar = ({ auth: { isAuthenticated, loading, isAdmin }, logout}) => {
 	        		<span className="hide-sm"> &nbsp;Court</span>
 	        	</Link>
 	        </li>
-			<li>
-	        	<Link to="/users" replace>
-	        		<i className="fas fa-users"></i>{' '}
-	        		<span className="hide-sm"> &nbsp;Users</span>
-	        	</Link>
-	        </li>
 	        <li>
 	        	<Link onClick={logout} to="/signin" replace> 
 	        		<i className="fas fa-sign-out-alt"></i>{' '}
