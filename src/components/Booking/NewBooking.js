@@ -13,7 +13,8 @@ class NewBooking extends Component {
     editIdx: -1,
     isActive:false,
     isDisplay: false,
-    courts : []
+    courts : [],
+    loading : false
   };
 
   handleStart = ()=>{
@@ -50,11 +51,25 @@ class NewBooking extends Component {
         return;
       } else {
         console.log(userdata.data.wallet  , rqamount , (userdata.data.wallet - rqamount))
-        if (window.confirm("Total Price :"+rqamount+"\nPress Ok To confirm ")) {
-          this.newBookingFun(submission);
-        } else {
-          // Do nothing
-        }
+        confirmAlert({
+            title: 'Confirm to submit',
+            message: 'Total Price :'+rqamount,
+            buttons: [
+              {
+                label: 'Yes',
+                onClick: () => {
+                  this.setState({loading : true})
+                   this.newBookingFun(submission);
+                }
+              },
+              {
+                label: 'No',
+                onClick: () => {
+                  
+                }
+              }
+            ]
+          });
       }
     }catch(err) {
       confirmAlert({title: 'Lets Badminton',message: "your session is expired, login again",
@@ -85,10 +100,12 @@ class NewBooking extends Component {
     }
     try {
       const res = await axios.post('/booking/', body, config);
+      this.setState({loading : false})
       confirmAlert({title: 'Lets Badminton',message: "Booking successfull",
       buttons: [{label: 'Ok',onClick: () => {}}]}); 
     } catch (err) {
       console.log(err.response.data.errors[0]);
+      this.setState({loading : false})
       confirmAlert({title: 'Lets Badminton',message: err.response.data.errors[0],
       buttons: [{label: 'Ok',onClick: () => {}}]}); 
     }
