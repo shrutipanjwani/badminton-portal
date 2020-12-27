@@ -109,7 +109,7 @@ export default class Wallet extends React.Component {
 			this.setState({bookings: boookingsVar.data.Length});
 			this.setState({wallet: res.data.wallet});
 			this.setState({src: res.data.avatar});
-
+			console.log(res.data.avatar);
 			//var token = this.props.match.params.token;
 		} catch(err) {
 			

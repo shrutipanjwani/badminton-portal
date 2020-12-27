@@ -8,31 +8,38 @@ export default class PictureUploader extends React.Component {
 
     this.state = {
       picture: false,
-      src: this.props.data
+      src: false
     }
   }
   
   handlePictureSelected(event) {
     var picture = event.target.files[0];
+    
     var src     = URL.createObjectURL(picture);
-
+    
     this.setState({
       picture: picture,
       src: src
     });
+    this.upload(picture);
   }
+
+ componentWillReceiveProps(nextProps) {
+   console.log(nextProps.data);
   
+		this.setState({ src: nextProps.data });  
+ }
 
-  async upload() {
-    var formData = new FormData();
+  async upload(picture) {
+    try{
+      var formData = new FormData();
 
-    await formData.append("file", this.state.picture);
+      formData.append("avatar", picture);
+      
+      axios.post("/users/uploadfile",  formData).then(res => { })
+    }catch(err){
 
-    axios.post("/users/uploadfile",  formData).then(res => { 
-        console.log(res.formData)
-          this.setState({ avatar: res.formData.url }, () => {
-        })
-    })
+    }
   }
 
   render() {
