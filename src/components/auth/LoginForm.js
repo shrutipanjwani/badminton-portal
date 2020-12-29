@@ -52,7 +52,7 @@ const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
   });
 
   const { email, password } = formData;
-  email = email.toLowerCase();
+
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 

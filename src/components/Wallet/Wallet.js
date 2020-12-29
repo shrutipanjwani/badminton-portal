@@ -35,7 +35,6 @@ export default class Wallet extends React.Component {
 			level: "Basic",
 			originallevel: "Basic",
 			isChange: false,
-			isChanged: false,
 		}
 		this.handleClick=this.handleClick.bind(this);
   	}

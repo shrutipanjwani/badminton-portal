@@ -20,11 +20,14 @@ export default class RegistererPermission extends Component{
 			user :{},
 			cancelbookings : 0,
 			level: "",
+			originalvalue: "",
+			isChange: false,
 		}
 	};
 	
 	handleChange = evt => {
 		this.setState({html: evt.target.value});
+		// this.state._id , evt.target.value
 	};
 
 	state = {
@@ -32,7 +35,8 @@ export default class RegistererPermission extends Component{
 	 }
 	
 	approveUser = async (e) => {
-		
+		console.log(e.target.getAttribute("data-value"));
+		console.log(e.target.getAttribute("data-value"))
 		const config = {
 			headers: {
 				'Content-Type': 'application/json'
@@ -42,13 +46,17 @@ export default class RegistererPermission extends Component{
 			
 			const res = await axios.get("/profile/approve/"+e.target.value, config)
 			const namesvar = this.state.names;
+			//await this.getData(e.target.getAttribute("data-value"));
 			let obj = namesvar.find((o, i) => {
 				if (o._id === e.target.value) {
 					namesvar[i].status = 2
 					return true; // stop searching
 				}
 			});
+			console.log(namesvar)
+			this.setState({status: "Approved"});
 			this.setState({names : namesvar})
+			
 		} catch(err) {
 			console.log(err.response)
 		}
@@ -61,7 +69,8 @@ export default class RegistererPermission extends Component{
 		}
 		try {
 			const res = await axios.get("/profile/unapprove/"+e.target.value, config)
-			await this.getData(e.target.value);
+			//await this.getData(e.target.getAttribute("data-value"));
+			this.setState({status: 1});
 			const namesvar = this.state.names;
 			let obj = namesvar.find((o, i) => {
 				if (o._id === e.target.value) {
@@ -69,6 +78,8 @@ export default class RegistererPermission extends Component{
 					return true; // stop searching
 				}
 			});
+			console.log(namesvar)
+			
 			this.setState({names : namesvar})
 		} catch(err) {
 			console.log(err.response)
@@ -76,9 +87,9 @@ export default class RegistererPermission extends Component{
 	}
 
 	clickUser = async (e)=>{
-		console.log(e.target.id);
+		console.log(e.target.getAttribute("data-value"));
 		this.setState({	isActive: false }) 
-		await this.getData(e.target.id);
+		await this.getData(e.target.value);
 		
 	 }
 
@@ -130,7 +141,6 @@ export default class RegistererPermission extends Component{
 	}
 
 	componentDidMount(){
-		console.log(1)
 		this.loadData();
 	}
 
@@ -145,7 +155,7 @@ export default class RegistererPermission extends Component{
 						<table style={{ width: "50%"}}>
 							<tbody>
 										{this.state.names.map(d => {
-											//console.log(d)
+											console.log(d)
 											var colourvar = "#000", approve = 'none',unapprove = 'block';
 											if(d.status == 1){
 												approve = 'block'
@@ -156,20 +166,19 @@ export default class RegistererPermission extends Component{
 												colourvar = 'red'
 											}
 											return (
-											<tr>
-												<td	style={{color : colourvar, textAlign: "left"}}>{d.name} &nbsp;</td>
-												<td><i className="fas fa-eye" onClick = {e => this.clickUser(e)} 
-												style={{marginLeft: "50px", float: "right"}}></i></td>
-													
-												<td>
-													<i className="fa fa-check" 
+											<tr	><td data-value={d._id} style={{color : colourvar, textAlign: "left"}}>{d.name} &nbsp;</td>
+												<td><button className="fas fa-eye" value={d._id} onClick = {e => this.clickUser(e)} 
+												style={{marginLeft: "50px", float: "right"}}>view</button>
+													</td>
+													<td  data-value={d._id}>
+													<button className="fa fa-check"  value={d._id}
 													style={{display : approve, float: "right"}}
-													onClick = {e => this.approveUser(e)}></i>
+													onClick = {e => this.approveUser(e)}>Approve</button>
 													
-													<i className="fas fa-times"
+													<button className="fas fa-times"  value={d._id}
 													style={{display : unapprove, float: "right", marginLeft: "50px"}} 
-													onClick = {e => this.unapproveUser(e)}></i>
-												</td>
+													onClick = {e => this.unapproveUser(e)}>Unapprove</button>
+													</td>
 											</tr>
 											)
 										})} 
@@ -192,10 +201,10 @@ export default class RegistererPermission extends Component{
 								<p><strong>Phone No:</strong> &nbsp; {this.state.phone}</p>
 								<br />
 								<p><strong>Status:</strong> &nbsp;
-									{this.state.status ? ((this.state.status == 1) ? <p disabled={true}>Unapproved</p> :
-										<p disabled={true}>Approved</p>) 
+									{this.state.status ? ((this.state.status == 1) ? <button disabled={true} style={{border: "none", background: "none", color: "#000"}}>Unapproved</button> :
+										<button disabled={true}  style={{border: "none", background: "none", color: "#000"}}>Approved</button>) 
 										: 
-										<p disabled={true}>Inactive</p>
+										<button disabled={true}  style={{border: "none", background: "none", color: "#000"}}>Inactive</button>
 									} 
 								</p>
 								<br />
@@ -213,7 +222,8 @@ export default class RegistererPermission extends Component{
 										innerRef={this.contentEditable}
 										disabled={false}       // use true to disable editing
 									/>
-									<button style={{border: "none", background: "#841e2d", borderRadius: "5px", color: "#fff", padding: "3px"}} onChange={this.handleChange}>
+									<button style={{border: "none", background: "#841e2d", borderRadius: "5px", 
+									color: "#fff", padding: "3px"}} onChange={this.handleChange}>
 										<i className="fas fa-check"></i> 
 									&nbsp;Done</button>
 								</p>
