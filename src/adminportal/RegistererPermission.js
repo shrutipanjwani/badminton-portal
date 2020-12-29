@@ -18,7 +18,8 @@ export default class RegistererPermission extends Component{
 			addToWallet: 0,
 			src:false,
 			user :{},
-			cancelbookings : 0
+			cancelbookings : 0,
+			level: "",
 		}
 	};
 	
@@ -29,11 +30,6 @@ export default class RegistererPermission extends Component{
 	state = {
 		isActive:false
 	 }
-   
-	handleShow = ()=>{
-		 
-		 	
-	}
 	
 	approveUser = async (e) => {
 		const config = {
@@ -105,6 +101,8 @@ export default class RegistererPermission extends Component{
 			this.setState({cancelbookings: boookingsVar.data.canceledLength});
 			this.setState({wallet: res.data.wallet});
 			this.setState({src: res.data.avatar});
+			this.setState({level: res.data.level});
+			console.log(res.data.level)
 		} catch(err) {
 			console.log(err.response)
 		}
@@ -141,10 +139,8 @@ export default class RegistererPermission extends Component{
 			    <br />
 			    <div style={{ width: "90%", margin: "auto"}}>
 					<div style={{ width: "50%", float: "left",borderRight: "1px solid grey", height: "60vh"}}>
-						<table style={{ width: "100%"}}>
+						<table style={{ width: "50%"}}>
 							<tbody>
-								<tr>
-									<td>
 										{this.state.names.map(d => {
 											//console.log(d)
 											var colourvar = "#000", approve = 'none',unapprove = 'block';
@@ -157,22 +153,23 @@ export default class RegistererPermission extends Component{
 												colourvar = 'red'
 											}
 											return (
-											<tr id={d._id} 
-												style={{color : colourvar, textAlign: "left"}}>{d.name} &nbsp;
-												<button style={{marginLeft: "50px", float: "right"}} className="btn btn-primary" onClick = {e => this.clickUser(e)}>
-													<i className="fas fa-eye"></i></button>
-												<button className="btn btn-primary" 
-												style={{display : approve, float: "right"}} onClick = {e => {
-													this.approveUser(e)
-												}}>
-													<i className="fa fa-check"></i></button>
-												<button className="btn btn-primary" 
-												style={{display : unapprove, float: "right", marginLeft: "50px"}} onClick = {e => this.unapproveUser(e)}>
-												<i className="fas fa-times"></i></button>
-											</tr>)
+											<tr>
+												<td	style={{color : colourvar, textAlign: "left"}}>{d.name} &nbsp;</td>
+												<td><i className="fas fa-eye" onClick = {e => this.clickUser(e)} 
+												style={{marginLeft: "50px", float: "right"}}></i></td>
+													
+												<td>
+													<i className="fa fa-check" 
+													style={{display : approve, float: "right"}}
+													onClick = {e => this.approveUser(e)}></i>
+													
+													<i className="fas fa-times"
+													style={{display : unapprove, float: "right", marginLeft: "50px"}} 
+													onClick = {e => this.unapproveUser(e)}></i>
+												</td>
+											</tr>
+											)
 										})} 
-									</td>
-								</tr>
 							</tbody>
 						</table>
 					</div>
@@ -192,25 +189,28 @@ export default class RegistererPermission extends Component{
 								<p><strong>Phone No:</strong> &nbsp; {this.state.phone}</p>
 								<br />
 								<p><strong>Status:</strong> &nbsp;
-									{this.state.status ? ((this.state.status == 1) ? <button className="btn" disabled={true}>Unapproved</button> :
-										<button className="btn" disabled={true}>Approved</button>) 
+									{this.state.status ? ((this.state.status == 1) ? <p disabled={true}>Unapproved</p> :
+										<p disabled={true}>Approved</p>) 
 										: 
-										<button className="btn" disabled={true}>Inactive</button>
+										<p disabled={true}>Inactive</p>
 									} 
 								</p>
+								<br />
+								<p><strong>Level: </strong> &nbsp; {this.state.level}</p>
 								<br />
 								<p><strong>Successfull Bookings: </strong> &nbsp; {this.state.bookings}</p>
 								<p><strong>Cancel Bookings: </strong> &nbsp; {this.state.cancelbookings}</p>
 								
 								<br />
 								<p style={{ display: "flex"}}>
-									<strong>Current Balance: $</strong> &nbsp;{this.state.wallet}	
+									<strong>Current Balance: $</strong> &nbsp;
 									<ContentEditable
-										style={{ width: "100px"}}	
+										style={{ width: "100px"}}
+										html={this.state.wallet}	
 										innerRef={this.contentEditable}
 										disabled={false}       // use true to disable editing
 									/>
-									<button className="btn btn-primary" onChange={this.handleChange}>
+									<button style={{border: "none", background: "#841e2d", borderRadius: "5px", color: "#fff", padding: "3px"}} onChange={this.handleChange}>
 										<i className="fas fa-check"></i> 
 									&nbsp;Done</button>
 								</p>

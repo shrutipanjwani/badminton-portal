@@ -277,17 +277,8 @@ export default class Form extends React.Component {
         <br />
         <br />
         <DatePicker
-            // style={{width: "200px"}}
             selected={this.state.bookingDefaultDate}
             name = "bookingDate"
-            // customStyles={{
-            //   dateTouch:{
-            //     width:'200px',
-            //   },
-            //   dateTouchBody: {
-            //     width:'200px',
-            //   },
-            // }}
             onChange={e => this.changeDate(e)}
             placeholderText="Booking Date"
             minDate={new Date()}

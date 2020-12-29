@@ -18,6 +18,11 @@ div, h1, h2, h3, h4, h5, nav, p, .main{
   margin-top:100px;
   overflow: auto;
 }
+
+i{
+  cursor: pointer;
+}
+
 .MuiToolbar-regular {
   background-color: var(--primary-color);
 }

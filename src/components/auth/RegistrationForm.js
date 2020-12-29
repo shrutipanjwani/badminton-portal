@@ -87,9 +87,10 @@ const Register = ({ setAlert }) => {
     password: "",
     confirmPassword: "",
     digits: "",
+    level: "",
   });
 
-  const { name, email, password, confirmPassword, digits } = formData;
+  const { name, email, password, confirmPassword, digits, level } = formData;
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -110,6 +111,7 @@ const Register = ({ setAlert }) => {
           country: country.value,
           digits: digits,
         },
+        level: level,
       };
 
       console.log(newUser);
@@ -185,7 +187,21 @@ const Register = ({ setAlert }) => {
               required
             />
           </div>
-          <Alert />
+          <div className="form-group">
+            <label for="level" style={{textAlign: "left"}}>Choose a Level:</label>
+            <select
+                id="level"
+                name="level"
+                value={level}
+                onChange={(e) => onChange(e)}
+                required
+            >
+                <option value="Basic" selected>Basic</option>
+                <option value="Low Intermediate">Low Intermediate</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+            </select>
+          </div>
           <div className={classes.dflex}>
             <Autocomplete
               id="country-select-demo"
@@ -215,6 +231,7 @@ const Register = ({ setAlert }) => {
                 />
               )}
             />
+            
             <input
               control="input"
               type="text"
@@ -226,6 +243,8 @@ const Register = ({ setAlert }) => {
               placeholder="Contact No."
             />
           </div>
+          
+          <Alert />
           <br />
           <input
             type="submit"
@@ -256,6 +275,7 @@ const Register = ({ setAlert }) => {
               </DialogContentText>
             </DialogContent>
           </Dialog>
+          
         </form>
         <p className="my-1">
           Already have an account? <Link to="/signin">Sign In</Link>

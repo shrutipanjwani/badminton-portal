@@ -5,12 +5,10 @@ import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-//import img from '../../img/user.png';
 import PictureUploader from "./pictureUploader";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 import setAuthToken from '../../utils/setAuthToken';
-
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
@@ -33,7 +31,11 @@ export default class Wallet extends React.Component {
 			bookings : 0,
 			wallet : 0,
 			addToWallet: 0,
-			src:false
+			src:false, 
+			level: "Basic",
+			originallevel: "Basic",
+			isChange: false,
+			isChanged: false,
 		}
 		this.handleClick=this.handleClick.bind(this);
   	}
@@ -120,11 +122,14 @@ export default class Wallet extends React.Component {
 			this.setState({name: res.data.name});
 			this.setState({email: res.data.email});
 			this.setState({phone: "+" + res.data.phone.country + "-" + res.data.phone.digits});
-			this.setState({status: "Active"});
 			this.setState({bookings: boookingsVar.data.Length});
 			this.setState({wallet: res.data.wallet});
 			this.setState({src: res.data.avatar});
-			console.log(res.data.avatar);
+			if(res.data.level){
+				this.setState({
+					level: res.data.level
+				});
+			}
 			//var token = this.props.match.params.token;
 		} catch(err) {
 			
@@ -133,19 +138,46 @@ export default class Wallet extends React.Component {
 
 	componentDidMount(){
     	this.getData();
-  	}
+	  }
+	  
+	handleIsChange  = async (e)=> {
+		if(e.target.value === this.state.originallevel){
+			this.setState({
+				isChange: false,
+				level: e.target.value
+			})
+		} else {
+			this.setState({
+				isChange: true,
+				level: e.target.value
+			})
+		}
+	}
+
+	handleIsChanged  = async ()=> {
+		const config = {
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}
+		try {
+			const res = await axios.get("/profile/level/"+this.state.level, config);
+			console.log(res.data)
+			//this.setState({level: res.data.level, originallevel: res.data.level});
+		} catch(err) {
+			console.log(err.response)
+		}
+		this.setState({
+			isChange: false,
+			originallevel: this.state.level,
+		})
+	}
 
 	render() {
 		return (
 			<Fragment>
 				<div className="gradient"  style={{ float: 'left', width: '55%', height: "100vh",
 				color: "#fff"}}>
-					{/* <img
-						class="round-img my-3"
-						style={{ width: '150px', height: '150px' }}
-						src={img}
-						alt=""
-					/> */}
 					<PictureUploader data={this.state.src}/>
 					<div style={{ width: '60%', textAlign: "left", margin: "auto"}}>
 					<h1 class="lead">{this.state.name}</h1>
@@ -153,9 +185,26 @@ export default class Wallet extends React.Component {
 						<br />
 						<p><strong>Phone No:</strong> &nbsp; {this.state.phone}</p>
 						<br />
-						<p><strong>Status:</strong> &nbsp; {this.state.status}</p>
-						<br />
 						<p><strong>Total Bookings: </strong> &nbsp; {this.state.bookings}</p>
+						<br />
+						<p style={{display: "flex"}}>
+							<div><strong>Level: </strong> &nbsp;</div>
+							<div className="form-group">
+								<select
+									style={{ padding: "4px"}}
+									name="level"
+									value={this.state.level}
+									onChange={(e) => this.handleIsChange(e)}
+									required
+								>
+									<option value="Basic" selected>Basic</option>
+									<option value="Low Intermediate">Low Intermediate</option>
+									<option value="Intermediate">Intermediate</option>
+									<option value="Advanced">Advanced</option>
+								</select>
+								{this.state.isChange ? <button onClick={this.handleIsChanged}>Save</button> : ""}
+							</div>
+						</p>
 					</div>
 				</div>
 				<div style={{ float: 'right', width: '45%'}}>
@@ -166,7 +215,9 @@ export default class Wallet extends React.Component {
 							Current Balance: ${this.state.wallet}
 						</Typography>
 						<br />
-						<input type="number" value={this.state.addToWallet} onChange={event => this.setState({addToWallet: event.target.value.replace(/\D/,'')})} style={{ padding: '0.4rem' ,fontSize: '1.2rem', border: '1px solid #ccc' }}/>
+						<input type="number" value={this.state.addToWallet} 
+						onChange={event => this.setState({addToWallet: event.target.value.replace(/\D/,'')})} 
+						style={{ padding: '0.4rem' ,fontSize: '1.2rem', border: '1px solid #ccc' }}/>
 					</CardContent>
 					<CardActions>
 						<Button size="small" className="text-primary" onClick={this.handleClick}>
