@@ -844,3 +844,21 @@ i {
 .css-1pahdxg-control{
   border-color: #841e2d !important;
 }
+
+table {
+  border-collapse: collapse;
+  border: 
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:hover {background-color: #ddd;}
+
+tr:nth-child(even) {background-color: #f2f2f2;}
+
+table, th, td {
+  border: 1px solid grey;
+}

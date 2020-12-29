@@ -181,9 +181,14 @@ export default class RegistererPermission extends Component{
 			    <h1 className="large text-primary">User Approval</h1>
 			    <br />
 			    <div style={{ width: "90%", margin: "auto"}}>
-					<div style={{ width: "50%", float: "left",borderRight: "1px solid grey", height: "60vh"}}>
-						<table style={{ width: "50%"}}>
+					<div style={{ width: "50%", float: "left",borderRight: "1px solid grey",
+					 height: "100vh",overflowX: "hidden", overflowY: "scroll"}}>
+						<table style={{ width: "80%"}}>
 							<tbody>
+									<th style={{color: "#841e2d", textAlign: "left"}}>Names</th>
+									<th></th>
+									<br />
+									<br />
 										{this.state.names.map(d => {
 											//console.log(d)
 											var colourvar = "#000", approve = 'none',unapprove = 'block';
@@ -198,16 +203,19 @@ export default class RegistererPermission extends Component{
 											return (
 											<tr	><td data-value={d._id} style={{color : colourvar, textAlign: "left"}}>{d.name} &nbsp;</td>
 												<td><button className="fas fa-eye" value={d._id} onClick = {e => this.clickUser(e)} 
-												style={{marginLeft: "50px", float: "right"}}>view</button>
+													style={{marginLeft: "50px", float: "right", background: "#841e2d",
+													 padding: "4px", border: "none", color: "#fff", borderRadius: "5px"}}>&nbsp; View</button>
 													</td>
 													<td  data-value={d._id}>
 													<button className="fa fa-check"  value={d._id}
-													style={{display : approve, float: "right"}}
-													onClick = {e => this.approveUser(e)}>Approve</button>
+													style={{display : approve, float: "right", background: "#841e2d",
+													 padding: "4px", border: "none", color: "#fff", borderRadius: "5px"}}
+													onClick = {e => this.approveUser(e)}>&nbsp; Approve</button>
 													
 													<button className="fas fa-times"  value={d._id}
-													style={{display : unapprove, float: "right", marginLeft: "50px"}} 
-													onClick = {e => this.unapproveUser(e)}>Unapprove</button>
+													style={{display : unapprove, float: "right", marginLeft: "50px", background: "#841e2d",
+													 padding: "4px", border: "none", color: "#fff", borderRadius: "5px"}} 
+													onClick = {e => this.unapproveUser(e)}>&nbsp; Unapprove</button>
 													</td>
 											</tr>
 											)

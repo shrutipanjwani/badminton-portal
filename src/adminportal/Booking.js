@@ -21,11 +21,18 @@ class AdminBooking extends Component {
         isDisplay: 2,
         value: [],
         selectedOption: 'courtname',
-        courts:[]
+        courts:[],
+        result: '',
       }
       
-      this.handleSelect = this.handleSelect.bind(this);
+      // this.handleSelect = this.handleSelect.bind(this);
 
+  }
+
+   handleSelectChange = (event) => {
+    this.setState({
+      result: event.target.value
+    })
   }
 
   handleRemove = i => {
@@ -51,10 +58,9 @@ class AdminBooking extends Component {
     }));
   };
 
-  handleSelect = (selectedOption) => {
-    this.setState({ selectedOption });
-    console.log(`Option selected:`, selectedOption);
-  }
+  // handleSelect = (selectedOption) => {
+  //   this.setState({ selectedOption });
+  // }
 
   async loadData(){
     
@@ -99,12 +105,7 @@ class AdminBooking extends Component {
     })
   }
 
-  handleSelect(event) {
-    console.log(event.target.value)
-    this.setState({selectedOption: event.target.value});
 
-  }
-  
   render() {
     let booking;
     if (this.state.isDisplay === 0) {
@@ -123,17 +124,16 @@ class AdminBooking extends Component {
         <h1 style={{ marginTop: "20px"}}>No Bookings</h1>
     }
 
-    const { selectedOption } = this.state;
-
     return (
         <Fragment>
           <h1 className="large text-primary" style={{ marginTop: "50px"}}>Bookings</h1>
           <div style={{width: "100%", margin: "auto"}}>
               <div style={{ width: "50%", float: "left", borderRight: "1px solid grey", height: "100vh"}}>
-                <button className="btn btn-primary" onClick={this.handleShow} style={{ marginRight: "20px"}}>New Booking</button>
+                <button className="btn btn-primary" onClick={this.handleShow} style={{ marginRight: "20px"}}>
+                New Booking</button>
                 <FormControl style={{marginTop:"-25px", marginRight: "20px"}}>
                   <label style={{textAlign: "left"}}>Search By</label>
-                  <select value={this.state.selectedOption} onChange={this.handleSelect} style={{ width: '200px', padding: "10px"}}>
+                  <select style={{ width: '200px', padding: "10px"}} onClick={this.handleSelectChange}>
 
                     <option value="email">Email Id</option>
 
@@ -145,10 +145,11 @@ class AdminBooking extends Component {
 
                   </select>
                 </FormControl>
-                <input type="search" pattern="\d*" style={{ padding: "8px", width: "200px"}} />
+                 {this.state.result}
+                {/* <input type="search" pattern="\d*" style={{ padding: "8px", width: "200px"}} />
                 <i className="fas fa-search" 
-                style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "6px", borderRadius: "5px",
-                color: "#fff", cursor: "pointer"}}></i>
+                style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "6px", 
+                borderRadius: "5px",color: "#fff", cursor: "pointer"}}></i> */}
                 <div>
                 <Fragment>
                   <div onClick={this.handleStart} style={{ cursor: 'pointer', marginTop: "20px"}}>
