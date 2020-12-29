@@ -1,5 +1,4 @@
 import React, { Fragment , Component } from 'react';
-import ContentEditable from 'react-contenteditable'
 import axios from "axios";
 
 export default class RegistererPermission extends Component{
