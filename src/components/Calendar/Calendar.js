@@ -1,5 +1,5 @@
 import React from 'react'
-import FullCalendar, { formatDate } from '@fullcalendar/react'
+import FullCalendar, { formatDate, ViewApi } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
@@ -28,7 +28,9 @@ export default class calendar extends React.Component {
       currentEvents: [],
       calenderView : 'dayGridMonth',
       bookedevents: [],
-      courts : []
+      courts : [],
+      //bookedeventdays : [],
+      //eventsvar : []
     }
   }
 
@@ -45,7 +47,7 @@ export default class calendar extends React.Component {
 	  }
 
     try {
-      var bookedeventsvar = [];
+      var bookedeventsvar = [] , bookedeventdaysvar = [];
       const res = await axios.get('/booking/', config);
       for(var i = 0; i < res.data.length; i++){
         var type = ""
@@ -70,10 +72,20 @@ export default class calendar extends React.Component {
           start: res.data[i].date + 'T' + res.data[i].start_time,
           end: res.data[i].date + 'T' + res.data[i].end_time,
           color : res.data[i].court.colour,
+          borderColor : res.data[i].court.colour,
+          //allDay : true,
           booking : res.data[i]
         })
+        // bookedeventdaysvar.push({
+        //   id: createEventId(),
+        //   title: "C" + res.data[i].court.court_name + " | " + type + playersname + "",
+        //   start: res.data[i].date + 'T' + res.data[i].start_time,
+        //   end: res.data[i].date + 'T' + res.data[i].end_time,
+        //   color : res.data[i].court.colour,
+        //   booking : res.data[i]
+        // })
       }
-      this.setState({bookedevents : bookedeventsvar})
+      this.setState({bookedevents : bookedeventsvar})// ,bookedeventdays : bookedeventdaysvar })
       this.getCourtDetails();
     } catch(err) {
         // this.setState({alert: 1});
@@ -129,10 +141,10 @@ export default class calendar extends React.Component {
               //editable={true}
               //selectable={true}
               selectMirror={true}
-              allDaySlot = {false}
+              allDaySlot = {true}
               //dayMaxEvents={true}
               //weekends={this.state.weekendsVisible}
-              events={this.state.bookedevents} // alternatively, use the `events` setting to fetch from a feed
+              events={this.state.bookedevents}                                  // alternatively, use the `events` setting to fetch from a feed
               dateClick={this.handleDateSelect}
               eventContent={renderEventContent} // custom render function
               eventClick={this.handleEventClick}
@@ -179,6 +191,7 @@ export default class calendar extends React.Component {
   }
 
   handleDateSelect = (selectInfo) => {
+    this.setState({eventsvar : this.state.bookedeventdays})
     this.calendarRef.current
         .getApi()
         .changeView('timeGridDay', selectInfo.date)
@@ -195,8 +208,9 @@ export default class calendar extends React.Component {
       currentEvents: events
     })
   }
-
 }
+
+
 
 function renderEventContent(eventInfo) {
   return (

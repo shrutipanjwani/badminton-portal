@@ -48,7 +48,7 @@ export const login = (email, password) => async dispatch => {
 			'Content-Type': 'application/json'
 		}
 	}
-
+	email =email.toLowerCase();
 	const body = JSON.stringify({ email, password });
 
 	try {
@@ -93,7 +93,7 @@ export const resetpassword = (email, token, password) => async dispatch => {
 				'Content-Type': 'application/json'
 			}
 		}
-
+		email = email.toLowerCase()
 		const body = JSON.stringify({ email, token, password});
 		
 		const res = await axios.post('/users/resetPassword', body, config);

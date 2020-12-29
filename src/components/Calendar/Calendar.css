@@ -56,9 +56,15 @@ b { /* used for event dates/times */
   text-transform: uppercase !important;
 }
 
+<<<<<<< HEAD
 /* .fc-theme-standard td, .fc-theme-standard th {
   width: 178px;
 } */
+=======
+.fc-theme-standard td, .fc-theme-standard th {
+  width: 100%;
+}
+>>>>>>> d4bac6b18dc532261b5c3b0da6a272f4f176d350
 
 .fc-direction-ltr .fc-daygrid-event.fc-event-start, .fc-direction-rtl .fc-daygrid-event.fc-event-end {
   margin-left: 3px;

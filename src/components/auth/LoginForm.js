@@ -52,7 +52,7 @@ const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
   });
 
   const { email, password } = formData;
-
+  email = email.toLowerCase();
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -70,7 +70,7 @@ const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
     const submitForm = async (e) => {
       const params = {
         params: {
-          "email": email,
+          "email": email.toLowerCase(),
         },
       };
       var res;
@@ -112,7 +112,7 @@ const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
                 type="email"
                 placeholder="Email Address"
                 name="email"
-                value={email}
+                value={email.toLowerCase()}
                 onChange={(e) => onChange(e)}
                 required
               />
@@ -148,7 +148,7 @@ const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
                           type="email"
                           placeholder="Email Address"
                           name="email"
-                          value={email}
+                          value={email.toLowerCase()}
                           onChange={(e) => onChange(e)}
                           required
                           style={{ padding: '10px', width: '250px', marginTop: '20px'}}
@@ -168,7 +168,7 @@ const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
             >
               <DialogContent id="emailrequest">
                   <DialogContentText style={styles.center}>
-                    <p>Email to Reset Password has been sent to {email}.</p>
+                    <p>Email to Reset Password has been sent to {email.toLowerCase()}.</p>
                     <p>Please Check in 2-3 Minutes</p>
                     <br />
                     <br />

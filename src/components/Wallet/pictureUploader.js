@@ -13,15 +13,18 @@ export default class PictureUploader extends React.Component {
   }
   
   handlePictureSelected(event) {
+    try {
     var picture = event.target.files[0];
-    
     var src     = URL.createObjectURL(picture);
     
-    this.setState({
-      picture: picture,
-      src: src
-    });
-    this.upload(picture);
+      this.setState({
+        picture: picture,
+        src: src
+      });
+      this.upload(picture);
+    }catch(err){
+      console.log(err)
+    }
   }
 
  componentWillReceiveProps(nextProps) {

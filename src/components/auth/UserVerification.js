@@ -5,7 +5,7 @@ class UserVerification extends React.Component {
 
     async  getData(){
         try {
-          var useremail = this.props.match.params.email
+          var useremail = this.props.match.params.email.toLowerCase()
           var token = this.props.match.params.token
 
           const res = await axios.get('/users/verify', {
