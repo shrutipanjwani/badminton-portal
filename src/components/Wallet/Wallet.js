@@ -118,7 +118,7 @@ export default class Wallet extends React.Component {
 			const res = await axios.get('/auth/', config);
 			const boookingsVar = await axios.get("/booking/userLength", config);
 			this.setState({name: res.data.name});
-			this.setState({email: res.data.email});
+			this.setState({email: res.data.email.toLowerCase()});
 			this.setState({phone: "+" + res.data.phone.country + "-" + res.data.phone.digits});
 			this.setState({status: "Active"});
 			this.setState({bookings: boookingsVar.data.Length});
@@ -148,8 +148,8 @@ export default class Wallet extends React.Component {
 					/> */}
 					<PictureUploader data={this.state.src}/>
 					<div style={{ width: '60%', textAlign: "left", margin: "auto"}}>
-					<h1 class="lead">{this.state.name}</h1>
-						<p><strong>Email:</strong> &nbsp; {this.state.email}</p>
+					<h1 class="lead">{this.state.name.toUpperCase()}</h1>
+						<p><strong>Email:</strong> &nbsp; {this.state.email.toLowerCase()}</p>
 						<br />
 						<p><strong>Phone No:</strong> &nbsp; {this.state.phone}</p>
 						<br />

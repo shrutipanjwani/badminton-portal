@@ -47,7 +47,7 @@ const ResetPassword = ({ setAlert, resetpassword }) => {
       setAlert("Password do not match", "danger");
     } else {
      
-      const res = await resetpassword(params.email, params.token, password);
+      const res = await resetpassword(params.email.toLowerCase(), params.token, password);
       
       if(res){
         handleClickOpen(true);

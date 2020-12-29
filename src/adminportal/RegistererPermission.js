@@ -36,16 +36,18 @@ export default class RegistererPermission extends Component{
 	}
 	
 	approveUser = async (e) => {
+		
 		const config = {
 			headers: {
 				'Content-Type': 'application/json'
 			}
 		}
 		try {
-			const res = await axios.get("/profile/approve/"+e.target.parentNode.id, config)
+			
+			const res = await axios.get("/profile/approve/"+e.target.value, config)
 			const namesvar = this.state.names;
 			let obj = namesvar.find((o, i) => {
-				if (o._id === e.target.parentNode.id) {
+				if (o._id === e.target.value) {
 					namesvar[i].status = 2
 					return true; // stop searching
 				}
@@ -62,11 +64,11 @@ export default class RegistererPermission extends Component{
 			}
 		}
 		try {
-			const res = await axios.get("/profile/unapprove/"+e.target.parentNode.id, config)
-			await this.getData(e.target.parentNode.id);
+			const res = await axios.get("/profile/unapprove/"+e.target.value, config)
+			await this.getData(e.target.value);
 			const namesvar = this.state.names;
 			let obj = namesvar.find((o, i) => {
-				if (o._id === e.target.parentNode.id) {
+				if (o._id === e.target.value) {
 					namesvar[i].status = 1
 					return true; // stop searching
 				}
@@ -78,11 +80,10 @@ export default class RegistererPermission extends Component{
 	}
 
 	clickUser = async (e)=>{
-		  //console.log(e.target.parentNode.id);
-		  await this.getData(e.target.parentNode.id);
-		this.setState({
-			 isActive: true
-		 })
+		console.log(e.target.id);
+		this.setState({	isActive: false }) 
+		await this.getData(e.target.id);
+		
 	 }
 
 	async getData(userId){
@@ -95,9 +96,9 @@ export default class RegistererPermission extends Component{
 			const res = await axios.get("/profile/user/"+userId, config)
 			const boookingsVar = await axios.get("/booking/userLength/"+userId, config);
 			//console.log(res)
-			// this.setState({ _id: res.data._id})
+			this.setState({ _id: res.data._id})
 			this.setState({name: res.data.name});
-			this.setState({email: res.data.email});
+			this.setState({email: res.data.email.toLowerCase()});
 			this.setState({phone: "+" + res.data.phone.country + "-" + res.data.phone.digits});
 			this.setState({status: res.data.status});
 		//	this.setState({approvedstatus: "Active"});
@@ -105,6 +106,7 @@ export default class RegistererPermission extends Component{
 			this.setState({cancelbookings: boookingsVar.data.canceledLength});
 			this.setState({wallet: res.data.wallet});
 			this.setState({src: res.data.avatar});
+			this.setState({	isActive: true })
 		} catch(err) {
 			console.log(err.response)
 		}
@@ -130,6 +132,7 @@ export default class RegistererPermission extends Component{
 	}
 
 	componentDidMount(){
+		console.log(1)
 		this.loadData();
 	}
 
@@ -143,36 +146,32 @@ export default class RegistererPermission extends Component{
 					<div style={{ width: "50%", float: "left",borderRight: "1px solid grey", height: "60vh"}}>
 						<table style={{ width: "100%"}}>
 							<tbody>
-								<tr>
-									<td>
-										{this.state.names.map(d => {
-											//console.log(d)
-											var colourvar = "#000", approve = 'none',unapprove = 'block';
-											if(d.status == 1){
-												approve = 'block'
-												unapprove = 'none'
-												colourvar = 'green'
-											}else if(d.status == 0){
-												unapprove = 'none'
-												colourvar = 'red'
-											}
-											return (
-											<tr id={d._id} 
-												style={{color : colourvar, textAlign: "left"}}>{d.name} &nbsp;
-												<button style={{marginLeft: "50px", float: "right"}} className="btn btn-primary" onClick = {e => this.clickUser(e)}>
-													<i className="fas fa-eye"></i></button>
-												<button className="btn btn-primary" 
-												style={{display : approve, float: "right"}} onClick = {e => {
-													this.approveUser(e)
-												}}>
-													<i className="fa fa-check"></i></button>
-												<button className="btn btn-primary" 
-												style={{display : unapprove, float: "right", marginLeft: "50px"}} onClick = {e => this.unapproveUser(e)}>
-												<i className="fas fa-times"></i></button>
-											</tr>)
-										})} 
-									</td>
-								</tr>
+								{this.state.names.map(d => {
+									var colourvar = "#000", approve = 'none',unapprove = 'block';
+									if(d.status == 1){
+										approve = 'block'
+										unapprove = 'none'
+										colourvar = 'green'
+									}else if(d.status == 0){
+										unapprove = 'none'
+										colourvar = 'red'
+									}
+									return (
+									<tr>
+										<td style={{color : colourvar, textAlign: "left"}}>{d.name.toUpperCase()}-{d._id} &nbsp;
+										</td>
+										<td>	
+											<button style={{ float: "right"}} className="btn btn-primary"  id={d._id}  onClick = {id => this.clickUser(id)}>
+											<i className="fas fa-eye" id={d._id}  onClick = {id => this.clickUser(id)}></i></button>
+										</td>
+										<td>
+											<button className="btn btn-primary"  value={d._id} style={{ float: "right"}} onClick = {e => this.approveUser(e)}>
+											<i className="fa fa-check"></i></button>
+											<button className="btn btn-primary"  value={d._id} style={{ float: "right"}} onClick = {e => this.unapproveUser(e)}>
+											<i className="fas fa-times"></i></button>
+										</td>
+									</tr>)
+								})}
 							</tbody>
 						</table>
 					</div>
@@ -186,8 +185,8 @@ export default class RegistererPermission extends Component{
 								alt=""
 							/>
 							<div style={{ width: '60%', textAlign: "left", margin: "auto"}}>
-							<h1 class="lead">{this.state.name}</h1>
-								<p><strong>Email:</strong> &nbsp; {this.state.email}</p>
+							<h1 class="lead">{this.state.name.toUpperCase()}</h1>
+								<p><strong>Email:</strong> &nbsp; {this.state.email.toLowerCase()}</p>
 								<br />
 								<p><strong>Phone No:</strong> &nbsp; {this.state.phone}</p>
 								<br />

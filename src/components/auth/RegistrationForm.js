@@ -104,7 +104,7 @@ const Register = ({ setAlert }) => {
     } else {
       const newUser = {
         name: name,
-        email: email,     
+        email: email.toLowerCase(),     
         password: password,
         phone: {
           country: country.value,
@@ -158,7 +158,7 @@ const Register = ({ setAlert }) => {
               type="email"
               placeholder="Email Address"
               name="email"
-              value={email}
+              value={email.toLowerCase()}
               onChange={(e) => onChange(e)}
               required
             />
@@ -243,7 +243,7 @@ const Register = ({ setAlert }) => {
             </DialogTitle>
             <DialogContent>
               <DialogContentText style={styles.center}>
-                <p>A Invitation Mail has already been sent to {email}.</p>
+                <p>A Invitation Mail has already been sent to {email.toLowerCase()}.</p>
                 <p>Please Check in 2-3 Minutes.</p>
                 <br />
                 <br />

@@ -85,10 +85,10 @@ export default class Booking extends React.Component {
     try {
       var user = this.state.data.user;
       var playersbody = Object.keys(user).map(function(key) {
-        return user[key].name+"\t"+user[key].email+"\t"+user[key].phone.country+"-"+user[key].phone.digits+"\n";
+        return user[key].name+"\t"+user[key].email.toLowerCase()+"\t"+user[key].phone.country+"-"+user[key].phone.digits+"\n";
       });
-      playersbody = playersbody.toString()+this.state.userdata.name+"\t"+this.state.userdata.email+"\t"+this.state.userdata.phone.country+"-"+this.state.userdata.phone.digits+"\n";
-      console.log(playersbody.toString()+this.state.userdata.name+"\t"+this.state.userdata.email+"\t"+this.state.userdata.phone.country+"-"+this.state.userdata.phone.digits+"\n");
+      playersbody = playersbody.toString()+this.state.userdata.name+"\t"+this.state.userdata.email.toLowerCase()+"\t"+this.state.userdata.phone.country+"-"+this.state.userdata.phone.digits+"\n";
+      console.log(playersbody.toString()+this.state.userdata.name+"\t"+this.state.userdata.email.toLowerCase()+"\t"+this.state.userdata.phone.country+"-"+this.state.userdata.phone.digits+"\n");
       const body = {
         playersBooked : playersbody
       }
@@ -107,7 +107,7 @@ export default class Booking extends React.Component {
       newdata.court_full = player;
       this.setState ({aviSlot : this.state.aviSlot - 1 , data : newdata});
       let players = (<tr><td>{this.state.userdata.name}</td>
-        <td>{this.state.userdata.email}</td>
+        <td>{this.state.userdata.email.toLowerCase()}</td>
         <td>+{this.state.userdata.phone.country}-{this.state.userdata.phone.digits}</td>
       </tr>);
       console.log (players)
@@ -142,7 +142,7 @@ export default class Booking extends React.Component {
     var user = this.state.data.user;
     var tifOptionsvar = Object.keys(user).map(function(key) {
       return (<tr><td>{user[key].name}</td>
-        <td>{user[key].email}</td>
+        <td>{user[key].email.toLowerCase()}</td>
         <td>+{user[key].phone.country}-{user[key].phone.digits}</td>
       </tr>);
     });
