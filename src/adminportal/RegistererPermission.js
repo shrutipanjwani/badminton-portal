@@ -141,10 +141,11 @@ export default class RegistererPermission extends Component{
 			    <br />
 			    <div style={{ width: "90%", margin: "auto"}}>
 					<div style={{ width: "50%", float: "left",borderRight: "1px solid grey", height: "60vh"}}>
-						<table style={{ width: "60%"}}>
+						<table style={{ width: "100%"}}>
 							<tbody>
-								<td>
-									{this.state.names.map(d => {
+								<tr>
+									<td>
+										{this.state.names.map(d => {
 											//console.log(d)
 											var colourvar = "#000", approve = 'none',unapprove = 'block';
 											if(d.status == 1){
@@ -155,18 +156,23 @@ export default class RegistererPermission extends Component{
 												unapprove = 'none'
 												colourvar = 'red'
 											}
-											return (<tr id={d._id} 
-											
-												style={{color : colourvar}}>{d.name} &nbsp;
-												<button className="btn btn-primary" onClick = {e => this.clickUser(e)}><i className="fas fa-check"></i> &nbsp;veiw</button>
-												<button className="btn btn-primary" style={{display : approve}} onClick = {e => {
-													
+											return (
+											<tr id={d._id} 
+												style={{color : colourvar, textAlign: "left"}}>{d.name} &nbsp;
+												<button style={{marginLeft: "50px", float: "right"}} className="btn btn-primary" onClick = {e => this.clickUser(e)}>
+													<i className="fas fa-eye"></i></button>
+												<button className="btn btn-primary" 
+												style={{display : approve, float: "right"}} onClick = {e => {
 													this.approveUser(e)
-												}}><i className="fas fa-check"></i> &nbsp;Approve</button>
-												<button className="btn btn-primary" style={{display : unapprove}} onClick = {e => this.unapproveUser(e)}><i className="fas fa-check"></i> &nbsp;Unapprove</button>
-												</tr>)
+												}}>
+													<i className="fa fa-check"></i></button>
+												<button className="btn btn-primary" 
+												style={{display : unapprove, float: "right", marginLeft: "50px"}} onClick = {e => this.unapproveUser(e)}>
+												<i className="fas fa-times"></i></button>
+											</tr>)
 										})} 
-								</td>
+									</td>
+								</tr>
 							</tbody>
 						</table>
 					</div>
