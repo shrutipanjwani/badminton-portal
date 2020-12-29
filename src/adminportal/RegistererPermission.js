@@ -20,14 +20,43 @@ export default class RegistererPermission extends Component{
 			user :{},
 			cancelbookings : 0,
 			level: "",
-			originalvalue: "",
-			isChange: false,
+			orignalWallet: 0,
+			isChange: "none",
 		}
 	};
 	
-	handleChange = evt => {
-		this.setState({html: evt.target.value});
+	handleChange = (evt) => {
+		console.log("jhj")
+		if(evt.target.value == this.state.orignalWallet){
+			this.setState({isChange:"none"});
+		}else{
+			this.setState({isChange:"block"});
+		}
 		// this.state._id , evt.target.value
+		this.setState({wallet: evt.target.value});
+	};
+
+	updateWallet = async () => {
+		this.setState({isChange:"none"});
+		// this.state._id , this.state.wallet,  orignalWallet : evt.target.value
+		const config = {
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}
+		try {
+			const res = await axios.get("/wallet/"+this.state._id+"/"+this.state.wallet, config);
+			console.log(res.data)
+			this.setState({orignalWallet : this.state.wallet})
+			//this.setState({level: res.data.level, originallevel: res.data.level});
+		} catch(err) {
+			console.log(err.response)
+		}
+		this.setState({
+			isChange: false,
+			originallevel: this.state.level,
+		})
+		
 	};
 
 	state = {
@@ -35,8 +64,8 @@ export default class RegistererPermission extends Component{
 	 }
 	
 	approveUser = async (e) => {
-		console.log(e.target.getAttribute("data-value"));
-		console.log(e.target.getAttribute("data-value"))
+		//console.log(e.target.getAttribute("data-value"));
+		//console.log(e.target.getAttribute("data-value"))
 		const config = {
 			headers: {
 				'Content-Type': 'application/json'
@@ -53,7 +82,7 @@ export default class RegistererPermission extends Component{
 					return true; // stop searching
 				}
 			});
-			console.log(namesvar)
+			//console.log(namesvar)
 			this.setState({status: "Approved"});
 			this.setState({names : namesvar})
 			
@@ -78,7 +107,7 @@ export default class RegistererPermission extends Component{
 					return true; // stop searching
 				}
 			});
-			console.log(namesvar)
+			//console.log(namesvar)
 			
 			this.setState({names : namesvar})
 		} catch(err) {
@@ -112,9 +141,10 @@ export default class RegistererPermission extends Component{
 			this.setState({bookings: boookingsVar.data.Length});
 			this.setState({cancelbookings: boookingsVar.data.canceledLength});
 			this.setState({wallet: res.data.wallet});
+			this.setState({orignalWallet: res.data.wallet});
 			this.setState({src: res.data.avatar});
 			this.setState({level: res.data.level});
-			console.log(res.data.level)
+			//console.log(res.data.level)
 			this.setState({	isActive: true })
 		} catch(err) {
 			console.log(err.response)
@@ -155,7 +185,7 @@ export default class RegistererPermission extends Component{
 						<table style={{ width: "50%"}}>
 							<tbody>
 										{this.state.names.map(d => {
-											console.log(d)
+											//console.log(d)
 											var colourvar = "#000", approve = 'none',unapprove = 'block';
 											if(d.status == 1){
 												approve = 'block'
@@ -216,14 +246,18 @@ export default class RegistererPermission extends Component{
 								<br />
 								<p style={{ display: "flex"}}>
 									<strong>Current Balance: $</strong> &nbsp;
-									<ContentEditable
+									<input type={Number}
 										style={{ width: "100px"}}
-										html={this.state.wallet}	
-										innerRef={this.contentEditable}
-										disabled={false}       // use true to disable editing
+										min = {0}
+										defaultValue={this.state.wallet}	
+										//innerRef={this.contentEditable}
+										onChange={e => this.handleChange(e)}
+										onkeypress={e => this.handleChange(e)} 
+										onpaste={e => this.handleChange(e)} 
+										oninput={e => this.handleChange(e)}     // use true to disable editing
 									/>
-									<button style={{border: "none", background: "#841e2d", borderRadius: "5px", 
-									color: "#fff", padding: "3px"}} onChange={this.handleChange}>
+									<button style={{ border: "none", background: "#841e2d", borderRadius: "5px", 
+									color: "#fff", padding: "3px" , display : this.state.isChange}}  onClick = {this.updateWallet}>
 										<i className="fas fa-check"></i> 
 									&nbsp;Done</button>
 								</p>
