@@ -5,7 +5,6 @@ import * as ReactDOM from 'react-dom';
 import FormControl from '@material-ui/core/FormControl';
 import axios from "axios";
 import setAuthToken from '../utils/setAuthToken';
-import Select from 'react-select';
 
 
 class AdminBooking extends Component {
