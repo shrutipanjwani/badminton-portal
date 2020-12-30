@@ -3,7 +3,6 @@ import Form from "./FormTwo";
 import Table from "./TableTwo";
 import * as ReactDOM from 'react-dom';
 import FormControl from '@material-ui/core/FormControl';
-import DatePicker from "react-datepicker";
 import Select from '@material-ui/core/Select';
 
 import axios from "axios";
@@ -33,7 +32,7 @@ class AdminBooking extends Component {
         email: "",
         error: "",
         result: 
-        <form className="form-group" onClick={e => this.onSubmitEmail(e)}>
+        <form className="form-group" onSubmit={e => this.onSubmitEmail(e)}>
               <input 
                 type="email" 
                 placeholder="Email Address"
@@ -43,9 +42,9 @@ class AdminBooking extends Component {
                 style={{ padding: "8px", width: "200px"}} 
               />
             <input 
-                type="button" value="Search"
-                style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "6px", 
-                borderRadius: "5px",color: "#fff", cursor: "pointer"}}
+                type="submit" value="Search"
+                style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "5px", 
+                borderRadius: "5px",color: "#fff", cursor: "pointer", paddingBottom: "30px"}}
               /> 
         </form>
       }
@@ -234,8 +233,8 @@ class AdminBooking extends Component {
               style={{ padding: "8px", width: "200px"}}
         />
           <input type="submit" value="Search"
-          style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "6px", 
-          borderRadius: "5px",color: "#fff", cursor: "pointer"}}
+          style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "5px", 
+          borderRadius: "5px",color: "#fff", cursor: "pointer", paddingBottom: "30px"}}
            />
       </form>
     })
@@ -259,8 +258,8 @@ class AdminBooking extends Component {
             {this.state.courts.map(this.renderCourt)}
           </Select>
             <input type="submit" value="Search"
-            style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "6px", 
-            borderRadius: "5px",color: "#fff", cursor: "pointer"}}
+            style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "5px", 
+            borderRadius: "5px",color: "#fff", cursor: "pointer", paddingBottom: "30px"}}
             />
         </form>
     })
@@ -289,8 +288,8 @@ class AdminBooking extends Component {
             </FormControl>
             <input 
               type="submit" value="Search"
-              style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "6px", 
-              borderRadius: "5px",color: "#fff", cursor: "pointer"}}
+              style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "5px", 
+              borderRadius: "5px",color: "#fff", cursor: "pointer", paddingBottom: "30px"}}
             />
         </form>
      })
@@ -309,8 +308,8 @@ class AdminBooking extends Component {
             /> */}
             <input 
               type="submit" value="Search"
-              style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "6px", 
-              borderRadius: "5px",color: "#fff", cursor: "pointer"}}
+              style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "5px", 
+                borderRadius: "5px",color: "#fff", cursor: "pointer", paddingBottom: "30px"}}
             /> 
         </form>
      })
