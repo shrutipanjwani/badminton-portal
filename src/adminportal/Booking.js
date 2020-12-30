@@ -32,19 +32,22 @@ class AdminBooking extends Component {
         bookingDate: null,
         email: "",
         error: "",
-        result: <div className="form-group">
-        <input 
-          type="email" 
-          placeholder="Email Address"
-          name="email"
-          onChange={e => this.change(e)}
-          required
-          style={{ padding: "8px", width: "200px"}} 
-        />
-          <i className="fas fa-search" onClick={e => this.onSubmitEmail(e)}
-          style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "6px", 
-          borderRadius: "5px",color: "#fff", cursor: "pointer"}}></i>
-      </div>
+        result: 
+        <form className="form-group" onClick={e => this.onSubmitEmail(e)}>
+              <input 
+                type="email" 
+                placeholder="Email Address"
+                name="email"
+                onChange={e => this.change(e)}
+                required
+                style={{ padding: "8px", width: "200px"}} 
+              />
+            <input 
+                type="button" value="Search"
+                style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "6px", 
+                borderRadius: "5px",color: "#fff", cursor: "pointer"}}
+              /> 
+        </form>
       }
       
       // this.handleSelect = this.handleSelect.bind(this);
@@ -55,6 +58,7 @@ class AdminBooking extends Component {
     this.setState({
       [e.target.name]: e.target.value
     });
+    console.log(e.target.value)
   };
 
   //Email Search
@@ -94,6 +98,7 @@ class AdminBooking extends Component {
   //Court Search
   validateCourt = () => {
     let isError = false;
+    console.log(this.state.courtName)
     if(this.state.courtName === ""){
       isError = true;
       this.setState({ error : "Please select Court Name" })
@@ -105,11 +110,19 @@ class AdminBooking extends Component {
     e.preventDefault();
     const err = this.validateCourt();
     if (!err) {
-      await this.props.onSubmitCourt(this.state);
-      this.submitCourt();
-      var courtname = this.state.courtName.split(' ')[1];
-      var courtSelected = this.state.courtName.find( o => o.court_name === courtname);
-      console.log(courtSelected._id)
+     
+      var courtSelected = this.state.courts.find( o => o.court_name === this.state.courtName.toString());
+     // console.log(courtSelected._id)
+      try {
+        const res = await axios.get('/booking/court/'+courtSelected._id).then(res => {
+          var courts = res.data
+              this.setState({courts : courts})
+              console.log(res.data)
+        })
+      } catch(err) {
+        console.log(err);   
+      }
+      
       // clear form
        this.setState({error : ""});
     }
@@ -131,10 +144,21 @@ class AdminBooking extends Component {
     e.preventDefault();
     const err = this.validateBookingType();
     if (!err) {
-      await this.props.onSubmitBookingType(this.state);
-      this.submitBookingType();
-      // clear form
-      this.clear();
+      try {
+          console.log(this.state.bookingType)
+          const res = await axios.get('/booking/type/'+this.state.bookingType).then(res => {
+            var bookings = res.data
+                this.setState({bookings : bookings})
+                console.log(res.data)
+          })
+        
+        
+      } catch(err) {
+        console.log(err);
+      }
+      // clear form 
+      console.log(this.state.bookingType)
+      this.setState({error : ""});
     }
   };
   
@@ -151,12 +175,22 @@ class AdminBooking extends Component {
 
   onSubmitBookingDate = async e => {
     e.preventDefault();
+    console.log(this.state.bookingDate)
     const err = this.validateBookingDate();
+    
     if (!err) {
-      await this.props.onSubmitBookingDate(this.state);
-      this.submitBookingDate();
-      // clear form
-      this.clear();
+      try {
+        const res = await axios.get('/booking/date/'+this.state.bookingDate).then(res => {
+          var bookings = res.data
+              this.setState({bookings : bookings})
+              console.log(res.data)
+        })
+      } catch(err) {
+        console.log(err);
+      }
+      // clear form 
+      console.log(this.state.bookingDate)
+      this.setState({error : ""});
     }
   };  
 
@@ -166,16 +200,18 @@ class AdminBooking extends Component {
     mnth = ("0" + (date.getMonth() + 1)).slice(-2),
     day = ("0" + date.getDate()).slice(-2);
     date = [date.getFullYear(), mnth, day].join("-");
+    console.log(e)
     this.setState({
-      bookingDate: date,
+      bookingDate: e.target.value,
       bookingDefaultDate: e
     });
-
+    console.log(e.target.value, this.state.bookingDate)
   };
 
   changeCourt = e =>{
         this.setState({
       [e.target.name]: e.target.value});
+      console.log(e.target.value)
   }
 
  renderCourt = (event)  => {
@@ -197,7 +233,7 @@ class AdminBooking extends Component {
               required 
               style={{ padding: "8px", width: "200px"}}
         />
-          <input type="submit" className="fas fa-search"
+          <input type="submit" value="Search"
           style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "6px", 
           borderRadius: "5px",color: "#fff", cursor: "pointer"}}
            />
@@ -206,15 +242,15 @@ class AdminBooking extends Component {
     }else if(event.target.value == "courtname"){
       this.setState({
         result:
-        <div className="form-group">
+        <form className="form-group" onSubmit={e => this.onSubmitCourt(e)}>
           <Select
             native
             defaultValue={this.state.courtName}
             onChange={e => this.changeCourt(e)}
-            // inputProps={{
-            //   name: 'courtName',
-            //   id: 'age-native-simple',
-            // }}
+            inputProps={{
+              name: 'courtName',
+              id: 'age-native-simple',
+            }}
             //errorText={this.state.courtNameError}
             style={{ width: '250px'}}
             required
@@ -222,18 +258,16 @@ class AdminBooking extends Component {
             <option aria-label="None" value="" disabled>Court Name</option>
             {this.state.courts.map(this.renderCourt)}
           </Select>
-            <i className="fas fa-search"
-            onClick={e => this.onSubmitCourt(e)}
+            <input type="submit" value="Search"
             style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "6px", 
             borderRadius: "5px",color: "#fff", cursor: "pointer"}}
-            >
-            </i>
-        </div>
+            />
+        </form>
     })
     }else if(event.target.value == "bookingtype"){
       this.setState({
         result: 
-        <div className="form-group">
+        <form className="form-group" onSubmit={e => this.onSubmitBookingType(e)}>
             <FormControl>
               <Select
                 native
@@ -253,20 +287,19 @@ class AdminBooking extends Component {
                 <option value='0'>Entire</option>
               </Select>
             </FormControl>
-            <i 
-              className="fas fa-search" 
-              onClick={e => this.onSubmitBookingType(e)}
+            <input 
+              type="submit" value="Search"
               style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "6px", 
               borderRadius: "5px",color: "#fff", cursor: "pointer"}}
-            >
-            </i>
-        </div>
+            />
+        </form>
      })
     }else if(event.target.value == "bookingdate"){
       this.setState({
         result: 
-        <div className="form-group">
-          <input type="date" pattern="\d*" style={{ padding: "8px", width: "200px"}} />
+        <form className="form-group" onSubmit={e => this.onSubmitBookingDate(e)}>
+          <input type="date" name = "bookingDate"
+              onChange={e => this.changeDate(e)}  style={{ padding: "8px", width: "200px"}}/>
             {/* <DatePicker
               value={this.state.bookingDefaultDate}
               name = "bookingDate"
@@ -274,14 +307,12 @@ class AdminBooking extends Component {
               placeholderText="Booking Date"
               required
             /> */}
-            <i 
-              className="fas fa-search" 
-              onClick={e => this.onSubmitBookingDate(e)}
+            <input 
+              type="submit" value="Search"
               style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "6px", 
               borderRadius: "5px",color: "#fff", cursor: "pointer"}}
-            > 
-            </i>
-        </div>
+            /> 
+        </form>
      })
     }else{
      this.setState({

@@ -56,6 +56,10 @@ i{
   height: 80px;
 }
 
+input[type="button"]{
+  border: none;
+}
+
 /* Global Styles */
 :root {
   --primary-color: #841e2d;
@@ -845,20 +849,19 @@ i {
   border-color: #841e2d !important;
 }
 
-table {
+.table {
   border-collapse: collapse;
-  border: 
 }
 
-th, td {
+.table th, td {
   text-align: left;
   padding: 8px;
 }
 
-tr:hover {background-color: #ddd;}
+.table tr:hover {background-color: #ddd;}
 
-tr:nth-child(even) {background-color: #f2f2f2;}
+.table tr:nth-child(even) {background-color: #f2f2f2;}
 
-table, th, td {
+.table th, td {
   border: 1px solid grey;
 }

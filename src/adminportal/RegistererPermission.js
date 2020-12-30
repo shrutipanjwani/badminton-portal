@@ -182,9 +182,10 @@ export default class RegistererPermission extends Component{
 			    <div style={{ width: "90%", margin: "auto"}}>
 					<div style={{ width: "50%", float: "left",borderRight: "1px solid grey",
 					 height: "100vh",overflowX: "hidden", overflowY: "scroll"}}>
-						<table style={{ width: "80%"}}>
+						<table style={{ width: "80%"}} className="table">
 							<tbody>
 									<th style={{color: "#841e2d", textAlign: "left"}}>Names</th>
+									<th></th>
 									<th></th>
 									<br />
 									<br />
