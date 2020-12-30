@@ -18,7 +18,7 @@ export default class Booking extends React.Component {
       userdata: null,
       tifOptions : null,
       newtifOptions : null,
-      loading: true
+      loading: true,
     };
   }
 
@@ -106,9 +106,11 @@ export default class Booking extends React.Component {
       let newdata = this.state.data;
       newdata.court_full = player;
       this.setState ({aviSlot : this.state.aviSlot - 1 , data : newdata});
+      console.log(this.state.userdata)
       let players = (<tr><td>{this.state.userdata.name}</td>
         <td>{this.state.userdata.email.toLowerCase()}</td>
         <td>+{this.state.userdata.phone.country}-{this.state.userdata.phone.digits}</td>
+        {this.state.userdata.level ? <td>{this.state.userdata.level}</td> : "Basic"}
       </tr>);
       console.log (players)
       this.setState({newtifOptions : players});
@@ -140,10 +142,12 @@ export default class Booking extends React.Component {
       this.setState({ aviSlot: player });
     }
     var user = this.state.data.user;
+    console.log(user)
     var tifOptionsvar = Object.keys(user).map(function(key) {
       return (<tr><td>{user[key].name}</td>
         <td>{user[key].email.toLowerCase()}</td>
         <td>+{user[key].phone.country}-{user[key].phone.digits}</td>
+        {user[key].level ? <td>{user[key].level}</td> : "Basic"}
       </tr>);
     });
     this.setState({tifOptions : tifOptionsvar});
@@ -218,6 +222,7 @@ export default class Booking extends React.Component {
                   <td>Players Name</td>
                   <td>Email</td>
                   <td>Phone Number</td>
+                  <td>Level</td>
                 </tr>
                 {this.state.tifOptions}
                 {this.state.newtifOptions}
