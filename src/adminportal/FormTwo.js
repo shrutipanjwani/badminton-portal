@@ -1,5 +1,4 @@
 import React from "react";
-import TextField from "@material-ui/core/TextField";
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -9,10 +8,10 @@ import TimePicker from 'rc-time-picker';
 import 'rc-time-picker/assets/index.css';
 import moment from 'moment';
 
+
 export default class Form extends React.Component {
   state = {
     courtName: "",
-    playerName: "",
     error: "",
     isBooking: false,
     courtSet : true,
@@ -36,20 +35,6 @@ export default class Form extends React.Component {
     endTimeMinuteDisabled : [],
   };
 
-  handleAdd = ()=>{
-    this.setState({
-      isBooking: true
-    });
-  }
-
-
-  change = e => {
-    // this.props.onChange({ [e.target.name]: e.target.value });
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-  };
-
   validate = () => {
     let isError = false;
     if(this.state.courtName === ""){
@@ -64,15 +49,12 @@ export default class Form extends React.Component {
     }else if(this.state.startTime === "" || this.state.endTime === ""){
       isError = true;
       this.setState({ error : "Please Select start and end Time"} )
-    }else if(this.state.playerName === ""){
-      isError = true;
-      this.setState({ error : "Please Enter Email"} )
     }
 
     return isError;
   };
 
-  onSubmit =async e => {
+   onSubmit =async e => {
     e.preventDefault();
     const err = this.validate();
     if (!err) {
@@ -82,12 +64,12 @@ export default class Form extends React.Component {
     }
   };
 
+ 
   clear = () => {
     this.setState({
         courtName: "",
         bookingType: "",
         courtNameError: "",
-        playerNameError: "",
         bookingTypeError: "",
         bookingDateError: "",
         bookingStartTimeError: "",
@@ -108,6 +90,19 @@ export default class Form extends React.Component {
         //isBooking: true
       });
   }
+
+  handleAdd = ()=>{
+    this.setState({
+      isBooking: true
+    });
+  }
+
+  change = e => {
+    // this.props.onChange({ [e.target.name]: e.target.value })
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
 
   changeCourt = e => {
     // this.props.onChange({ [e.target.name]: e.target.value })
@@ -249,8 +244,8 @@ export default class Form extends React.Component {
             style={{ width: '250px'}}
             required
           >
-          <option aria-label="None" value="" disabled>Court Name</option>
-            
+            <option aria-label="None" value="" disabled>Court Name</option>
+            {this.props.data.map(renderCourt)}
           </Select>
         </FormControl>
         <br />
@@ -277,8 +272,17 @@ export default class Form extends React.Component {
         <br />
         <br />
         <DatePicker
+            // style={{width: "200px"}}
             selected={this.state.bookingDefaultDate}
             name = "bookingDate"
+            // customStyles={{
+            //   dateTouch:{
+            //     width:'200px',
+            //   },
+            //   dateTouchBody: {
+            //     width:'200px',
+            //   },
+            // }}
             onChange={e => this.changeDate(e)}
             placeholderText="Booking Date"
             minDate={new Date()}
@@ -317,18 +321,6 @@ export default class Form extends React.Component {
         />
         <br />
         <br />
-        <TextField
-          type="email"
-          name="playerName"
-          placeholder="Email"
-          value={this.state.playerName}
-          onChange={e => this.change(e)}
-          errorText={this.state.playerNameError}
-          required
-          style={{ width: '250px'}}
-        />
-        <br />
-        <br />
         <p className="btn-danger">{this.state.error}</p>
         <br /> 
         <Button onClick={e => this.onSubmit(e)}>
@@ -337,4 +329,8 @@ export default class Form extends React.Component {
       </form>
     );
   }
+}
+
+function renderCourt(event) {
+  return (<option value={event.court_name}>Court {event.court_name}</option>)
 }

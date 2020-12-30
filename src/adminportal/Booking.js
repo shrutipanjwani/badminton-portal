@@ -22,11 +22,11 @@ class AdminBooking extends Component {
         bookings: [],
         data: [],
         editIdx: -1,
+        courtName: "",
         isDisplay: 2,
         value: [],
         selectedOption: 'courtname',
         courts:[],
-        courtName: [],
         bookingType: "",
         bookingDefaultDate: null,
         bookingDate: null,
@@ -37,9 +37,7 @@ class AdminBooking extends Component {
           type="email" 
           placeholder="Email Address"
           name="email"
-          // value={this.state.email}
-          // onChange={e => this.change(e)}
-          // errorText={this.state.emailError}
+          onChange={e => this.change(e)}
           required
           style={{ padding: "8px", width: "200px"}} 
         />
@@ -62,10 +60,13 @@ class AdminBooking extends Component {
   //Email Search
   validateEmail = () => {
     let isError = false;
-    
+   console.log(this.state.email.indexOf('@'))
     if(this.state.email === ""){
       isError = true;
       this.setState({ error : "Please Enter Email"})
+    }else if(this.state.email.indexOf('@') < 0){
+      isError = true;
+      this.setState({ error : "Please Enter valid Email"})
     }
 
     return isError;
@@ -75,10 +76,18 @@ class AdminBooking extends Component {
     e.preventDefault();
     const err = this.validateEmail();
     if (!err) {
-      await this.props.onSubmitEmail(this.state);
-      this.submitEmail();
-      // clear form
-      this.clear();
+      try {
+        const res = await axios.get('/booking/email/'+this.state.email).then(res => {
+          var bookings = res.data
+              this.setState({bookings : bookings})
+              console.log(res.data)
+        })
+      } catch(err) {
+        console.log(err);
+      }
+      // clear form 
+      console.log(this.state.email)
+      this.setState({error : ""});
     }
   };
 
@@ -98,8 +107,11 @@ class AdminBooking extends Component {
     if (!err) {
       await this.props.onSubmitCourt(this.state);
       this.submitCourt();
+      var courtname = this.state.courtName.split(' ')[1];
+      var courtSelected = this.state.courtName.find( o => o.court_name === courtname);
+      console.log(courtSelected._id)
       // clear form
-      this.clear();
+       this.setState({error : ""});
     }
   };
 
@@ -148,20 +160,6 @@ class AdminBooking extends Component {
     }
   };  
 
-  clear = () => {
-    this.setState({
-        courtName: [],
-        courtNameError: "",
-        bookingType: "",
-        bookingTypeError: "",
-        email: "",
-        emailError: "",
-        bookingDate : "",
-        bookingDefaultDate : null,
-        bookingDateError: "",
-    });
-  }
-
   changeDate = e => {
     // this.props.onChange({ [e.target.name]: e.target.value })
     var date = new Date(e),
@@ -175,43 +173,55 @@ class AdminBooking extends Component {
 
   };
 
+  changeCourt = e =>{
+        this.setState({
+      [e.target.name]: e.target.value});
+  }
+
+ renderCourt = (event)  => {
+  return (<option value={event.court_name}>Court {event.court_name}</option>)
+}
+
    handleSelectChange = (event) => {
+     this.setState({searchType : event.target.value })
     if(event.target.value == "email"){
      this.setState({
       result: 
-      <div className="form-group">
+      <form className="form-group" onSubmit = {e => this.onSubmitEmail(e)}>
         <input 
               type="email" 
               placeholder="Email Address"
               name="email"
-              value={this.state.email}
               onChange={e => this.change(e)}
               errorText={this.state.emailError}
               required 
               style={{ padding: "8px", width: "200px"}}
         />
-          <i className="fas fa-search"
-          onClick={e => this.onSubmitEmail(e)}
+          <input type="submit" className="fas fa-search"
           style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "6px", 
           borderRadius: "5px",color: "#fff", cursor: "pointer"}}
-          >
-          </i>
-      </div>
+           />
+      </form>
     })
     }else if(event.target.value == "courtname"){
       this.setState({
         result:
         <div className="form-group">
-          <input 
-            type="number" 
-            min="0" 
-            style={{ padding: "8px", width: "200px"}} 
-            // value={this.state.courtName}
-            placeholder="Court Name"
-            onChange={e => this.change(e)}
-            errorText={this.state.courtNameError} 
+          <Select
+            native
+            defaultValue={this.state.courtName}
+            onChange={e => this.changeCourt(e)}
+            // inputProps={{
+            //   name: 'courtName',
+            //   id: 'age-native-simple',
+            // }}
+            //errorText={this.state.courtNameError}
+            style={{ width: '250px'}}
             required
-          />
+          >
+            <option aria-label="None" value="" disabled>Court Name</option>
+            {this.state.courts.map(this.renderCourt)}
+          </Select>
             <i className="fas fa-search"
             onClick={e => this.onSubmitCourt(e)}
             style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "6px", 
@@ -227,7 +237,7 @@ class AdminBooking extends Component {
             <FormControl>
               <Select
                 native
-                value={this.state.bookingType}
+                defaultValue={this.state.bookingType}
                 onChange={e => this.change(e)}
                 inputProps={{
                   name: 'bookingType',
@@ -256,16 +266,14 @@ class AdminBooking extends Component {
       this.setState({
         result: 
         <div className="form-group">
-          {/* <input type="date" pattern="\d*" style={{ padding: "8px", width: "200px"}} /> */}
-            <DatePicker
-              selected={this.state.bookingDefaultDate}
+          <input type="date" pattern="\d*" style={{ padding: "8px", width: "200px"}} />
+            {/* <DatePicker
+              value={this.state.bookingDefaultDate}
               name = "bookingDate"
               onChange={e => this.changeDate(e)}
               placeholderText="Booking Date"
-              minDate={new Date()}
-              maxDate={ new Date().setMonth(new Date().getMonth()+6)}
               required
-            />
+            /> */}
             <i 
               className="fas fa-search" 
               onClick={e => this.onSubmitBookingDate(e)}
@@ -320,19 +328,6 @@ class AdminBooking extends Component {
   //   this.setState({ selectedOption });
   // }
 
-  async loadData(){
-    
-		try {
-			const res = await axios.get('/booking').then(res => {
-				var bookings = res.data
-            this.setState({bookings : bookings})
-            console.log(res.data)
-			})
-		} catch(err) {
-			console.log(err);
-		}
-  }
-
   async getCourtDetails(){
     const config = {
 		  headers: {
@@ -347,61 +342,8 @@ class AdminBooking extends Component {
 	  }
   }
 
-  //CourtNames Api call
-  async CourtNames(court_name){
-    try{
-      const res = await axios.get('/court/'+court_name).then(res => {
-				var courts = res.data
-            this.setState({courtName : courts})
-            console.log(res.data)
-			})
-    }
-    catch(err) {
-      console.log(err);
-    }
-  }
-
-  // Call dropdown Apis
-  async submitEmail(){
-    
-		try {
-			
-		} catch(err) {
-      console.log(err);
-		}
-  }
-
-  async submitCourt(){
-    
-		try {
-			
-		} catch(err) {
-			console.log(err);
-		}
-  }
-
-  async submitBookingType(){
-    
-		try {
-			
-		} catch(err) {
-			console.log(err);
-		}
-  }
-
-  async submitBookingDate(){
-    
-		try {
-			
-		} catch(err) {
-			console.log(err);
-		}
-  }
-
   async componentDidMount(){
-    await this.loadData();
     await this.getCourtDetails();
-    await this.CourtNames();
 	}
 
   render() {
