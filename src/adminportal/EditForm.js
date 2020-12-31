@@ -11,7 +11,7 @@ import moment from 'moment';
 
 export default class Form extends React.Component {
   state = {
-    courtName: "",
+    courtName: this.props.booking.court.court_name,
     error: "",
     isBooking: false,
     courtSet : true,
@@ -34,6 +34,7 @@ export default class Form extends React.Component {
     endTimeHourDisabled : [],
     endTimeMinuteDisabled : [],
   };
+
 
   validate = () => {
     let isError = false;
@@ -226,12 +227,17 @@ export default class Form extends React.Component {
       }
     }
   }
-
-  componentDidMount() {
-    console.log(this.props.booking)
-   //this.setState({domMounted: true}) 
-  } 
-
+  componentWillReceiveProps(nextProps) {
+    // Any time props.email changes, update state.
+    console.log(nextProps , this.props)
+    if (nextProps.booking._id !== this.props.booking._id) {
+      console.log(typeof nextProps.booking.court.court_name)
+      this.setState({
+        courtName: parseInt(nextProps.booking.court.court_name)
+      });
+    }
+  }
+  
   render() {
     return (
       <form style={{ marginTop: "20px"}} className="form">
@@ -270,9 +276,9 @@ export default class Form extends React.Component {
             required
           >
             <option aria-label="None" value="" disabled>Booking Type</option>
-            <option value='1'>Single</option>
-            <option value='2'>Double</option>
-            <option value='0'>Entire</option>
+            <option value={1}>Single</option>
+            <option value={2}>Double</option>
+            <option value={0}>Entire</option>
           </Select>
         </FormControl>
         <br />

@@ -30,7 +30,7 @@ class AdminBooking extends Component {
         bookingDate: null,
         email: "",
         error: "",
-        bookingid : "",
+        bookingid : [],
         
         result: 
         <form className="form-group" onSubmit={e => this.onSubmitEmail(e)}>
@@ -354,11 +354,14 @@ class AdminBooking extends Component {
   };
 
   handleStart = (e) => {
-    console.log(e.target.getAttribute("data-value"))
+    var bookingsvar = this.state.bookings;
+    var booking = bookingsvar.find(({ _id }) => _id === e.target.getAttribute("data-value"))
+    console.log(booking);
     this.setState({
       isDisplay: 1,
-      bookingid : e.target.getAttribute("data-value")
+      bookingid :booking
     });
+   
   };
 
   // handleSelect = (selectedOption) => {
@@ -499,9 +502,9 @@ class AdminBooking extends Component {
                 </div>
               </div>
           </div>
-          <div style={{ width: "50%", float: "right" }}>
+          {/* <div style={{ width: "50%", float: "right" }}>
             <div>{booking}</div>
-          </div>
+          </div> */}
         
       </Fragment>
     );
