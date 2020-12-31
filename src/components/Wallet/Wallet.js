@@ -136,7 +136,24 @@ export default class Wallet extends React.Component {
 	}
 
 	componentDidMount(){
-    	this.getData();
+
+		var data= JSON.parse(localStorage.getItem("USER"))
+		console.log("datahere",localStorage.getItem("USER"))
+		try{    
+		  if(data.loginstatus===1 && data.role==="Member"){
+	
+		} 
+		else{
+		  alert("wrongpath");
+		  this.props.history.replace('/signin');
+	
+		}}
+		catch{
+		  this.props.history.replace('/signin');
+		}
+	
+	
+		this.getData();
 	  }
 	  
 	handleIsChange  = async (e)=> {

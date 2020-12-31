@@ -37,6 +37,9 @@ const App = () => {
     }
     fetchData();
   }, []);
+
+
+
   
   return (
     <Provider store={store}>
@@ -51,9 +54,12 @@ const App = () => {
               <Route exact path='/Home' component={Landing} />
               <Route exact path='/signup' component={Register}/>
               <Route exact path='/signin' component={Login}/>
-              <Route exact path='/signin/:verifydetails' component={Login}/>
+              <Route exact path='/signin/:verifydetails' component={Login}/>  
+              
               <Route exact path='/resetpassword/:email/:token' component={ResetPassword}/>
               <Route exact path='/verify/:email/:token' component={UserVerification}/>
+           
+              {/* user Portal */}
               <Route exact path='/calendar' component={CalendarPage}/>
               <Route exact path='/wallet/:sessionId' component={Wallet}/>
               <Route exact path='/wallet' component={Wallet}/>
@@ -61,7 +67,7 @@ const App = () => {
               <Route exact path='/userbooking' component={UserBooking}/>
 
               {/* Admin Portal */}
-              <Route exact path='/edittime' component={EditTime}/>
+              {/* <Route exact path='/edittime' component={EditTime}/> */}
               <Route exact path='/editcourt' component={EditCourt}/>
               <Route exact path='/permission' component={RegistererPermission}/>
               <Route exact path='/adminbooking' component={AdminBooking}/>

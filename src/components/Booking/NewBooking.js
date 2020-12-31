@@ -1,6 +1,8 @@
 import React, { Fragment, Component } from "react";
 import axios from "axios";
 import Form from "./FormTwo";
+import { Link, Redirect, useParams } from "react-router-dom";
+
 import ReactDOM from "react-dom";
 import moment from 'moment';
 import { confirmAlert } from 'react-confirm-alert'; // Import
@@ -14,7 +16,8 @@ class NewBooking extends Component {
     isActive:false,
     isDisplay: false,
     courts : [],
-    loading : false
+    loading : false,
+    move:null
   };
 
   handleStart = ()=>{
@@ -126,11 +129,41 @@ class NewBooking extends Component {
 	  }
   }
 
+  componentWillMount(){
+    var data= JSON.parse(localStorage.getItem("USER"))
+    console.log("datahere",localStorage.getItem("USER"))
+    try{    
+      if(data.loginstatus===1 && data.role==="Member"){
+        console.log("called")
+
+
+    } 
+    else{
+
+      this.setState({move:true})
+
+    }}
+    catch{
+      this.setState({move:true})
+
+        }
+
+  }
+
   componentDidMount(){
     this.getCourtDetails();
+
+
+
+
   }
 
   render() {
+
+    if(this.state.move===true){
+      return(      <div>something went wrong</div>
+        );
+    }
     return (
         <Fragment>
           <h1 className="large text-primary" style={{ marginTop: "50px"}}>Bookings</h1>

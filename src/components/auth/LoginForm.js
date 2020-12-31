@@ -11,8 +11,20 @@ import axios from "axios";
 import { login } from '../../actions/auth';
 
 const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
+
+
+  //REseting data here if comes to this page form anywehre
+	// var data={
+  //   "loginstatus":0,
+  //   "role":"null"
+  // }
+
+  // localStorage.setItem("USER",JSON.stringify(data));
+  // console.log("data set ",JSON.parse(localStorage.getItem("USER")));
+
+
   const params = useParams();
-  useEffect(() => {
+    useEffect(() => {
         // if(!props.fetched) {
         //     props.fetchRules();
         // }
@@ -90,16 +102,21 @@ const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
         //console.log(err.response.data.errors[0].msg)
       }
     }
+    var data=JSON.parse(localStorage.getItem("USER"));
 
-    if (isAuthenticated) {
-     // console.log(isAdmin)
-      if(isAdmin){
-        //console.log(isAdmin)
-       return <Redirect to='/permission' replace />;
-      }else{
-        //console.log(isAdmin)
-       return <Redirect to='/calendar' replace />;
-      }
+    try{    if (isAuthenticated&&data.loginstatus===1) {
+      // console.log(isAdmin)
+       if(isAdmin){
+         //console.log(isAdmin)
+        return <Redirect to='/permission' replace />;
+       }else{
+         //console.log(isAdmin)
+        return <Redirect to='/calendar' replace />;
+       }
+     }}
+    catch{
+      return <Redirect to='/signin' replace />;
+
     }
 
     
@@ -183,6 +200,8 @@ const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
       </Fragment>
     
 };
+
+
 
 Login.propTypes = {
   setAlert: PropTypes.func.isRequired,
