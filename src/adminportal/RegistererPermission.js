@@ -1,3 +1,5 @@
+
+
 import React, { Fragment , Component } from 'react';
 import axios from "axios";
 
@@ -170,6 +172,17 @@ export default class RegistererPermission extends Component{
 	}
 
 	componentDidMount(){
+    
+var data = JSON.parse(localStorage.getItem("USER"));
+console.log("datahere", localStorage.getItem("USER"));
+try {
+  if (data.loginstatus === 1 && data.role === "admin") {
+  } else {
+    this.props.history.replace("/signin");
+  }
+} catch {
+  this.props.history.replace("/signin");
+}
 		this.loadData();
 	}
 

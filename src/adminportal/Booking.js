@@ -5,18 +5,17 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
 import axios from "axios";
-import setAuthToken from '../utils/setAuthToken';
-
+import setAuthToken from "../utils/setAuthToken";
 
 class AdminBooking extends Component {
-
-  constructor(props){
+  constructor(props) {
     super(props);
-      if (localStorage.token) {
-        setAuthToken(localStorage.token);
-      }
+    if (localStorage.token) {
+      setAuthToken(localStorage.token);
+    }
 
       this.state = {
+        move:null,
         bookings: [],
         data: [],
         editIdx: -1,
@@ -52,10 +51,10 @@ class AdminBooking extends Component {
       // this.handleSelect = this.handleSelect.bind(this);
   }
 
-  change = e => {
+  change = (e) => {
     // this.props.onChange({ [e.target.name]: e.target.value });
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
     console.log(e.target.value)
   };
@@ -63,49 +62,50 @@ class AdminBooking extends Component {
   //Email Search
   validateEmail = () => {
     let isError = false;
-   console.log(this.state.email.indexOf('@'))
-    if(this.state.email === ""){
+    console.log(this.state.email.indexOf("@"));
+    if (this.state.email === "") {
       isError = true;
-      this.setState({ error : "Please Enter Email"})
-    }else if(this.state.email.indexOf('@') < 0){
+      this.setState({ error: "Please Enter Email" });
+    } else if (this.state.email.indexOf("@") < 0) {
       isError = true;
-      this.setState({ error : "Please Enter valid Email"})
+      this.setState({ error: "Please Enter valid Email" });
     }
 
     return isError;
   };
 
-  onSubmitEmail =async e => {
+  onSubmitEmail = async (e) => {
     e.preventDefault();
     const err = this.validateEmail();
     if (!err) {
       try {
-        const res = await axios.get('/booking/email/'+this.state.email).then(res => {
-          var bookings = res.data
-              this.setState({bookings : bookings})
-              console.log(res.data)
-        })
-      } catch(err) {
+        const res = await axios
+          .get("/booking/email/" + this.state.email)
+          .then((res) => {
+            var bookings = res.data;
+            this.setState({ bookings: bookings });
+            console.log(res.data);
+          });
+      } catch (err) {
         console.log(err);
       }
-      // clear form 
-      console.log(this.state.email)
-      this.setState({error : ""});
+      // clear form
+      console.log(this.state.email);
+      this.setState({ error: "" });
     }
   };
 
   //Court Search
   validateCourt = () => {
     let isError = false;
-
-    if(this.state.courtName === ""){
+    if (this.state.courtName === "") {
       isError = true;
-      this.setState({ error : "Please select Court Name" })
+      this.setState({ error: "Please select Court Name" });
     }
     return isError;
   };
 
-  onSubmitCourt = async e => {
+  onSubmitCourt = async (e) => {
     e.preventDefault();
     const err = this.validateCourt();
     if (!err) {
@@ -124,23 +124,23 @@ class AdminBooking extends Component {
       }
       
       // clear form
-       this.setState({error : ""});
+      this.setState({ error: "" });
     }
   };
 
   //BookingType Search
   validateBookingType = () => {
     let isError = false;
-    
+
     if (this.state.bookingType === "") {
       isError = true;
-      this.setState({ error : "Please Select Booking Type"})
+      this.setState({ error: "Please Select Booking Type" });
     }
-    
+
     return isError;
   };
 
-  onSubmitBookingType = async e => {
+  onSubmitBookingType = async (e) => {
     e.preventDefault();
     const err = this.validateBookingType();
     if (!err) {
@@ -161,19 +161,19 @@ class AdminBooking extends Component {
       this.setState({error : ""});
     }
   };
-  
+
   //BookingDate Search
   validateBookingDate = () => {
     let isError = false;
-    
-    if(this.state.bookingDate === null){
+
+    if (this.state.bookingDate === null) {
       isError = true;
-      this.setState({ error : "Please select Booking Date"})
+      this.setState({ error: "Please select Booking Date" });
     }
     return isError;
   };
 
-  onSubmitBookingDate = async e => {
+  onSubmitBookingDate = async (e) => {
     e.preventDefault();
     console.log(this.state.bookingDate)
     const err = this.validateBookingDate();
@@ -192,13 +192,13 @@ class AdminBooking extends Component {
       console.log(this.state.bookingDate)
       this.setState({error : ""});
     }
-  };  
+  };
 
-  changeDate = e => {
+  changeDate = (e) => {
     // this.props.onChange({ [e.target.name]: e.target.value })
     var date = new Date(e),
-    mnth = ("0" + (date.getMonth() + 1)).slice(-2),
-    day = ("0" + date.getDate()).slice(-2);
+      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
     date = [date.getFullYear(), mnth, day].join("-");
     console.log(e)
     this.setState({
@@ -214,18 +214,18 @@ class AdminBooking extends Component {
      
   }
 
- renderCourt = (event)  => {
-  return (<option value={event.court_name}>Court {event.court_name}</option>)
-}
+  renderCourt = (event) => {
+    return <option value={event.court_name}>Court {event.court_name}</option>;
+  };
 
-   handleSelectChange = (event) => {
-     this.setState({searchType : event.target.value })
-    if(event.target.value == "email"){
-     this.setState({
-      result: 
-      <form className="form-group" onSubmit = {e => this.onSubmitEmail(e)}>
-        <input 
-              type="email" 
+  handleSelectChange = (event) => {
+    this.setState({ searchType: event.target.value });
+    if (event.target.value == "email") {
+      this.setState({
+        result: (
+          <form className="form-group" onSubmit={(e) => this.onSubmitEmail(e)}>
+            <input
+              type="email"
               placeholder="Email Address"
               name="email"
               onChange={e => this.change(e)}
@@ -237,7 +237,7 @@ class AdminBooking extends Component {
           style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "5px", 
           borderRadius: "5px",color: "#fff", cursor: "pointer", paddingBottom: "30px"}}
            />
-      </form>
+      </form>)
     })
     }else if(event.target.value == "courtname"){
       this.setState({
@@ -272,19 +272,21 @@ class AdminBooking extends Component {
               <Select
                 native
                 defaultValue={this.state.bookingType}
-                onChange={e => this.change(e)}
+                onChange={(e) => this.change(e)}
                 inputProps={{
-                  name: 'bookingType',
-                  id: 'age-native-simple',
+                  name: "bookingType",
+                  id: "age-native-simple",
                 }}
                 errorText={this.state.bookingTypeError}
-                style={{ width: '250px'}}
+                style={{ width: "250px" }}
                 required
               >
-                <option aria-label="None" value="" disabled>Booking Type</option>
-                <option value='1'>Single</option>
-                <option value='2'>Double</option>
-                <option value='0'>Entire</option>
+                <option aria-label="None" value="" disabled>
+                  Booking Type
+                </option>
+                <option value="1">Single</option>
+                <option value="2">Double</option>
+                <option value="0">Entire</option>
               </Select>
             </FormControl>
             <input 
@@ -320,13 +322,13 @@ class AdminBooking extends Component {
     })}
   }
 
-  handleRemove = i => {
-    this.setState(state => ({
-      data: state.data.filter((row, j) => j !== i)
+  handleRemove = (i) => {
+    this.setState((state) => ({
+      data: state.data.filter((row, j) => j !== i),
     }));
   };
 
-  startEditing = i => {
+  startEditing = (i) => {
     this.setState({ editIdx: i });
   };
 
@@ -336,64 +338,81 @@ class AdminBooking extends Component {
 
   handleChange = (e, name, i) => {
     const { value } = e.target;
-    this.setState(state => ({
-      data: state.data.map(
-        (row, j) => (j === i ? { ...row, [name]: value } : row)
-      )
+    this.setState((state) => ({
+      data: state.data.map((row, j) =>
+        j === i ? { ...row, [name]: value } : row
+      ),
     }));
   };
 
-  handleShow = ()=>{
+  handleShow = () => {
     this.setState({
-      isDisplay: 0
-    })
-  }
+      isDisplay: 0,
+    });
+  };
 
-  handleStart = ()=>{
+  handleStart = () => {
     this.setState({
-      isDisplay: 1
-    })
-  }
+      isDisplay: 1,
+    });
+  };
 
   // handleSelect = (selectedOption) => {
   //   this.setState({ selectedOption });
   // }
 
-  async getCourtDetails(){
+  async getCourtDetails() {
     const config = {
-		  headers: {
-			  'Content-Type': 'application/json'
-		  }
-	  }
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
     try {
-      const res = await axios.get('/court/', config);
+      const res = await axios.get("/court/", config);
+      // this.setState({ courts: res.data });
       this.setState({courtlist : res.data})
-    } catch(err) {
-        console.log(err);
-	  }
+
+    } catch (err) {
+      console.log(err);
+    }
   }
 
-  async componentDidMount(){
+  componentWillMount() {
+    var data = JSON.parse(localStorage.getItem("USER"));
+    console.log("datahere", localStorage.getItem("USER"));
+    try {
+      if (data.loginstatus === 1 && data.role === "admin") {
+        console.log("called");
+      } else {
+        this.setState({ move: true });
+      }
+    } catch {
+      this.setState({ move: true });
+    }
+  }
+
+  async componentDidMount() {
     await this.getCourtDetails();
-	}
+  }
 
   render() {
+    if (this.state.move === true) {
+      return <div>Something went wrong...</div>;
+    }
+
     let booking;
     if (this.state.isDisplay === 0) {
-      booking = 
+      booking = (
         <Form
-        data={this.state.courts}
-       // onSubmit={submission => 
-       //   this.checkWallet(submission)}
+          data={this.state.courts}
+          // onSubmit={submission =>
+          //   this.checkWallet(submission)}
         />
-    }
-    else if(this.state.isDisplay === 1) {
-      booking =
-        <h1>Booking Details</h1>
-
+      );
+    } else if (this.state.isDisplay === 1) {
+      booking = <h1>Booking Details</h1>;
     } else {
-      booking = 
-        <h1 style={{ marginTop: "20px"}}>No Bookings</h1>
+      booking = <h1 style={{ marginTop: "20px" }}>No Bookings</h1>;
     }
     
     return (
@@ -472,13 +491,14 @@ class AdminBooking extends Component {
                 </div>
               </div>
           </div>
-        </Fragment>
+          <div style={{ width: "50%", float: "right" }}>
+            <div>{booking}</div>
+          </div>
+        
+      </Fragment>
     );
   }
 }
 
-ReactDOM.render(
-  <AdminBooking />,
-  document.querySelector('div')
-);
+ReactDOM.render(<AdminBooking />, document.querySelector("div"));
 export default AdminBooking;

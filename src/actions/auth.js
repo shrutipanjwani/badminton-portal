@@ -51,9 +51,20 @@ export const login = (email, password) => async dispatch => {
 	email =email.toLowerCase();
 	const body = JSON.stringify({ email, password });
 
+
+
+
 	try {
 		const res = await axios.post('/auth', body, config);
 		//console.log(res.data.role)
+		
+		var data={
+			"loginstatus":1,
+			"role":res.data.role
+		}
+
+		localStorage.setItem("USER",JSON.stringify(data));
+		console.log("data set ",JSON.parse(localStorage.getItem("USER")));
 		if(res.data.role === "admin"){
 			
 			await dispatch({
@@ -68,11 +79,12 @@ export const login = (email, password) => async dispatch => {
 			});
 		}
 		await dispatch(loadUser());
+
 		
 		
 	} catch(err) {
 		const errors = err.response.data.errors;
-	
+		
 		if (errors) {
 			errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
 		}else{

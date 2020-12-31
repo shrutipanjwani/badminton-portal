@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 const Landing = ({ isAuthenticated }) => {
+	localStorage.clear();
 	if (isAuthenticated) {
 		return <Redirect to='/calendar' replace/>;
 	}

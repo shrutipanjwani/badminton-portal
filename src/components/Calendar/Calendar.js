@@ -15,6 +15,8 @@ import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 export default class calendar extends React.Component {
+
+
   calendarRef = React.createRef();
 
   constructor(props){
@@ -91,9 +93,9 @@ export default class calendar extends React.Component {
         // this.setState({alert: 1});
         console.log(err)
         logout();
-        this.props.history.replace("/signin");
-        confirmAlert({title: 'Lets Badminton',message: "Your session is expired, login again",
-        buttons: [{label: 'Ok',onClick: () => {}}]});
+
+        confirmAlert({title: 'Lets Badminton hi',message: "Your session is expired, login again",
+        buttons: [{label: 'Ok',onClick: () => {    localStorage.clear();    this.props.history.replace("/signin");}}]});
 	  }
   }
   
@@ -116,8 +118,28 @@ export default class calendar extends React.Component {
       } 
 	  }
   }
+  componentWillMount(){
+
+  }
 
   componentDidMount(){
+
+    var data= JSON.parse(localStorage.getItem("USER"))
+    console.log("datahere",localStorage.getItem("USER"))
+    try{    
+      if(data.loginstatus===1 && data.role==="Member"){
+
+    } 
+    else{
+      alert("wrongpath");
+      this.props.history.replace('/signin');
+
+    }}
+    catch{
+      this.props.history.replace('/signin');
+    }
+
+
     this.getData();
   }
 
