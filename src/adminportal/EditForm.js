@@ -14,17 +14,17 @@ export default class Form extends React.Component {
     courtName: this.props.booking.court.court_name,
     error: "",
     isBooking: false,
-    courtSet : true,
+    courtSet : false,
     courtTimeHourDisabled : [],
     courttimeMinuteDisabled : [],
-    bookingType: "",
+    bookingType: this.props.booking.type,
 
     bookingDefaultDate: null,
     bookingDate: null,
 
     bookingDefaultStartTime: moment( ).set({hour:0,minute:0,second:0,millisecond:0}),
     bookingStartTime: null,
-    startTimeSet : true,
+    startTimeSet : false,
     startDetails:[],
     startTime : "",
 
@@ -137,6 +137,7 @@ export default class Form extends React.Component {
   };
 
   changeDate = e => {
+    console.log(e)
     // this.props.onChange({ [e.target.name]: e.target.value })
     var date = new Date(e),
     mnth = ("0" + (date.getMonth() + 1)).slice(-2),
@@ -229,11 +230,26 @@ export default class Form extends React.Component {
   }
   componentWillReceiveProps(nextProps) {
     // Any time props.email changes, update state.
-    console.log(nextProps , this.props)
+    //console.log(nextProps , this.props)
     if (nextProps.booking._id !== this.props.booking._id) {
-      console.log(typeof nextProps.booking.court.court_name)
+      //console.log(typeof nextProps.booking.court.court_name)
+      var dateVar = new Date(nextProps.booking.date);
+      var stvar = nextProps.booking.start_time.split(':');
+      var etvar = nextProps.booking.end_time.split(':');
+      var startTimeVar = moment( ).set({hour:stvar[0],minute:stvar[1],second:0,millisecond:0});
+      var end_timeVar = moment( ).set({hour:etvar[0],minute:etvar[1],second:0,millisecond:0});
+      var emailsvar = []
+      for(var i = 0 ; i<nextProps.booking.user.length ; i++){
+          emailsvar.push(nextProps.booking.user[i].email)
+      }
+      console.log(emailsvar)
       this.setState({
-        courtName: parseInt(nextProps.booking.court.court_name)
+        courtName: parseInt(nextProps.booking.court.court_name),
+        bookingType : parseInt(nextProps.booking.type),
+        bookingDefaultDate : dateVar,
+        bookingStartTime : startTimeVar,
+        bookingDefaultEndTime : end_timeVar,
+        // emailPlayers : emailsvar        
       });
     }
   }
