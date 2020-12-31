@@ -1,5 +1,6 @@
 import React, { Fragment, Component } from "react";
 import Form from "./FormTwo";
+import EditForm from "./EditForm";
 import * as ReactDOM from 'react-dom';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -29,6 +30,7 @@ class AdminBooking extends Component {
         bookingDate: null,
         email: "",
         error: "",
+        bookingid : "",
         
         result: 
         <form className="form-group" onSubmit={e => this.onSubmitEmail(e)}>
@@ -56,13 +58,13 @@ class AdminBooking extends Component {
     this.setState({
       [e.target.name]: e.target.value,
     });
-    console.log(e.target.value)
+   // console.log(e.target.value)
   };
 
   //Email Search
   validateEmail = () => {
     let isError = false;
-    console.log(this.state.email.indexOf("@"));
+    //console.log(this.state.email.indexOf("@"));
     if (this.state.email === "") {
       isError = true;
       this.setState({ error: "Please Enter Email" });
@@ -84,13 +86,13 @@ class AdminBooking extends Component {
           .then((res) => {
             var bookings = res.data;
             this.setState({ bookings: bookings });
-            console.log(res.data);
+            //console.log(res.data);
           });
       } catch (err) {
         console.log(err);
       }
       // clear form
-      console.log(this.state.email);
+     // console.log(this.state.email);
       this.setState({ error: "" });
     }
   };
@@ -113,7 +115,7 @@ class AdminBooking extends Component {
       var courtSelected = this.state.courtlist.find( ({ court_name }) =>  court_name === this.state.courtName.toString());
     
       try {
-        console.log(this.state.courtlist ,courtSelected)
+       // console.log(this.state.courtlist ,courtSelected)
         const res = await axios.get('/booking/court/'+courtSelected._id).then(res => {
           var courts = res.data
               this.setState({bookings : courts})
@@ -145,11 +147,11 @@ class AdminBooking extends Component {
     const err = this.validateBookingType();
     if (!err) {
       try {
-          console.log(this.state.bookingType)
+          //console.log(this.state.bookingType)
           const res = await axios.get('/booking/type/'+this.state.bookingType).then(res => {
             var bookings = res.data
                 this.setState({bookings : bookings})
-                console.log(res.data)
+                //console.log(res.data)
           })
         
         
@@ -157,7 +159,7 @@ class AdminBooking extends Component {
         console.log(err);
       }
       // clear form 
-      console.log(this.state.bookingType)
+      //console.log(this.state.bookingType)
       this.setState({error : ""});
     }
   };
@@ -175,7 +177,7 @@ class AdminBooking extends Component {
 
   onSubmitBookingDate = async (e) => {
     e.preventDefault();
-    console.log(this.state.bookingDate)
+    //console.log(this.state.bookingDate)
     const err = this.validateBookingDate();
     
     if (!err) {
@@ -183,13 +185,13 @@ class AdminBooking extends Component {
         const res = await axios.get('/booking/date/'+this.state.bookingDate).then(res => {
           var bookings = res.data
               this.setState({bookings : bookings})
-              console.log(res.data)
+              //console.log(res.data)
         })
       } catch(err) {
         console.log(err);
       }
       // clear form 
-      console.log(this.state.bookingDate)
+      //console.log(this.state.bookingDate)
       this.setState({error : ""});
     }
   };
@@ -200,12 +202,12 @@ class AdminBooking extends Component {
       mnth = ("0" + (date.getMonth() + 1)).slice(-2),
       day = ("0" + date.getDate()).slice(-2);
     date = [date.getFullYear(), mnth, day].join("-");
-    console.log(e)
+   // console.log(e)
     this.setState({
       bookingDate: e.target.value,
       bookingDefaultDate: e
     });
-    console.log(e.target.value, this.state.bookingDate)
+   // console.log(e.target.value, this.state.bookingDate)
   };
 
   changeCourt = e =>{
@@ -351,9 +353,11 @@ class AdminBooking extends Component {
     });
   };
 
-  handleStart = () => {
+  handleStart = (e) => {
+    console.log(e.target.getAttribute("data-value"))
     this.setState({
       isDisplay: 1,
+      bookingid : e.target.getAttribute("data-value")
     });
   };
 
@@ -379,10 +383,10 @@ class AdminBooking extends Component {
 
   componentWillMount() {
     var data = JSON.parse(localStorage.getItem("USER"));
-    console.log("datahere", localStorage.getItem("USER"));
+   // console.log("datahere", localStorage.getItem("USER"));
     try {
       if (data.loginstatus === 1 && data.role === "admin") {
-        console.log("called");
+       // console.log("called");
       } else {
         this.setState({ move: true });
       }
@@ -404,13 +408,17 @@ class AdminBooking extends Component {
     if (this.state.isDisplay === 0) {
       booking = (
         <Form
-          data={this.state.courts}
+          data={this.state.courtlist}
           // onSubmit={submission =>
           //   this.checkWallet(submission)}
         />
       );
     } else if (this.state.isDisplay === 1) {
-      booking = <h1>Booking Details</h1>;
+      booking = (<EditForm
+                data={this.state.courtlist} booking={this.state.bookingid}
+                // onSubmit={submission =>
+                //   this.checkWallet(submission)}
+              />);
     } else {
       booking = <h1 style={{ marginTop: "20px" }}>No Bookings</h1>;
     }
@@ -464,18 +472,18 @@ class AdminBooking extends Component {
                               //   colourvar = 'red'
                               // }
                               return (
-                              <tr onClick={this.handleStart}>
+                              <tr data-value={d._id} onClick={ e => this.handleStart(e)}>
                                   <td data-value={d._id} style={{ textAlign: "left"}}></td>
-                                  <td>
+                                  <td data-value={d._id}>
                                     {d.type === 0 ? "Entire" : (d.type == 1 ? "Single" : "Double")}
                                   </td>
                                   <td data-value={d._id}>
                                     {d.date}
-                                  </td>
-                                  <td>
+                                  </td >
+                                  <td data-value={d._id}>
                                     {d.start_time}
-                                  </td>
-                                  <td>
+                                  </td >
+                                  <td data-value={d._id}>
                                     {d.end_time}
                                   </td>
                               </tr>
