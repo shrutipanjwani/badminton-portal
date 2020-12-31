@@ -3,7 +3,6 @@ import Form from "./FormTwo";
 import * as ReactDOM from 'react-dom';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import BookingDetails from  "./BookingDetails";
 
 import axios from "axios";
 import setAuthToken from '../utils/setAuthToken';

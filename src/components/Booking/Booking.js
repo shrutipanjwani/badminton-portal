@@ -5,7 +5,7 @@ import { Fragment } from "react";
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
-export default class BookingDetails extends React.Component {
+export default class Booking extends React.Component {
   constructor(props) {
     super(props);
     console.log("newdata", this.props.location.state.data);
