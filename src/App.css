@@ -81,6 +81,7 @@ body {
   line-height: 1.6;
   background-color: #fff;
   color: #333;
+  counter-reset: Serial;
 }
 
 a {
@@ -864,4 +865,10 @@ i {
 
 .table th, td {
   border: 1px solid grey;
+}
+
+.booking-table tr td:first-child:before
+{
+  counter-increment: Serial; 
+  content: counter(Serial); 
 }

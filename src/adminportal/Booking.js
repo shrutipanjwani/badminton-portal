@@ -1,9 +1,9 @@
 import React, { Fragment, Component } from "react";
 import Form from "./FormTwo";
-import Table from "./TableTwo";
 import * as ReactDOM from 'react-dom';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import BookingDetails from  "./BookingDetails";
 
 import axios from "axios";
 import setAuthToken from '../utils/setAuthToken';
@@ -31,6 +31,7 @@ class AdminBooking extends Component {
         bookingDate: null,
         email: "",
         error: "",
+        
         result: 
         <form className="form-group" onSubmit={e => this.onSubmitEmail(e)}>
               <input 
@@ -390,6 +391,7 @@ class AdminBooking extends Component {
     else if(this.state.isDisplay === 1) {
       booking =
         <h1>Booking Details</h1>
+
     } else {
       booking = 
         <h1 style={{ marginTop: "20px"}}>No Bookings</h1>
@@ -400,7 +402,7 @@ class AdminBooking extends Component {
           <h1 className="large text-primary" style={{ marginTop: "50px"}}>Bookings</h1>
           <br />
           <div style={{width: "100%", margin: "auto"}}>
-            <div style={{ width: "50%", float: "left", borderRight: "1px solid grey", height: "100vh"}}>
+            <div style={{ width: "60%", float: "left",height: "100vh"}}>
               <div style={{width: "100%", display: "flex", paddingLeft: "50px"}}> 
                 <button className="btn btn-primary" onClick={this.handleShow} style={{ marginRight: "20px"}}>New Booking</button>
                 <FormControl style={{marginTop:"-25px", marginRight: "20px"}}>
@@ -422,14 +424,14 @@ class AdminBooking extends Component {
               <br />
               <p className="btn-danger">{this.state.error}</p>
               <br /> 
-              <div>
-                <div style={{ width: "90%", margin: "auto"}}>
-                  <div style={{ width: "50%", float: "left",borderRight: "1px solid grey", height: "100vh",overflowX: "hidden", overflowY: "scroll"}}>
-                    <table style={{ width: "80%"}} className="table">
+                  <div style={{overflowX: "hidden", overflowY: "scroll"}}>
+                    <table style={{ width: "95%", margin: "auto"}} className="table booking-table" border="1">
                       <tbody>
-                        <th style={{color: "#841e2d", textAlign: "left"}}>Names</th>
-                        <th></th>
-                        <th></th>
+                        <th style={{color: "#841e2d", textAlign: "left"}}>S.No.</th>
+                        <th style={{color: "#841e2d", textAlign: "left"}}>Booking Type</th>
+                        <th style={{color: "#841e2d", textAlign: "left"}}>Booking Date</th>
+                        <th style={{color: "#841e2d", textAlign: "left"}}>Start Time</th>
+                        <th style={{color: "#841e2d", textAlign: "left"}}>End Time</th>
                         <br />
                         <br />
                         {this.state.bookings.map(d => {
@@ -444,39 +446,32 @@ class AdminBooking extends Component {
                               //   colourvar = 'red'
                               // }
                               return (
-                              <tr	><td data-value={d._id} style={{ textAlign: "left"}}>{d._id} &nbsp;</td>
-                                <td><button className="fas fa-eye" value={d._id} onClick = {e => this.clickUser(e)} 
-                                  style={{marginLeft: "50px", float: "right", background: "#841e2d",
-                                  padding: "4px", border: "none", color: "#fff", borderRadius: "5px"}}>&nbsp; View</button>
+                              <tr onClick={this.handleStart}>
+                                  <td data-value={d._id} style={{ textAlign: "left"}}></td>
+                                  <td>
+                                    {d.type === 0 ? "Entire" : (d.type == 1 ? "Single" : "Double")}
                                   </td>
-                                  <td  data-value={d._id}>
-                                  <button className="fa fa-check"  value={d._id}
-                                  style={{ float: "right", background: "#841e2d",
-                                  padding: "4px", border: "none", color: "#fff", borderRadius: "5px"}}
-                                  onClick = {e => this.approveUser(e)}>&nbsp; Approve</button>
-                                  
-                                  <button className="fas fa-times"  value={d._id}
-                                  style={{ float: "right", marginLeft: "50px", background: "#841e2d",
-                                  padding: "4px", border: "none", color: "#fff", borderRadius: "5px"}} 
-                                  onClick = {e => this.unapproveUser(e)}>&nbsp; Unapprove</button>
+                                  <td data-value={d._id}>
+                                    {d.date}
+                                  </td>
+                                  <td>
+                                    {d.start_time}
+                                  </td>
+                                  <td>
+                                    {d.end_time}
                                   </td>
                               </tr>
                               )
                             })} 
                       </tbody>
                     </table>
-                  </div>
-                </div>
-                <div style={{ width: "50%", float: "right"}}>
-                  <div>
-                  
-                    {booking}
-                  
-                  </div>
-
+                  </div>      
+              </div>
+              <div style={{ width: "40%", float: "right"}}>
+                <div> 
+                  {booking} 
                 </div>
               </div>
-            </div>
           </div>
         </Fragment>
     );
