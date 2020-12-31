@@ -5,13 +5,11 @@ import { Fragment } from "react";
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
-export default class BookingDetails extends React.Component {
-
-  
+export default class Booking extends React.Component {
   constructor(props) {
     super(props);
-    // console.log("newdata", this.props.location.state.data);
-    try{   this.state = {
+  
+    this.state = {
       data: props.location.state.data,
       aviSlot: null,
       total: null,
@@ -19,25 +17,9 @@ export default class BookingDetails extends React.Component {
       userdata: null,
       tifOptions : null,
       newtifOptions : null,
-      loading: true
-    };}
-    catch{
-      this.state={
-        aviSlot: null,
-      total: null,
-      courttype: ["Fullcourt", "singles", "Doubles"],
-      userdata: null,
-      tifOptions : null,
-      newtifOptions : null,
       loading: true,
-        move:true
-      }
-    }
-
-    }
-
-
-
+    };
+  }
 
   async getBalance() {
     const config = {
@@ -140,32 +122,8 @@ export default class BookingDetails extends React.Component {
       }
     }
   }
-  
-  
-	componentDidMount(){
-
-		var data= JSON.parse(localStorage.getItem("USER"))
-		console.log("datahere",localStorage.getItem("USER"))
-		try{    
-		  if(data.loginstatus===1 && data.role==="Member"){
-	
-		} 
-		else{
-		  alert("wrongpath");
-		  this.props.history.replace('/signin');
-	
-		}}
-		catch{
-		  this.props.history.replace('/signin');
-		}
-	
-	
-	  }
 
   componentWillMount() {
- if(this.state.move===true){
-   
- }else{
     this.getBalance();
     var player = this.state.data.players.length;
     if (this.state.data.type === 1) {
@@ -191,7 +149,7 @@ export default class BookingDetails extends React.Component {
         {user[key].level ? <td>{user[key].level}</td> : "Basic"}
       </tr>);
     });
-    this.setState({tifOptions : tifOptionsvar});}
+    this.setState({tifOptions : tifOptionsvar});
   }
 
   Canbook = () => {
@@ -215,10 +173,6 @@ export default class BookingDetails extends React.Component {
   };
 
   render() {
-
-    if(this.state.move===true){
-      return(<div>someting went wrong</div>)
-    }
    
     return (
       <Fragment>

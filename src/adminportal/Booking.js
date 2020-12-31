@@ -1,10 +1,9 @@
 import React, { Fragment, Component } from "react";
 import Form from "./FormTwo";
-import Table from "./TableTwo";
-import * as ReactDOM from "react-dom";
-import FormControl from "@material-ui/core/FormControl";
-import DatePicker from "react-datepicker";
-import Select from "@material-ui/core/Select";
+import * as ReactDOM from 'react-dom';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import BookingDetails from  "./BookingDetails";
 
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
@@ -16,49 +15,41 @@ class AdminBooking extends Component {
       setAuthToken(localStorage.token);
     }
 
-    this.state = {
-      move: null,
-      bookings: [],
-      data: [],
-      editIdx: -1,
-      courtName: "",
-      isDisplay: 2,
-      value: [],
-      selectedOption: "courtname",
-      courts: [],
-      bookingType: "",
-      bookingDefaultDate: null,
-      bookingDate: null,
-      email: "",
-      error: "",
-      result: (
-        <div className="form-group">
-          <input
-            type="email"
-            placeholder="Email Address"
-            name="email"
-            onChange={(e) => this.change(e)}
-            required
-            style={{ padding: "8px", width: "200px" }}
-          />
-          <i
-            className="fas fa-search"
-            onClick={(e) => this.onSubmitEmail(e)}
-            style={{
-              fontSize: "20px",
-              background: "#841e2d",
-              height: "38px",
-              padding: "6px",
-              borderRadius: "5px",
-              color: "#fff",
-              cursor: "pointer",
-            }}
-          ></i>
-        </div>
-      ),
-    };
-
-    // this.handleSelect = this.handleSelect.bind(this);
+      this.state = {
+        move:null,
+        bookings: [],
+        data: [],
+        editIdx: -1,
+        courtName: "",
+        isDisplay: 2,
+        value: [],
+        selectedOption: 'courtname',
+        courtlist:[],
+        bookingType: "",
+        bookingDefaultDate: null,
+        bookingDate: null,
+        email: "",
+        error: "",
+        
+        result: 
+        <form className="form-group" onSubmit={e => this.onSubmitEmail(e)}>
+              <input 
+                type="email" 
+                placeholder="Email Address"
+                name="email"
+                onChange={e => this.change(e)}
+                required
+                style={{ padding: "8px", width: "200px"}} 
+              />
+            <input 
+                type="submit" value="Search"
+                style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "5px", 
+                borderRadius: "5px",color: "#fff", cursor: "pointer", paddingBottom: "30px"}}
+              /> 
+        </form>
+      }
+      
+      // this.handleSelect = this.handleSelect.bind(this);
   }
 
   change = (e) => {
@@ -66,6 +57,7 @@ class AdminBooking extends Component {
     this.setState({
       [e.target.name]: e.target.value,
     });
+    console.log(e.target.value)
   };
 
   //Email Search
@@ -118,13 +110,20 @@ class AdminBooking extends Component {
     e.preventDefault();
     const err = this.validateCourt();
     if (!err) {
-      await this.props.onSubmitCourt(this.state);
-      this.submitCourt();
-      var courtname = this.state.courtName.split(" ")[1];
-      var courtSelected = this.state.courtName.find(
-        (o) => o.court_name === courtname
-      );
-      console.log(courtSelected._id);
+     
+      var courtSelected = this.state.courtlist.find( ({ court_name }) =>  court_name === this.state.courtName.toString());
+    
+      try {
+        console.log(this.state.courtlist ,courtSelected)
+        const res = await axios.get('/booking/court/'+courtSelected._id).then(res => {
+          var courts = res.data
+              this.setState({bookings : courts})
+              console.log(res.data)
+        })
+      } catch(err) {
+        console.log(err);   
+      }
+      
       // clear form
       this.setState({ error: "" });
     }
@@ -146,10 +145,21 @@ class AdminBooking extends Component {
     e.preventDefault();
     const err = this.validateBookingType();
     if (!err) {
-      await this.props.onSubmitBookingType(this.state);
-      this.submitBookingType();
-      // clear form
-      this.clear();
+      try {
+          console.log(this.state.bookingType)
+          const res = await axios.get('/booking/type/'+this.state.bookingType).then(res => {
+            var bookings = res.data
+                this.setState({bookings : bookings})
+                console.log(res.data)
+          })
+        
+        
+      } catch(err) {
+        console.log(err);
+      }
+      // clear form 
+      console.log(this.state.bookingType)
+      this.setState({error : ""});
     }
   };
 
@@ -166,12 +176,22 @@ class AdminBooking extends Component {
 
   onSubmitBookingDate = async (e) => {
     e.preventDefault();
+    console.log(this.state.bookingDate)
     const err = this.validateBookingDate();
+    
     if (!err) {
-      await this.props.onSubmitBookingDate(this.state);
-      this.submitBookingDate();
-      // clear form
-      this.clear();
+      try {
+        const res = await axios.get('/booking/date/'+this.state.bookingDate).then(res => {
+          var bookings = res.data
+              this.setState({bookings : bookings})
+              console.log(res.data)
+        })
+      } catch(err) {
+        console.log(err);
+      }
+      // clear form 
+      console.log(this.state.bookingDate)
+      this.setState({error : ""});
     }
   };
 
@@ -181,17 +201,19 @@ class AdminBooking extends Component {
       mnth = ("0" + (date.getMonth() + 1)).slice(-2),
       day = ("0" + date.getDate()).slice(-2);
     date = [date.getFullYear(), mnth, day].join("-");
+    console.log(e)
     this.setState({
-      bookingDate: date,
-      bookingDefaultDate: e,
+      bookingDate: e.target.value,
+      bookingDefaultDate: e
     });
+    console.log(e.target.value, this.state.bookingDate)
   };
 
-  changeCourt = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
-  };
+  changeCourt = e =>{
+        this.setState({
+      [e.target.name]: e.target.value});
+     
+  }
 
   renderCourt = (event) => {
     return <option value={event.court_name}>Court {event.court_name}</option>;
@@ -207,68 +229,46 @@ class AdminBooking extends Component {
               type="email"
               placeholder="Email Address"
               name="email"
-              onChange={(e) => this.change(e)}
-              errorText={this.state.emailError}
-              required
-              style={{ padding: "8px", width: "200px" }}
-            />
-            <input
-              type="submit"
-              className="fas fa-search"
-              style={{
-                fontSize: "20px",
-                background: "#841e2d",
-                height: "38px",
-                padding: "6px",
-                borderRadius: "5px",
-                color: "#fff",
-                cursor: "pointer",
-              }}
-            />
-          </form>
-        ),
-      });
-    } else if (event.target.value == "courtname") {
+              onChange={e => this.change(e)}
+
+              required 
+              style={{ padding: "8px", width: "200px"}}
+        />
+          <input type="submit" value="Search"
+          style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "5px", 
+          borderRadius: "5px",color: "#fff", cursor: "pointer", paddingBottom: "30px"}}
+           />
+      </form>)
+    })
+    }else if(event.target.value == "courtname"){
       this.setState({
-        result: (
-          <div className="form-group">
-            <Select
-              native
-              defaultValue={this.state.courtName}
-              onChange={(e) => this.changeCourt(e)}
-              // inputProps={{
-              //   name: 'courtName',
-              //   id: 'age-native-simple',
-              // }}
-              //errorText={this.state.courtNameError}
-              style={{ width: "250px" }}
-              required
-            >
-              <option aria-label="None" value="" disabled>
-                Court Name
-              </option>
-              {this.state.courts.map(this.renderCourt)}
-            </Select>
-            <i
-              className="fas fa-search"
-              onClick={(e) => this.onSubmitCourt(e)}
-              style={{
-                fontSize: "20px",
-                background: "#841e2d",
-                height: "38px",
-                padding: "6px",
-                borderRadius: "5px",
-                color: "#fff",
-                cursor: "pointer",
-              }}
-            ></i>
-          </div>
-        ),
-      });
-    } else if (event.target.value == "bookingtype") {
+        result:
+        <form className="form-group" onSubmit={e => this.onSubmitCourt(e)}>
+          <Select
+            native
+            defaultValue = ""
+            onChange={e => this.change(e)}
+            inputProps={{
+              name: 'courtName',
+              id: 'age-native-simple',
+            }}
+            //errorText={this.state.courtNameError}
+            style={{ width: '250px'}}
+            required
+          >
+            <option aria-label="None" value="" disabled>Court Name</option>
+            {this.state.courtlist.map(this.renderCourt)}
+          </Select>
+            <input type="submit" value="Search"
+            style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "5px", 
+            borderRadius: "5px",color: "#fff", cursor: "pointer", paddingBottom: "30px"}}
+            />
+        </form>
+    })
+    }else if(event.target.value == "bookingtype"){
       this.setState({
-        result: (
-          <div className="form-group">
+        result: 
+        <form className="form-group" onSubmit={e => this.onSubmitBookingType(e)}>
             <FormControl>
               <Select
                 native
@@ -290,31 +290,19 @@ class AdminBooking extends Component {
                 <option value="0">Entire</option>
               </Select>
             </FormControl>
-            <i
-              className="fas fa-search"
-              onClick={(e) => this.onSubmitBookingType(e)}
-              style={{
-                fontSize: "20px",
-                background: "#841e2d",
-                height: "38px",
-                padding: "6px",
-                borderRadius: "5px",
-                color: "#fff",
-                cursor: "pointer",
-              }}
-            ></i>
-          </div>
-        ),
-      });
-    } else if (event.target.value == "bookingdate") {
-      this.setState({
-        result: (
-          <div className="form-group">
-            <input
-              type="date"
-              pattern="\d*"
-              style={{ padding: "8px", width: "200px" }}
+            <input 
+              type="submit" value="Search"
+              style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "5px", 
+              borderRadius: "5px",color: "#fff", cursor: "pointer", paddingBottom: "30px"}}
             />
+        </form>
+     })
+    }else if(event.target.value == "bookingdate"){
+      this.setState({
+        result: 
+        <form className="form-group" onSubmit={e => this.onSubmitBookingDate(e)}>
+          <input type="date" name = "bookingDate"
+              onChange={e => this.changeDate(e)}  style={{ padding: "8px", width: "200px"}}/>
             {/* <DatePicker
               value={this.state.bookingDefaultDate}
               name = "bookingDate"
@@ -322,28 +310,18 @@ class AdminBooking extends Component {
               placeholderText="Booking Date"
               required
             /> */}
-            <i
-              className="fas fa-search"
-              onClick={(e) => this.onSubmitBookingDate(e)}
-              style={{
-                fontSize: "20px",
-                background: "#841e2d",
-                height: "38px",
-                padding: "6px",
-                borderRadius: "5px",
-                color: "#fff",
-                cursor: "pointer",
-              }}
-            ></i>
-          </div>
-        ),
-      });
-    } else {
-      this.setState({
-        result: event.target.value,
-      });
-    }
-  };
+            <input 
+              type="submit" value="Search"
+              style={{ fontSize: "20px", background: "#841e2d", height: "38px", padding: "5px", 
+                borderRadius: "5px",color: "#fff", cursor: "pointer", paddingBottom: "30px"}}
+            /> 
+        </form>
+     })
+    }else{
+     this.setState({
+       result: event.target.value
+    })}
+  }
 
   handleRemove = (i) => {
     this.setState((state) => ({
@@ -392,7 +370,9 @@ class AdminBooking extends Component {
     };
     try {
       const res = await axios.get("/court/", config);
-      this.setState({ courts: res.data });
+      // this.setState({ courts: res.data });
+      this.setState({courtlist : res.data})
+
     } catch (err) {
       console.log(err);
     }
@@ -435,113 +415,87 @@ class AdminBooking extends Component {
     } else {
       booking = <h1 style={{ marginTop: "20px" }}>No Bookings</h1>;
     }
-
+    
     return (
-      <Fragment>
-        <h1 className="large text-primary" style={{ marginTop: "50px" }}>
-          Bookings
-        </h1>
-        <br />
-        <div style={{ width: "100%", margin: "auto" }}>
-          <div
-            style={{
-              width: "50%",
-              float: "left",
-              borderRight: "1px solid grey",
-              height: "100vh",
-            }}
-          >
-            <div
-              style={{ width: "100%", display: "flex", paddingLeft: "50px" }}
-            >
-              <button
-                className="btn btn-primary"
-                onClick={this.handleShow}
-                style={{ marginRight: "20px" }}
-              >
-                New Booking
-              </button>
-              <FormControl style={{ marginTop: "-25px", marginRight: "20px" }}>
-                <label style={{ textAlign: "left" }}>Search By</label>
-                <select
-                  style={{ width: "180px", padding: "10px" }}
-                  onChange={this.handleSelectChange}
-                >
-                  <option value="email">Email Id</option>
+        <Fragment>
+          <h1 className="large text-primary" style={{ marginTop: "50px"}}>Bookings</h1>
+          <br />
+          <div style={{width: "100%", margin: "auto"}}>
+            <div style={{ width: "60%", float: "left",height: "100vh"}}>
+              <div style={{width: "100%", display: "flex", paddingLeft: "50px"}}> 
+                <button className="btn btn-primary" onClick={this.handleShow} style={{ marginRight: "20px"}}>New Booking</button>
+                <FormControl style={{marginTop:"-25px", marginRight: "20px"}}>
+                  <label style={{textAlign: "left"}}>Search By</label>
+                  <select style={{ width: '180px', padding: "10px"}} onChange={this.handleSelectChange}>
 
-                  <option value="courtname">Court Name</option>
+                    <option value="email">Email Id</option>
 
-                  <option value="bookingtype">Booking Type</option>
+                    <option value="courtname">Court Name</option>
 
-                  <option value="bookingdate">Booking Date</option>
-                </select>
-              </FormControl>
-              {this.state.result}
-            </div>
-            <br />
-            <p className="btn-danger">{this.state.error}</p>
-            <br />
-            <div>
-              <Fragment>
-                <div
-                  onClick={this.handleStart}
-                  style={{ cursor: "pointer", marginTop: "20px" }}
-                >
-                  <table>
-                    <tbody>
-                      <tr style={{ textAlign: "left", cursor: "pointer" }}>
-                        {this.state.booking}
-                        {/* {this.state.bookings.map((item, index) => (<td key={index}>{item.booking}</td>)) } */}
-                      </tr>
-                    </tbody>
-                  </table>
-                  <Table
-                    style={{ margin: "auto", textAlign: "center" }}
-                    handleRemove={this.handleRemove}
-                    startEditing={this.startEditing}
-                    editIdx={this.state.editIdx}
-                    stopEditing={this.stopEditing}
-                    handleChange={this.handleChange}
-                    data={this.state.data}
-                    header={[
-                      {
-                        name: "",
-                        prop: "courtName",
-                      },
-                      {
-                        name: "",
-                        prop: "playerName",
-                      },
-                      {
-                        name: "",
-                        prop: "bookingType",
-                      },
-                      {
-                        name: "",
-                        prop: "bookingDate",
-                      },
-                      {
-                        name: "",
-                        prop: "bookingStartTime",
-                      },
-                      {
-                        name: "",
-                        prop: "bookingEndTime",
-                      },
-                      {
-                        name: "",
-                        prop: "bookingContact",
-                      },
-                    ]}
-                  />
+                    <option value="bookingtype">Booking Type</option>
+
+                    <option value="bookingdate">Booking Date</option>
+
+                  </select>
+                </FormControl>
+                {this.state.result}
+              </div>
+              <br />
+              <p className="btn-danger">{this.state.error}</p>
+              <br /> 
+                  <div style={{overflowX: "hidden", overflowY: "scroll"}}>
+                    <table style={{ width: "95%", margin: "auto"}} className="table booking-table" border="1">
+                      <tbody>
+                        <th style={{color: "#841e2d", textAlign: "left"}}>S.No.</th>
+                        <th style={{color: "#841e2d", textAlign: "left"}}>Booking Type</th>
+                        <th style={{color: "#841e2d", textAlign: "left"}}>Booking Date</th>
+                        <th style={{color: "#841e2d", textAlign: "left"}}>Start Time</th>
+                        <th style={{color: "#841e2d", textAlign: "left"}}>End Time</th>
+                        <br />
+                        <br />
+                        {this.state.bookings.map(d => {
+                              //console.log(d)
+                              // var colourvar = "#000", approve = 'none',unapprove = 'block';
+                              // if(d.status == 1){
+                              //   approve = 'block'
+                              //   unapprove = 'none'
+                              //   colourvar = 'green'
+                              // }else if(d.status == 0){
+                              //   unapprove = 'none'
+                              //   colourvar = 'red'
+                              // }
+                              return (
+                              <tr onClick={this.handleStart}>
+                                  <td data-value={d._id} style={{ textAlign: "left"}}></td>
+                                  <td>
+                                    {d.type === 0 ? "Entire" : (d.type == 1 ? "Single" : "Double")}
+                                  </td>
+                                  <td data-value={d._id}>
+                                    {d.date}
+                                  </td>
+                                  <td>
+                                    {d.start_time}
+                                  </td>
+                                  <td>
+                                    {d.end_time}
+                                  </td>
+                              </tr>
+                              )
+                            })} 
+                      </tbody>
+                    </table>
+                  </div>      
+              </div>
+              <div style={{ width: "40%", float: "right"}}>
+                <div> 
+                  {booking} 
                 </div>
-              </Fragment>
-            </div>
+              </div>
           </div>
           <div style={{ width: "50%", float: "right" }}>
             <div>{booking}</div>
           </div>
-        </div>
+        
       </Fragment>
     );
   }
