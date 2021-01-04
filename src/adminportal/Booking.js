@@ -30,8 +30,8 @@ class AdminBooking extends Component {
         bookingDate: null,
         email: "",
         error: "",
-        bookingid : "",
-        
+        bookingid : [],
+        emails : [],
         result: 
         <form className="form-group" onSubmit={e => this.onSubmitEmail(e)}>
               <input 
@@ -354,11 +354,18 @@ class AdminBooking extends Component {
   };
 
   handleStart = (e) => {
-    console.log(e.target.getAttribute("data-value"))
+    var bookingsvar = this.state.bookings;
+    var booking = bookingsvar.find(({ _id }) => _id === e.target.getAttribute("data-value"))
+    var emailsvar = []
+    for(var i = 0 ; i<booking.user.length ; i++){
+          emailsvar.push(booking.user[i].email)
+      }
     this.setState({
       isDisplay: 1,
-      bookingid : e.target.getAttribute("data-value")
+      bookingid :booking,
+      emails : emailsvar
     });
+   
   };
 
   // handleSelect = (selectedOption) => {
@@ -416,7 +423,7 @@ class AdminBooking extends Component {
       );
     } else if (this.state.isDisplay === 1) {
       booking = (<EditForm
-                data={this.state.courtlist} booking={this.state.bookingid}
+                data={this.state.courtlist} booking={this.state.bookingid} emails={this.state.emails}
                 // onSubmit={submission =>
                 //   this.checkWallet(submission)}
               />);
@@ -500,6 +507,13 @@ class AdminBooking extends Component {
                 </div>
               </div>
           </div>
+<<<<<<< HEAD
+=======
+          {/* <div style={{ width: "50%", float: "right" }}>
+            <div>{booking}</div>
+          </div> */}
+        
+>>>>>>> 356ccd2094073c8f88ecf035c7ec6b53984255bf
       </Fragment>
     );
   }

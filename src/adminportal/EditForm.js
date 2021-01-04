@@ -11,30 +11,37 @@ import moment from 'moment';
 
 export default class Form extends React.Component {
   state = {
-    courtName: "",
+    emailPlayers : this.props.emails,
+    courtName: this.props.booking.court.court_name,
     error: "",
     isBooking: false,
-    courtSet : true,
+    courtSet : false,
     courtTimeHourDisabled : [],
     courttimeMinuteDisabled : [],
-    bookingType: "",
+    bookingType: this.props.booking.type,
 
-    bookingDefaultDate: null,
+    bookingDefaultDate: new Date(this.props.booking.date),
     bookingDate: null,
 
     bookingDefaultStartTime: moment( ).set({hour:0,minute:0,second:0,millisecond:0}),
-    bookingStartTime: null,
-    startTimeSet : true,
+    bookingStartTime: moment( ).set({hour:this.props.booking.start_time.split(':')[0],minute:this.props.booking.start_time.split(':')[1],second:0,millisecond:0}),
+    startTimeSet : false,
     startDetails:[],
     startTime : "",
 
-    bookingDefaultEndTime: null,
+    bookingDefaultEndTime:  moment( ).set({hour:this.props.booking.end_time.split(':')[0],minute:this.props.booking.end_time.split(':')[1],second:0,millisecond:0}),
     bookingEndTime : null,
     endTime : "",
     endTimeHourDisabled : [],
     endTimeMinuteDisabled : [],
+
+    courtstarttime : this.props.data.find(o => o.court_name === this.props.booking.court.court_name).start_time.split(':',2),
+     courtendtime : this.props.data.find(o => o.court_name === this.props.booking.court.court_name).end_time.split(':',2),
   };
 
+  iterate = (item) => {
+    console.log(item);
+  }
   validate = () => {
     let isError = false;
     if(this.state.courtName === ""){
@@ -136,6 +143,7 @@ export default class Form extends React.Component {
   };
 
   changeDate = e => {
+    console.log(e)
     // this.props.onChange({ [e.target.name]: e.target.value })
     var date = new Date(e),
     mnth = ("0" + (date.getMonth() + 1)).slice(-2),
@@ -227,11 +235,34 @@ export default class Form extends React.Component {
     }
   }
 
-  componentDidMount() {
-    console.log(this.props.booking)
-   //this.setState({domMounted: true}) 
-  } 
 
+  componentWillReceiveProps(nextProps) {
+    // Any time props.email changes, update state.
+    //console.log(nextProps , this.props)
+    if (nextProps.booking._id !== this.props.booking._id) {
+      //console.log(typeof nextProps.booking.court.court_name)
+      var dateVar = new Date(nextProps.booking.date);
+      var stvar = nextProps.booking.start_time.split(':');
+      var etvar = nextProps.booking.end_time.split(':');
+      var startTimeVar = moment( ).set({hour:stvar[0],minute:stvar[1],second:0,millisecond:0});
+      var end_timeVar = moment( ).set({hour:etvar[0],minute:etvar[1],second:0,millisecond:0});
+      var emailsvar = []
+      for(var i = 0 ; i<nextProps.booking.user.length ; i++){
+          emailsvar.push(nextProps.booking.user[i].email)
+      }
+      
+      this.setState({
+        courtName: parseInt(nextProps.booking.court.court_name),
+        bookingType : parseInt(nextProps.booking.type),
+        bookingDefaultDate : dateVar,
+        bookingStartTime : startTimeVar,
+        bookingDefaultEndTime : end_timeVar,
+        emailPlayers : emailsvar,
+       // courtstarttime: courtSelected.start_time.split(':',2),        
+      });
+    }
+  }
+  
   render() {
     return (
       <form style={{ marginTop: "20px"}} className="form">
@@ -270,9 +301,9 @@ export default class Form extends React.Component {
             required
           >
             <option aria-label="None" value="" disabled>Booking Type</option>
-            <option value='1'>Single</option>
-            <option value='2'>Double</option>
-            <option value='0'>Entire</option>
+            <option value={1}>Single</option>
+            <option value={2}>Double</option>
+            <option value={0}>Entire</option>
           </Select>
         </FormControl>
         <br />
@@ -325,6 +356,18 @@ export default class Form extends React.Component {
           disabled = {this.state.startTimeSet}
           //required
         />
+        {this.state.emailPlayers.map(d => {
+          console.log(d)
+          return (<input
+              type="email"
+              placeholder="Email Address"
+              name="email"
+              onChange={e => this.change(e)}
+              value={d} 
+              required 
+              style={{ padding: "8px", width: "200px"}}
+        /> )
+        })}
         <br />
         <br />
         <p className="btn-danger">{this.state.error}</p>
