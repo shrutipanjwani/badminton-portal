@@ -409,6 +409,7 @@ class AdminBooking extends Component {
       booking = (
         <Form
           data={this.state.courtlist}
+          
           // onSubmit={submission =>
           //   this.checkWallet(submission)}
         />
@@ -499,10 +500,6 @@ class AdminBooking extends Component {
                 </div>
               </div>
           </div>
-          <div style={{ width: "50%", float: "right" }}>
-            <div>{booking}</div>
-          </div>
-        
       </Fragment>
     );
   }

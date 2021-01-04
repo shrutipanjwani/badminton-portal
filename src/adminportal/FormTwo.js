@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Fragment} from "react";
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -18,6 +18,7 @@ export default class Form extends React.Component {
     courtTimeHourDisabled : [],
     courttimeMinuteDisabled : [],
     bookingType: "",
+    email: [],
 
     bookingDefaultDate: null,
     bookingDate: null,
@@ -86,7 +87,15 @@ export default class Form extends React.Component {
         startTime: "",
         endTime : "",
         courtTimeHourDisabled: [],
-         courtSet : false
+         courtSet : false,
+
+         single1: "",
+         single2: "",
+         double1: "",
+         double2: "",
+         double3: "",
+         double4: "",
+         entire1: "",
         //isBooking: true
       });
   }
@@ -320,6 +329,85 @@ export default class Form extends React.Component {
           disabled = {this.state.startTimeSet}
           //required
         />
+        <br /> 
+        <FormControl>
+        {this.state.bookingType === "1" ? 
+          <Fragment>
+              <div className="form-group">
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  name="single1"
+                  style={{width: "250px"}}
+                  onChange={(e) => this.change(e)}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  name="single2"
+                  style={{width: "250px"}}
+                  onChange={(e) => this.change(e)}
+                  required
+                />
+              </div>
+          </Fragment> : (this.state.bookingType === "2" ? 
+          <Fragment>
+            <div className="form-group">
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  name="double1"
+                  style={{width: "250px"}}
+                  onChange={(e) => this.change(e)}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  name="double2"
+                  style={{width: "250px"}}
+                  onChange={(e) => this.change(e)}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  name="double3"
+                  style={{width: "250px"}}
+                  onChange={(e) => this.change(e)}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  name="double4"
+                  style={{width: "250px"}}
+                  onChange={(e) => this.change(e)}
+                  required
+                />
+              </div>
+          </Fragment> : 
+          <div className="form-group">
+            <input
+              type="email"
+              placeholder="Email Address"
+              name="entire1"
+              style={{width: "250px"}}
+              onChange={(e) => this.change(e)}
+              required
+            />
+          </div>
+          )}
+          </FormControl>
         <br />
         <br />
         <p className="btn-danger">{this.state.error}</p>

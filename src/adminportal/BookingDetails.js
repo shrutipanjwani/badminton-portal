@@ -10,7 +10,7 @@ export default class BookingDetails extends React.Component {
     super(props);
   
     this.state = {
-      data: props.location.state.data,
+      datas: props.location.state.data,
       aviSlot: null,
       total: null,
       courttype: ["Fullcourt", "singles", "Doubles"],
@@ -38,12 +38,12 @@ export default class BookingDetails extends React.Component {
 
   checkWallet() {
     var rqamount = 0;
-    var startTime=moment(this.state.data.start_time, "HH:mm:ss");
-    var endTime=moment(this.state.data.end_time, "HH:mm:ss");
+    var startTime=moment(this.state.datas.start_time, "HH:mm:ss");
+    var endTime=moment(this.state.datas.end_time, "HH:mm:ss");
     var duration = moment.duration(endTime.diff(startTime));
     var hours = parseFloat(duration.asHours());
 
-    let totamount = parseInt(this.state.data.court.price)*(hours);
+    let totamount = parseInt(this.state.datas.court.price)*(hours);
     rqamount = totamount/this.state.total;
     
     console.log("you need this to Register", rqamount);
@@ -82,7 +82,7 @@ export default class BookingDetails extends React.Component {
       },
     };
     try {
-      var user = this.state.data.user;
+      var user = this.state.datas.user;
       var playersbody = Object.keys(user).map(function(key) {
         return user[key].name+"\t"+user[key].email.toLowerCase()+"\t"+user[key].phone.country+"-"+user[key].phone.digits+"\n";
       });
@@ -93,7 +93,7 @@ export default class BookingDetails extends React.Component {
       }
       console.log(body)
       await axios.put(
-        "/booking/update/" + this.state.data._id + "/" + rqamount,
+        "/booking/update/" + this.state.datas._id + "/" + rqamount,
         body,
         config
       );
@@ -102,9 +102,9 @@ export default class BookingDetails extends React.Component {
       confirmAlert({title: 'Lets Badminton',message: "Booking successfull",
       buttons: [{label: 'Ok',onClick: () => {}}]});
       const player = ((this.state.aviSlot - 1) === 0 ) ? true : false;
-      let newdata = this.state.data;
+      let newdata = this.state.datas;
       newdata.court_full = player;
-      this.setState ({aviSlot : this.state.aviSlot - 1 , data : newdata});
+      this.setState ({aviSlot : this.state.aviSlot - 1 , datas : newdata});
       console.log(this.state.userdata)
       let players = (<tr><td>{this.state.userdata.name}</td>
         <td>{this.state.userdata.email.toLowerCase()}</td>
@@ -125,22 +125,22 @@ export default class BookingDetails extends React.Component {
 
   componentWillMount() {
     this.getBalance();
-    var player = this.state.data.players.length;
-    if (this.state.data.type === 1) {
+    var player = this.state.datas.players.length;
+    if (this.state.datas.type === 1) {
       this.setState({ total: 2 });
       player = 2 - player;
       this.setState({ aviSlot: player });
     }
-    if (this.state.data.type === 0) {
+    if (this.state.datas.type === 0) {
       this.setState({ total: 4 });
       this.setState({ aviSlot: 0 });
     }
-    if (this.state.data.type === 2) {
+    if (this.state.datas.type === 2) {
       this.setState({ total: 4 });
       player = 4 - player;
       this.setState({ aviSlot: player });
     }
-    var user = this.state.data.user;
+    var user = this.state.datas.user;
     console.log(user)
     var tifOptionsvar = Object.keys(user).map(function(key) {
       return (<tr><td>{user[key].name}</td>
@@ -153,7 +153,7 @@ export default class BookingDetails extends React.Component {
   }
 
   Canbook = () => {
-    if (this.state.data.court_full === true) {
+    if (this.state.datas.court_full === true) {
       return (
         <p style={{ color: "red" }}>
           {" "}
@@ -193,23 +193,23 @@ export default class BookingDetails extends React.Component {
                 </tr>
                 <tr>
                   <td>Date</td>
-                  <td>{this.state.data.date}</td>
+                  <td>{this.state.datas.date}</td>
                 </tr>
                 <tr>
                   <td>Start time</td>
-                  <td>{this.state.data.start_time}</td>
+                  <td>{this.state.datas.start_time}</td>
                 </tr>
                 <tr>
                   <td>End Time</td>
-                  <td>{this.state.data.end_time}</td>
+                  <td>{this.state.datas.end_time}</td>
                 </tr>
                 <tr>
                   <td>Court number</td>
-                  <td>{this.state.data.court.court_name}</td>
+                  <td>{this.state.datas.court.court_name}</td>
                 </tr>
                 <tr>
                   <td>Court Booking Type</td>
-                  <td>{this.state.courttype[this.state.data.type]}</td>
+                  <td>{this.state.courttype[this.state.datas.type]}</td>
                 </tr>
               </table>
             </div>

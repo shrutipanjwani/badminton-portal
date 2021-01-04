@@ -2,13 +2,36 @@ import React, { Fragment, Component } from "react";
 import Form from "./Form";
 import Table from "./Table";
 import store from "./../store";
+import axios from 'axios'
 
 class EditCourt extends Component {
   state = {
     data: [],
     editIdx: -1,
     isActive: 2,
+    courts: [],
   };
+
+  async loadData(){
+		const config = {
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}
+		try {
+			const res = await axios.get('/court/'+this.state.courts, config).then(res => {
+				var courts = res.data
+				console.log(res.data)
+          this.setState({courts : courts._id})
+			})
+		} catch(err) {
+			console.log(err.response)
+		}
+  }
+  
+  componentDidMount() {
+    this.loadData();
+  }
 
   componentWillMount() {
     var data = JSON.parse(localStorage.getItem("USER"));
@@ -104,6 +127,8 @@ class EditCourt extends Component {
             <button className="btn btn-primary" onClick={this.handleShow}>
               New Court
             </button>
+            <br />
+            {this.state.courts} 
             <div>
               <Fragment>
                 <div
