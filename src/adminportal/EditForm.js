@@ -11,6 +11,7 @@ import moment from 'moment';
 
 export default class Form extends React.Component {
   state = {
+    emailPlayers : this.props.emails,
     courtName: this.props.booking.court.court_name,
     error: "",
     isBooking: false,
@@ -19,23 +20,28 @@ export default class Form extends React.Component {
     courttimeMinuteDisabled : [],
     bookingType: this.props.booking.type,
 
-    bookingDefaultDate: null,
+    bookingDefaultDate: new Date(this.props.booking.date),
     bookingDate: null,
 
     bookingDefaultStartTime: moment( ).set({hour:0,minute:0,second:0,millisecond:0}),
-    bookingStartTime: null,
+    bookingStartTime: moment( ).set({hour:this.props.booking.start_time.split(':')[0],minute:this.props.booking.start_time.split(':')[1],second:0,millisecond:0}),
     startTimeSet : false,
     startDetails:[],
     startTime : "",
 
-    bookingDefaultEndTime: null,
+    bookingDefaultEndTime:  moment( ).set({hour:this.props.booking.end_time.split(':')[0],minute:this.props.booking.end_time.split(':')[1],second:0,millisecond:0}),
     bookingEndTime : null,
     endTime : "",
     endTimeHourDisabled : [],
     endTimeMinuteDisabled : [],
+
+    courtstarttime : this.props.data.find(o => o.court_name === this.props.booking.court.court_name).start_time.split(':',2),
+     courtendtime : this.props.data.find(o => o.court_name === this.props.booking.court.court_name).end_time.split(':',2),
   };
 
-
+  iterate = (item) => {
+    console.log(item);
+  }
   validate = () => {
     let isError = false;
     if(this.state.courtName === ""){
@@ -228,6 +234,8 @@ export default class Form extends React.Component {
       }
     }
   }
+
+
   componentWillReceiveProps(nextProps) {
     // Any time props.email changes, update state.
     //console.log(nextProps , this.props)
@@ -242,14 +250,15 @@ export default class Form extends React.Component {
       for(var i = 0 ; i<nextProps.booking.user.length ; i++){
           emailsvar.push(nextProps.booking.user[i].email)
       }
-      console.log(emailsvar)
+      
       this.setState({
         courtName: parseInt(nextProps.booking.court.court_name),
         bookingType : parseInt(nextProps.booking.type),
         bookingDefaultDate : dateVar,
         bookingStartTime : startTimeVar,
         bookingDefaultEndTime : end_timeVar,
-        // emailPlayers : emailsvar        
+        emailPlayers : emailsvar,
+       // courtstarttime: courtSelected.start_time.split(':',2),        
       });
     }
   }
@@ -347,6 +356,18 @@ export default class Form extends React.Component {
           disabled = {this.state.startTimeSet}
           //required
         />
+        {this.state.emailPlayers.map(d => {
+          console.log(d)
+          return (<input
+              type="email"
+              placeholder="Email Address"
+              name="email"
+              onChange={e => this.change(e)}
+              value={d} 
+              required 
+              style={{ padding: "8px", width: "200px"}}
+        /> )
+        })}
         <br />
         <br />
         <p className="btn-danger">{this.state.error}</p>

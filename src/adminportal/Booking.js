@@ -31,7 +31,7 @@ class AdminBooking extends Component {
         email: "",
         error: "",
         bookingid : [],
-        
+        emails : [],
         result: 
         <form className="form-group" onSubmit={e => this.onSubmitEmail(e)}>
               <input 
@@ -356,10 +356,14 @@ class AdminBooking extends Component {
   handleStart = (e) => {
     var bookingsvar = this.state.bookings;
     var booking = bookingsvar.find(({ _id }) => _id === e.target.getAttribute("data-value"))
-    console.log(booking);
+    var emailsvar = []
+    for(var i = 0 ; i<booking.user.length ; i++){
+          emailsvar.push(booking.user[i].email)
+      }
     this.setState({
       isDisplay: 1,
-      bookingid :booking
+      bookingid :booking,
+      emails : emailsvar
     });
    
   };
@@ -418,7 +422,7 @@ class AdminBooking extends Component {
       );
     } else if (this.state.isDisplay === 1) {
       booking = (<EditForm
-                data={this.state.courtlist} booking={this.state.bookingid}
+                data={this.state.courtlist} booking={this.state.bookingid} emails={this.state.emails}
                 // onSubmit={submission =>
                 //   this.checkWallet(submission)}
               />);
