@@ -469,16 +469,6 @@ class AdminBooking extends Component {
                         <br />
                         <br />
                         {this.state.bookings.map(d => {
-                              //console.log(d)
-                              // var colourvar = "#000", approve = 'none',unapprove = 'block';
-                              // if(d.status == 1){
-                              //   approve = 'block'
-                              //   unapprove = 'none'
-                              //   colourvar = 'green'
-                              // }else if(d.status == 0){
-                              //   unapprove = 'none'
-                              //   colourvar = 'red'
-                              // }
                               return (
                               <tr data-value={d._id} onClick={ e => this.handleStart(e)}>
                                   <td data-value={d._id} style={{ textAlign: "left"}}></td>
@@ -507,13 +497,6 @@ class AdminBooking extends Component {
                 </div>
               </div>
           </div>
-<<<<<<< HEAD
-=======
-          {/* <div style={{ width: "50%", float: "right" }}>
-            <div>{booking}</div>
-          </div> */}
-        
->>>>>>> 356ccd2094073c8f88ecf035c7ec6b53984255bf
       </Fragment>
     );
   }

@@ -49,7 +49,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, isAdmin }, logout}) => {
 	        	</Link>
 	        </li>
 			<li>
-	        	<Link to="/editcourt" replace>
+	        	<Link to="/court" replace>
 	        		<i className="fas fa-layer-group"></i>{' '}
 	        		<span className="hide-sm"> &nbsp;Court</span>
 	        	</Link>
