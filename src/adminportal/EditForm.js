@@ -252,6 +252,7 @@ export default class Form extends React.Component {
       }
       
       this.setState({
+        id : nextProps.booking._id,
         courtName: parseInt(nextProps.booking.court.court_name),
         bookingType : parseInt(nextProps.booking.type),
         bookingDefaultDate : dateVar,
