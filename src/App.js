@@ -9,7 +9,7 @@ import CalendarPage from './components/Calendar/Calendar';
 import UserVerification from './components/auth/UserVerification';
 import Wallet from './components/Wallet/Wallet';
 import EditTime from './adminportal/EditTime';
-import EditCourt from './adminportal/EditCourt';
+import Court from './adminportal/Court';
 import NewBooking from './components/Booking/NewBooking';
 import UserBooking from './components/Booking/Booking';
 import RegistererPermission from './adminportal/RegistererPermission';
@@ -68,7 +68,7 @@ const App = () => {
 
               {/* Admin Portal */}
               {/* <Route exact path='/edittime' component={EditTime}/> */}
-              <Route exact path='/editcourt' component={EditCourt}/>
+              <Route exact path='/court' component={Court}/>
               <Route exact path='/permission' component={RegistererPermission}/>
               <Route exact path='/adminbooking' component={AdminBooking}/>
               {/*Error Page*/}

@@ -2,7 +2,7 @@ import React from "react";
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import DatePicker from "react-datepicker";
+import TextField from "@material-ui/core/TextField";
 import "react-datepicker/dist/react-datepicker.css";
 import TimePicker from 'rc-time-picker';
 import 'rc-time-picker/assets/index.css';
@@ -12,32 +12,25 @@ import { Fragment } from "react";
 
 export default class Form extends React.Component {
   state = {
-    emailPlayers : this.props.emails,
-    courtName: this.props.booking.court.court_name,
+    courtName: this.props.court.court_name,
     error: "",
     isBooking: false,
     courtSet : false,
     courtTimeHourDisabled : [],
     courttimeMinuteDisabled : [],
-    bookingType: this.props.booking.type,
 
-    bookingDefaultDate: new Date(this.props.booking.date),
-    bookingDate: null,
-
-    bookingDefaultStartTime: moment( ).set({hour:0,minute:0,second:0,millisecond:0}),
-    bookingStartTime: moment( ).set({hour:this.props.booking.start_time.split(':')[0],minute:this.props.booking.start_time.split(':')[1],second:0,millisecond:0}),
+    courtDefaultStartTime: moment( ).set({hour:0,minute:0,second:0,millisecond:0}),
+    //courtStartTime: moment( ).set({hour:this.props.court.start_time.split(':')[0],minute:this.props.court.start_time.split(':')[1],second:0,millisecond:0}),
     startTimeSet : false,
     startDetails:[],
     startTime : "",
 
-    bookingDefaultEndTime:  moment( ).set({hour:this.props.booking.end_time.split(':')[0],minute:this.props.booking.end_time.split(':')[1],second:0,millisecond:0}),
-    bookingEndTime : null,
+    //courtDefaultEndTime:  moment( ).set({hour:this.props.court.end_time.split(':')[0],minute:this.props.court.end_time.split(':')[1],second:0,millisecond:0}),
+    courtEndTime : null,
     endTime : "",
     endTimeHourDisabled : [],
     endTimeMinuteDisabled : [],
-
-    courtstarttime : this.props.data.find(o => o.court_name === this.props.booking.court.court_name).start_time.split(':',2),
-     courtendtime : this.props.data.find(o => o.court_name === this.props.booking.court.court_name).end_time.split(':',2),
+    price: "",
   };
 
   iterate = (item) => {
@@ -57,6 +50,9 @@ export default class Form extends React.Component {
     }else if(this.state.startTime === "" || this.state.endTime === ""){
       isError = true;
       this.setState({ error : "Please Select start and end Time"} )
+    }else if(this.state.price === ""){
+        isError = true;
+        this.setState({ error : "Please Enter Price"} )
     }
 
     return isError;
@@ -76,26 +72,23 @@ export default class Form extends React.Component {
   clear = () => {
     this.setState({
         courtName: "",
-        bookingType: "",
         courtNameError: "",
-        bookingTypeError: "",
-        bookingDateError: "",
-        bookingStartTimeError: "",
-        bookingEndTimeError: "",
-        bookingDefaultDate : null,
-        bookingStartTime: null,
-        bookingDefaultEndTime: null,
-        bookingEndTime : moment( ).set({hour:0,minute:0,second:0,millisecond:0}),
+        courtStartTimeError: "",
+        courtEndTimeError: "",
+        courtDefaultDate : null,
+        courtStartTime: null,
+        courtDefaultEndTime: null,
+        courtEndTime : moment( ).set({hour:0,minute:0,second:0,millisecond:0}),
         startTimeSet : true,
         endTimeHourDisabled : [],
         endTimeMinuteDisabled : [],
         startDetails:[],
-        bookingDate : "",
         startTime: "",
         endTime : "",
         courtTimeHourDisabled: [],
-         courtSet : false
-        //isBooking: true
+        courtSet : false,
+        price: "",
+        priceError: "",
       });
   }
 
@@ -113,7 +106,6 @@ export default class Form extends React.Component {
   };
 
   changeCourt = e => {
-    // this.props.onChange({ [e.target.name]: e.target.value })
     var courtTimeHourDisabledvar = [];
     const courtSelected = this.props.data.find(o => o.court_name === e.target.value);
     const starttimearr = courtSelected.start_time.split(':',2);
@@ -134,28 +126,15 @@ export default class Form extends React.Component {
       courtSet : false  ,
       courtstarttime : starttimearr,
       courtendtime : endtimearr,
-      bookingDefaultEndTime :  null,
+      courtDefaultEndTime :  null,
       startTimeSet : true,
-      bookingStartTime: null,
+      courtStartTime: null,
       startTime : "" , endTime : "" ,
       endTimeMinuteDisabled : [] 
     });
       
   };
 
-  changeDate = e => {
-    console.log(e)
-    // this.props.onChange({ [e.target.name]: e.target.value })
-    var date = new Date(e),
-    mnth = ("0" + (date.getMonth() + 1)).slice(-2),
-    day = ("0" + date.getDate()).slice(-2);
-    date = [date.getFullYear(), mnth, day].join("-");
-    this.setState({
-      bookingDate: date,
-      bookingDefaultDate: e
-    });
-
-  };
   disabledMinutes = ( hour ) => {
     let minutes = []
       if(hour == this.state.courtstarttime[0] && this.state.courtstarttime[1] == "30"){
@@ -178,29 +157,29 @@ export default class Form extends React.Component {
   }
   changeStartTime = e =>{
     if(!e){
-      this.setState({bookingDefaultEndTime :  null,endTimeMinuteDisabled : [] })
+      this.setState({courtDefaultEndTime :  null,endTimeMinuteDisabled : [] })
       this.setState({startTimeSet : true})
-      this.setState({bookingStartTime: null });
+      this.setState({courtStartTime: null });
       this.setState({startTime : "" , endTime : ""})
     }else{
      
       var date = new Date(e), Hour = ("0" + date.getHours()).slice(-2), Min = ("0" + date.getMinutes()).slice(-2);
       if(Hour == this.state.courtstarttime[0] && this.state.courtstarttime[1] == "30"){
-        this.setState({ bookingStartTime:e.set({hour:Hour,minute:30})})
+        this.setState({ courtStartTime:e.set({hour:Hour,minute:30})})
       }else {
-        this.setState({bookingStartTime: e });
+        this.setState({courtStartTime: e });
       }
      
       this.setState({startTime : Hour+":"+Min+":00"})
       var dateArr = [ date.getHours() , date.getMinutes()]
       this.setState({startDetails : dateArr})
       if(date.getMinutes() == 0){
-        this.setState({bookingDefaultEndTime :  moment( ).set({hour:date.getHours(),minute:30})})
+        this.setState({courtDefaultEndTime :  moment( ).set({hour:date.getHours(),minute:30})})
         this.setState({endTime : Hour+":30:00"})
         this.setState({endTimeMinuteDisabled : [0]})
         this.setState({endTimeHourDisabled : Array.from(Array(date.getHours()).keys()) })
       }else{
-        this.setState({bookingDefaultEndTime :  moment( ).set({hour:date.getHours()+1,minute:0})})
+        this.setState({courtDefaultEndTime :  moment( ).set({hour:date.getHours()+1,minute:0})})
         const Hourend = ("0" + date.getHours()+1).slice(-2)
         this.setState({endTime : Hourend+":00:00"})
         this.setState({endTimeHourDisabled : Array.from(Array(date.getHours()+1).keys()) })
@@ -213,23 +192,23 @@ export default class Form extends React.Component {
 
   changeEndTime = e =>{
     if(!e){
-      this.setState({bookingDefaultEndTime :  null})
+      this.setState({courtDefaultEndTime :  null})
       this.setState({endTime : ""})
     }else{
       var date = new Date(e), Hour = ("0" + date.getHours()).slice(-2), Min = ("0" + date.getMinutes()).slice(-2);
       if(Hour == this.state.courtendtime[0] && this.state.courtendtime[1] == "00"){
-         this.setState({bookingDefaultEndTime :  e.set({minute:0})})
+         this.setState({courtDefaultEndTime :  e.set({minute:0})})
          this.setState({endTime : Hour+":00:00"})
       }else if(this.state.startDetails[0] == date.getHours() && this.state.startDetails[1] == 0){
-        this.setState({bookingDefaultEndTime :  e.set({minute:30})})
+        this.setState({courtDefaultEndTime :  e.set({minute:30})})
         this.setState({endTimeMinuteDisabled : [0]})
         this.setState({endTime : Hour+":30:00"})
       }else if(this.state.startDetails[0] == date.getHours() && this.state.startDetails[1] == 30){
-        this.setState({bookingDefaultEndTime :  e.set({hour:date.getHours()+1,minute:0})})
+        this.setState({courtDefaultEndTime :  e.set({hour:date.getHours()+1,minute:0})})
         this.setState({endTimeHourDisabled : Array.from(Array(date.getHours()+1).keys())})
         this.setState({endTime : (date.getHours()+1)+":00:00"})
       }else{
-        this.setState({bookingDefaultEndTime : e})
+        this.setState({courtDefaultEndTime : e})
         this.setState({endTimeMinuteDisabled : []})
         this.setState({endTime : Hour+":"+Min+":00"})
       }
@@ -238,29 +217,19 @@ export default class Form extends React.Component {
 
 
   componentWillReceiveProps(nextProps) {
-    // Any time props.email changes, update state.
-    //console.log(nextProps , this.props)
-    if (nextProps.booking._id !== this.props.booking._id) {
-      //console.log(typeof nextProps.booking.court.court_name)
-      var dateVar = new Date(nextProps.booking.date);
-      var stvar = nextProps.booking.start_time.split(':');
-      var etvar = nextProps.booking.end_time.split(':');
+    
+    if (nextProps.court._id !== this.props.court._id) {
+     
+      var stvar = nextProps.court.start_time.split(':');
+      var etvar = nextProps.court.end_time.split(':');
       var startTimeVar = moment( ).set({hour:stvar[0],minute:stvar[1],second:0,millisecond:0});
       var end_timeVar = moment( ).set({hour:etvar[0],minute:etvar[1],second:0,millisecond:0});
-      var emailsvar = []
-      for(var i = 0 ; i<nextProps.booking.user.length ; i++){
-          emailsvar.push(nextProps.booking.user[i].email)
-      }
-      
+     
       this.setState({
-        id : nextProps.booking._id,
-        courtName: parseInt(nextProps.booking.court.court_name),
-        bookingType : parseInt(nextProps.booking.type),
-        bookingDefaultDate : dateVar,
-        bookingStartTime : startTimeVar,
-        bookingDefaultEndTime : end_timeVar,
-        emailPlayers : emailsvar,
-       // courtstarttime: courtSelected.start_time.split(':',2),        
+        courtName: parseInt(nextProps.court.court_name),
+        courtStartTime : startTimeVar,
+        courtDefaultEndTime : end_timeVar,
+        price: parseInt(nextProps.court.price),
       });
     }
   }
@@ -290,46 +259,6 @@ export default class Form extends React.Component {
             </FormControl>
             <br />
             <br />
-            <FormControl>
-              <Select
-                native
-                value={this.state.bookingType}
-                onChange={e => this.change(e)}
-                inputProps={{
-                  name: 'bookingType',
-                  id: 'age-native-simple',
-                }}
-                errorText={this.state.bookingTypeError}
-                style={{ width: '250px'}}
-                required
-              >
-                <option aria-label="None" value="" disabled>Booking Type</option>
-                <option value={1}>Single</option>
-                <option value={2}>Double</option>
-                <option value={0}>Entire</option>
-              </Select>
-            </FormControl>
-            <br />
-            <br />
-            <DatePicker
-                // style={{width: "200px"}}
-                selected={this.state.bookingDefaultDate}
-                name = "bookingDate"
-                // customStyles={{
-                //   dateTouch:{
-                //     width:'200px',
-                //   },
-                //   dateTouchBody: {
-                //     width:'200px',
-                //   },
-                // }}
-                onChange={e => this.changeDate(e)}
-                placeholderText="Booking Date"
-                minDate={new Date()}
-                maxDate={ new Date().setMonth(new Date().getMonth()+6)}
-                required
-            />
-            <br /><br />
             
             <TimePicker
               style={{ width: "125px" }}
@@ -337,10 +266,10 @@ export default class Form extends React.Component {
               showSecond= {false}
               hideDisabledOptions = {true}
               placeholder= "Start Time"
-              defaultOpenValue= {this.state.bookingDefaultStartTime} 
+              defaultOpenValue= {this.state.courtDefaultStartTime} 
               disabledHours = {() => this.state.courtStartTimeHourDisabled}
               disabledMinutes =  {e => this.disabledMinutes(e)}
-              value= {this.state.bookingStartTime}
+              value= {this.state.courtStartTime}
               onChange={e => this.changeStartTime(e)}
               disabled = {this.state.courtSet}
             // required
@@ -352,27 +281,26 @@ export default class Form extends React.Component {
               hideDisabledOptions = {true}
               placeholder= "End Time"
               onChange={e => this.changeEndTime(e)}
-              value={this.state.bookingDefaultEndTime}
-              defaultOpenValue= {this.state.bookingDefaultEndTime} 
+              value={this.state.courtDefaultEndTime}
+              defaultOpenValue= {this.state.courtDefaultEndTime} 
               disabledHours = {() => this.state.endTimeHourDisabled.concat(this.state.courtEndTimeHourDisabled)}
               disabledMinutes = {e => this.disabledMinutesEndTime(e)}
               disabled = {this.state.startTimeSet}
               //required
             />
-            {this.state.emailPlayers.map(d => {
-              console.log(d)
-              return (<input
-                  type="email"
-                  placeholder="Email Address"
-                  name="email"
-                  onChange={e => this.change(e)}
-                  value={d} 
-                  required 
-                  style={{ padding: "8px", width: "200px"}}
-            /> )
-            })}
             <br />
             <br />
+            $&nbsp;
+            <input
+                style={{ width: "240px", padding: "7px" }}
+                type="number"
+                name="price"
+                placeholder="Price"
+                value={this.state.price}
+                onChange={e => this.change(e)}
+                errorText={this.state.priceError}
+                required
+            />
             <p className="btn-danger">{this.state.error}</p>
             <br /> 
             <Button onClick={e => this.onSubmit(e)}>
