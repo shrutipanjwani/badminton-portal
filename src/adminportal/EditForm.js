@@ -12,6 +12,7 @@ import { Fragment } from "react";
 
 export default class Form extends React.Component {
   state = {
+    id :  this.props.booking._id,
     emailPlayers : this.props.emails,
     courtName: this.props.booking.court.court_name,
     error: "",
@@ -22,22 +23,23 @@ export default class Form extends React.Component {
     bookingType: this.props.booking.type,
 
     bookingDefaultDate: new Date(this.props.booking.date),
-    bookingDate: null,
+    bookingDate: new Date(this.props.booking.date),
 
     bookingDefaultStartTime: moment( ).set({hour:0,minute:0,second:0,millisecond:0}),
     bookingStartTime: moment( ).set({hour:this.props.booking.start_time.split(':')[0],minute:this.props.booking.start_time.split(':')[1],second:0,millisecond:0}),
     startTimeSet : false,
     startDetails:[],
-    startTime : "",
-
+    startTime :this.props.booking.start_time ,
+    courtStartTimeHourDisabled: this.props.sthrdisabled,
+      courtEndTimeHourDisabled : this.props.ethrdisabled , 
     bookingDefaultEndTime:  moment( ).set({hour:this.props.booking.end_time.split(':')[0],minute:this.props.booking.end_time.split(':')[1],second:0,millisecond:0}),
     bookingEndTime : null,
-    endTime : "",
+    endTime : this.props.booking.end_time,
     endTimeHourDisabled : [],
     endTimeMinuteDisabled : [],
 
     courtstarttime : this.props.data.find(o => o.court_name === this.props.booking.court.court_name).start_time.split(':',2),
-     courtendtime : this.props.data.find(o => o.court_name === this.props.booking.court.court_name).end_time.split(':',2),
+    courtendtime : this.props.data.find(o => o.court_name === this.props.booking.court.court_name).end_time.split(':',2),
   };
 
   iterate = (item) => {
@@ -67,8 +69,6 @@ export default class Form extends React.Component {
     const err = this.validate();
     if (!err) {
       await this.props.onSubmit(this.state);
-      // clear form
-      this.clear();
     }
   };
 
@@ -122,9 +122,9 @@ export default class Form extends React.Component {
     for(var i = parseInt(parseInt(endtimearr[0])); i<= 24 ; i++){
         courtTimeHourDisabledvar.push(i);
     }
-    if(endtimearr[1] == "30"){
-      courtTimeHourDisabledvar = courtTimeHourDisabledvar.filter(item => item !== parseInt(endtimearr[0]))
-    }
+    // if(endtimearr[1] == "30"){
+    //   courtTimeHourDisabledvar = courtTimeHourDisabledvar.filter(item => item !== parseInt(endtimearr[0]))
+    // }
     this.setState({
       [e.target.name]: e.target.value,
       courtStartTimeHourDisabled: courtTimeHourDisabledvar
@@ -158,12 +158,13 @@ export default class Form extends React.Component {
   };
   disabledMinutes = ( hour ) => {
     let minutes = []
-      if(hour == this.state.courtstarttime[0] && this.state.courtstarttime[1] == "30"){
-        minutes = [0]; 
-      }
-      if(hour == this.state.courtendtime[0] && this.state.courtendtime[1] == "30"){
-        minutes = [30]; 
-      } 
+      // if(hour == this.state.courtstarttime[0] && this.state.courtstarttime[1] == "30"){
+      //   minutes = [0]; 
+      // }
+      // if(hour == this.state.courtendtime[0] && this.state.courtendtime[1] == "30"){
+      //   minutes = [30]; 
+      // } 
+      minutes = [0,30]
     return minutes
   }
   disabledMinutesEndTime = (hour) => {
@@ -174,6 +175,7 @@ export default class Form extends React.Component {
       // if(hour == this.state.courtendtime[0] && this.state.courtendtime[1] == "30"){
       //   minutes = [30]; 
       // } 
+      minutes = [0 ,30];
     return minutes; 
   }
   changeStartTime = e =>{
@@ -185,8 +187,10 @@ export default class Form extends React.Component {
     }else{
      
       var date = new Date(e), Hour = ("0" + date.getHours()).slice(-2), Min = ("0" + date.getMinutes()).slice(-2);
+      var min = date.getMinutes();
       if(Hour == this.state.courtstarttime[0] && this.state.courtstarttime[1] == "30"){
         this.setState({ bookingStartTime:e.set({hour:Hour,minute:30})})
+        min = 30;
       }else {
         this.setState({bookingStartTime: e });
       }
@@ -194,15 +198,15 @@ export default class Form extends React.Component {
       this.setState({startTime : Hour+":"+Min+":00"})
       var dateArr = [ date.getHours() , date.getMinutes()]
       this.setState({startDetails : dateArr})
-      if(date.getMinutes() == 0){
-        this.setState({bookingDefaultEndTime :  moment( ).set({hour:date.getHours(),minute:30})})
-        this.setState({endTime : Hour+":30:00"})
-        this.setState({endTimeMinuteDisabled : [0]})
-        this.setState({endTimeHourDisabled : Array.from(Array(date.getHours()).keys()) })
-      }else{
+      if(min == 0){
         this.setState({bookingDefaultEndTime :  moment( ).set({hour:date.getHours()+1,minute:0})})
+        this.setState({endTime : Hour+":00:00"})
+        this.setState({endTimeMinuteDisabled : [0]})
+        this.setState({endTimeHourDisabled : Array.from(Array(date.getHours()+1).keys()) })
+      }else{
+        this.setState({bookingDefaultEndTime :  moment( ).set({hour:date.getHours()+1,minute:30})})
         const Hourend = ("0" + date.getHours()+1).slice(-2)
-        this.setState({endTime : Hourend+":00:00"})
+        this.setState({endTime : Hourend+":30:00"})
         this.setState({endTimeHourDisabled : Array.from(Array(date.getHours()+1).keys()) })
       }
       
@@ -241,6 +245,7 @@ export default class Form extends React.Component {
     // Any time props.email changes, update state.
     //console.log(nextProps , this.props)
     if (nextProps.booking._id !== this.props.booking._id) {
+    
       //console.log(typeof nextProps.booking.court.court_name)
       var dateVar = new Date(nextProps.booking.date);
       var stvar = nextProps.booking.start_time.split(':');
@@ -248,10 +253,19 @@ export default class Form extends React.Component {
       var startTimeVar = moment( ).set({hour:stvar[0],minute:stvar[1],second:0,millisecond:0});
       var end_timeVar = moment( ).set({hour:etvar[0],minute:etvar[1],second:0,millisecond:0});
       var emailsvar = []
-      for(var i = 0 ; i<nextProps.booking.user.length ; i++){
-          emailsvar.push(nextProps.booking.user[i].email)
+      if(nextProps.booking.user.length > 0){
+        emailsvar.push(nextProps.booking.user[0].email)}
+      else{
+        emailsvar.push("")
       }
-      
+      for(var i = 1 ; i<parseInt(nextProps.booking.type)*2 ; i++){
+        if(nextProps.booking.user.length > i){
+          emailsvar.push(nextProps.booking.user[i].email)}
+        else{
+          emailsvar.push("")
+        }
+      }
+      console.log(emailsvar)
       this.setState({
         id : nextProps.booking._id,
         courtName: parseInt(nextProps.booking.court.court_name),
@@ -260,6 +274,10 @@ export default class Form extends React.Component {
         bookingStartTime : startTimeVar,
         bookingDefaultEndTime : end_timeVar,
         emailPlayers : emailsvar,
+        courtStartTimeHourDisabled: nextProps.sthrdisabled,
+        courtEndTimeHourDisabled : nextProps.ethrdisabled , 
+        startTime :nextProps.booking.start_time ,
+        endTime : nextProps.booking.end_time,
        // courtstarttime: courtSelected.start_time.split(':',2),        
       });
     }
@@ -325,8 +343,8 @@ export default class Form extends React.Component {
                 // }}
                 onChange={e => this.changeDate(e)}
                 placeholderText="Booking Date"
-                minDate={new Date()}
-                maxDate={ new Date().setMonth(new Date().getMonth()+6)}
+                // minDate={new Date()}
+                // maxDate={ new Date().setMonth(new Date().getMonth()+6)}
                 required
             />
             <br /><br />
@@ -376,7 +394,7 @@ export default class Form extends React.Component {
             <p className="btn-danger">{this.state.error}</p>
             <br /> 
             <Button onClick={e => this.onSubmit(e)}>
-              <p className="btn bg-dark">Add Booking</p>
+              <p className="btn bg-dark">Edit Booking</p>
             </Button>
           </form>
         </Fragment>

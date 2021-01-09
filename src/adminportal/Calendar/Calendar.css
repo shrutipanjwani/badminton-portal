@@ -1,0 +1,76 @@
+
+h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+ul {
+  margin: 0;
+  padding: 0 0 0 1.5em;
+}
+
+li {
+  margin: 1.5em 0;
+  padding: 0;
+}
+
+b { /* used for event dates/times */
+  margin-right: 3px;
+}
+
+.demo-app {
+  display: flex;
+  min-height: 100%;
+  font-size: 14px;
+}
+
+.demo-app-sidebar {
+  width: 300px;
+  line-height: 1.5;
+  background: #eaf9ff;
+  border-right: 1px solid #d3e2e8;
+}
+
+.demo-app-sidebar-section {
+  padding: 2em;
+}
+
+.demo-app-main {
+  flex-grow: 1;
+  padding: 0.5em;
+}
+
+.fc-title {
+  padding: 0 1px;
+  font-size: larger;
+    background-color: black;
+}
+
+.fc { /* the calendar root */
+  max-width: 1300px;
+  margin: 0 auto;
+
+}
+
+.fc-button-group button, .fc-today-button{
+  text-transform: uppercase !important;
+}
+
+<<<<<<< HEAD
+/* .fc-theme-standard td, .fc-theme-standard th {
+  width: 178px;
+} */
+=======
+.fc-theme-standard td, .fc-theme-standard th {
+  width: 100%;
+}
+>>>>>>> d4bac6b18dc532261b5c3b0da6a272f4f176d350
+
+.fc-direction-ltr .fc-daygrid-event.fc-event-start, .fc-direction-rtl .fc-daygrid-event.fc-event-end {
+  margin-left: 3px;
+}
+
+.fc-daygrid-event {
+  position: relative;
+  white-space: normal;
+}

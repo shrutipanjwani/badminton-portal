@@ -50,7 +50,7 @@ export default class calendar extends React.Component {
 
     try {
       var bookedeventsvar = [] , bookedeventdaysvar = [];
-      const res = await axios.get('/booking/', config);
+      const res = await axios.get('/booking/all', config);
       for(var i = 0; i < res.data.length; i++){
         var type = ""
         switch(res.data[i].type){
@@ -118,16 +118,14 @@ export default class calendar extends React.Component {
       } 
 	  }
   }
-  componentWillMount(){
 
-  }
 
   componentDidMount(){
 
     var data= JSON.parse(localStorage.getItem("USER"))
     console.log("datahere",localStorage.getItem("USER"))
     try{    
-    if(data.loginstatus===1 && data.role==="Member"){
+    if(data.loginstatus===1 && data.role==="admin"){
 
     } 
     else{
@@ -170,10 +168,6 @@ export default class calendar extends React.Component {
               dateClick={this.handleDateSelect}
               eventContent={renderEventContent} // custom render function
               eventClick={this.handleEventClick}
-              validRange= {{
-                start: new Date(),
-                end: new Date().setMonth(new Date().getMonth()+6)
-              }}
               eventsSet={this.handleEvents} // called after events are initialized/added/changed/removed
               /* you can update a remote database when these fire:
               eventAdd={function(){}}
@@ -222,7 +216,7 @@ export default class calendar extends React.Component {
   handleEventClick = (clickInfo) => {
     console.log("clickeve",clickInfo.event._def.extendedProps.booking)
     var bookingdata=clickInfo.event._def.extendedProps.booking;
-    this.props.history.replace('/userbooking',{data:bookingdata});
+    this.props.history.replace('/adminbookingdetails',{data:bookingdata});
   }
 
   handleEvents = (events) => {

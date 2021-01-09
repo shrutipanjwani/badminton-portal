@@ -70,7 +70,7 @@ const Login = ({  isAuthenticated, setAlert , login , isAdmin}) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();  
-    login(email, password);
+    await login(email, password);
   };
 
     const styles = {

@@ -114,9 +114,9 @@ export default class Form extends React.Component {
     for(var i = parseInt(parseInt(endtimearr[0])); i<= 24 ; i++){
         courtTimeHourDisabledvar.push(i);
     }
-    if(endtimearr[1] == "30"){
-      courtTimeHourDisabledvar = courtTimeHourDisabledvar.filter(item => item !== parseInt(endtimearr[0]))
-    }
+    // if(endtimearr[1] == "30"){
+    //   courtTimeHourDisabledvar = courtTimeHourDisabledvar.filter(item => item !== parseInt(endtimearr[0]))
+    // }
     this.setState({
       [e.target.name]: e.target.value,
       courtStartTimeHourDisabled: courtTimeHourDisabledvar
@@ -149,12 +149,13 @@ export default class Form extends React.Component {
   };
   disabledMinutes = ( hour ) => {
     let minutes = []
-      if(hour == this.state.courtstarttime[0] && this.state.courtstarttime[1] == "30"){
-        minutes = [0]; 
-      }
-      if(hour == this.state.courtendtime[0] && this.state.courtendtime[1] == "30"){
-        minutes = [30]; 
-      } 
+      // if(hour == this.state.courtstarttime[0] && this.state.courtstarttime[1] == "30"){
+      //   minutes = [0 , 30]; 
+      // }
+      // if(hour == this.state.courtendtime[0] && this.state.courtendtime[1] == "30"){
+      //   minutes = [0 , 30]; 
+      // } 
+      minutes = [0 , 30]; 
     return minutes
   }
   disabledMinutesEndTime = (hour) => {
@@ -165,6 +166,7 @@ export default class Form extends React.Component {
       // if(hour == this.state.courtendtime[0] && this.state.courtendtime[1] == "30"){
       //   minutes = [30]; 
       // } 
+      minutes = [0, 30]; 
     return minutes; 
   }
   changeStartTime = e =>{
@@ -176,24 +178,26 @@ export default class Form extends React.Component {
     }else{
      
       var date = new Date(e), Hour = ("0" + date.getHours()).slice(-2), Min = ("0" + date.getMinutes()).slice(-2);
+      var min = date.getMinutes();
       if(Hour == this.state.courtstarttime[0] && this.state.courtstarttime[1] == "30"){
         this.setState({ bookingStartTime:e.set({hour:Hour,minute:30})})
+        min = 30;
       }else {
         this.setState({bookingStartTime: e });
       }
-     
+      
       this.setState({startTime : Hour+":"+Min+":00"})
       var dateArr = [ date.getHours() , date.getMinutes()]
       this.setState({startDetails : dateArr})
-      if(date.getMinutes() == 0){
-        this.setState({bookingDefaultEndTime :  moment( ).set({hour:date.getHours(),minute:30})})
-        this.setState({endTime : Hour+":30:00"})
-        this.setState({endTimeMinuteDisabled : [0]})
-        this.setState({endTimeHourDisabled : Array.from(Array(date.getHours()).keys()) })
-      }else{
+      if(min == 0){
         this.setState({bookingDefaultEndTime :  moment( ).set({hour:date.getHours()+1,minute:0})})
+        this.setState({endTime : Hour+":00:00"})
+       // this.setState({endTimeMinuteDisabled : [0 , 30]})
+        this.setState({endTimeHourDisabled : Array.from(Array(date.getHours()+1).keys()) })
+      }else{
+        this.setState({bookingDefaultEndTime :  moment( ).set({hour:date.getHours()+1,minute:30})})
         const Hourend = ("0" + date.getHours()+1).slice(-2)
-        this.setState({endTime : Hourend+":00:00"})
+        this.setState({endTime : Hourend+":30:00"})
         this.setState({endTimeHourDisabled : Array.from(Array(date.getHours()+1).keys()) })
       }
       

@@ -357,9 +357,20 @@ class AdminBooking extends Component {
     var bookingsvar = this.state.bookings;
     var booking = bookingsvar.find(({ _id }) => _id === e.target.getAttribute("data-value"))
     var emailsvar = []
-    for(var i = 0 ; i<booking.user.length ; i++){
-          emailsvar.push(booking.user[i].email)
+      if(booking.user.length > 0){
+        emailsvar.push(booking.user[0].email)}
+      else{
+        emailsvar.push("")
       }
+      for(var i = 1 ; i<parseInt(booking.type)*2 ; i++){
+        if(booking.user.length > i){
+          emailsvar.push(booking.user[i].email)}
+        else{
+          emailsvar.push("")
+        }
+      }
+
+
     this.setState({
       isDisplay: 1,
       bookingid :booking,
@@ -406,6 +417,68 @@ class AdminBooking extends Component {
     await this.getCourtDetails();
   }
 
+  async checkWallet(submission) {
+  // try{
+  //     var index = this.state.courts.findIndex(x => x.court_name === submission.courtName);
+  //     var rqamount = 0 , players = 0;
+  //     var startTime=moment(submission.startTime, "HH:mm:ss");
+  //     var endTime=moment(submission.endTime, "HH:mm:ss");
+  //     var duration = moment.duration(endTime.diff(startTime));
+  //     var hours = parseFloat(duration.asHours());
+
+  //     let totamount = parseInt(this.state.courts[index].price)*(hours);
+  //     console.log(submission.start_time);console.log(endTime);console.log(startTime);console.log(hours);
+  //     if(parseInt(submission.bookingType) == 0){
+  //       rqamount = totamount;
+  //     }else{
+  //       players = parseInt(submission.bookingType)*2;
+  //       rqamount = totamount/players ;
+  //     }
+  //     const config = {
+	// 	    headers: {
+	// 		    'Content-Type': 'application/json'
+	// 	    }
+	//     };
+  //     var userdata = await axios.get('/auth/', config);
+  //     console.log(userdata.data)
+  //     if (userdata.wallet < rqamount) {
+  //       confirmAlert({title: 'Lets Badminton',message: "Sorry unable to reg due to low balance",
+  //       buttons: [{label: 'Ok',onClick: () => {}}]});
+  //       return;
+  //     } else {
+  //       console.log(userdata.data.wallet  , rqamount , (userdata.data.wallet - rqamount))
+  //       confirmAlert({
+  //           title: 'Confirm to submit',
+  //           message: 'Total Price :'+rqamount,
+  //           buttons: [
+  //             {
+  //               label: 'Yes',
+  //               onClick: () => {
+  //                 this.setState({loading : true})
+  //                  this.newBookingFun(submission);
+  //               }
+  //             },
+  //             {
+  //               label: 'No',
+  //               onClick: () => {
+                  
+  //               }
+  //             }
+  //           ]
+  //         });
+  //     }
+  //   }catch(err) {
+  //     confirmAlert({title: 'Lets Badminton',message: "your session is expired, login again",
+  //     buttons: [{label: 'Ok',onClick: () => {}}]});
+	// 		//this.setState({alert: 1});
+	// 		//logout();
+	// 		this.props.history.replace("/signin");
+	// 	}
+    console.log("submission")
+    console.log(submission)
+  }
+
+
   render() {
     if (this.state.move === true) {
       return <div>Something went wrong...</div>;
@@ -422,11 +495,21 @@ class AdminBooking extends Component {
         />
       );
     } else if (this.state.isDisplay === 1) {
+      var courtTimeHourDisabledvar = [];
+      const courtSelected = this.state.courtlist.find(o => o.court_name === this.state.bookingid.court.court_name);
+      const starttimearr = courtSelected.start_time.split(':',2);
+      const endtimearr = courtSelected.end_time.split(':',2);
+      courtTimeHourDisabledvar = Array.from(Array(parseInt(starttimearr[0])).keys());
+      for(var i = parseInt(parseInt(endtimearr[0])); i<= 24 ; i++){
+          courtTimeHourDisabledvar.push(i);
+      }
+      var courtStartTimeHourDisabled =  courtTimeHourDisabledvar.filter(item => item !== parseInt(starttimearr[0]))
+      var courtEndTimeHourDisabled = courtTimeHourDisabledvar.filter(item => item !== parseInt(endtimearr[0]))
       booking = (<EditForm
-                data={this.state.courtlist} booking={this.state.bookingid} emails={this.state.emails}
-                // onSubmit={submission =>
-                //   this.checkWallet(submission)}
-              />);
+                  data={this.state.courtlist} booking={this.state.bookingid} emails={this.state.emails}
+                  sthrdisabled = {courtStartTimeHourDisabled} ethrdisabled = {courtEndTimeHourDisabled} 
+                  onSubmit={submission => this.checkWallet(submission)}
+                />);
     } else {
       booking = <h1 style={{ marginTop: "20px" }}>No Bookings</h1>;
     }
@@ -462,16 +545,25 @@ class AdminBooking extends Component {
                     <table style={{ width: "95%", margin: "auto"}} className="table booking-table" border="1">
                       <tbody>
                         <th style={{color: "#841e2d", textAlign: "left"}}>S.No.</th>
+                        <th style={{color: "#841e2d", textAlign: "left"}}>Court Name</th>
                         <th style={{color: "#841e2d", textAlign: "left"}}>Booking Type</th>
                         <th style={{color: "#841e2d", textAlign: "left"}}>Booking Date</th>
                         <th style={{color: "#841e2d", textAlign: "left"}}>Start Time</th>
                         <th style={{color: "#841e2d", textAlign: "left"}}>End Time</th>
+                        <th style={{color: "#841e2d", textAlign: "left"}}>Players</th>
                         <br />
                         <br />
                         {this.state.bookings.map(d => {
+                              var player = "";
+                              for(var i = 0 ; i<d.user.length ; i++){
+                                player = player+d.user[i].name+" ,"
+                              }
                               return (
                               <tr data-value={d._id} onClick={ e => this.handleStart(e)}>
                                   <td data-value={d._id} style={{ textAlign: "left"}}></td>
+                                  <td data-value={d._id}>
+                                   Court {d.court.court_name}
+                                  </td>
                                   <td data-value={d._id}>
                                     {d.type === 0 ? "Entire" : (d.type == 1 ? "Single" : "Double")}
                                   </td>
@@ -483,6 +575,9 @@ class AdminBooking extends Component {
                                   </td >
                                   <td data-value={d._id}>
                                     {d.end_time}
+                                  </td>
+                                  <td data-value={d._id}>
+                                    {player}
                                   </td>
                               </tr>
                               )

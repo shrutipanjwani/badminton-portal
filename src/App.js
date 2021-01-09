@@ -15,6 +15,8 @@ import UserBooking from './components/Booking/Booking';
 import RegistererPermission from './adminportal/RegistererPermission';
 import Landing from "./components/layout/Landing";
 import NotFound from './components/layout/NotFound';
+import AdminCalendar from './adminportal/Calendar/Calendar';
+import AdminBookingDetails from './adminportal/adminBooking';
 //import PrivateRoute from './components/routing/PrivateRoute';
 
 //Redux
@@ -71,6 +73,8 @@ const App = () => {
               <Route exact path='/court' component={Court}/>
               <Route exact path='/permission' component={RegistererPermission}/>
               <Route exact path='/adminbooking' component={AdminBooking}/>
+              <Route exact path='/admincalendar' component={AdminCalendar}/>
+              <Route exact path='/adminbookingdetails' component={AdminBookingDetails}/>
               {/*Error Page*/}
               <Route path="" component={NotFound} />
             </Switch>
